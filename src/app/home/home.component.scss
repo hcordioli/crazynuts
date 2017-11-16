@@ -65,7 +65,8 @@
 						}
 					}
 					input:focus,
-					input.ng-dirty {
+					input.ng-dirty,
+					input.ng-touched {
 						&~.label {
 							display: none;
 						}
@@ -250,6 +251,6 @@
 		}
 	}
 	.foot {
-		padding-top: 10rem;
+		padding-top: 4rem;
 	}
 }

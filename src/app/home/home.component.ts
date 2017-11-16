@@ -25,7 +25,9 @@ export class HomeComponent implements OnInit {
         },
         el: null,
         name: 0,
-        hotelList: {}
+        hotelList: {
+            HotelListResponse: null
+        }
     }
     open = {
         rooms: false,
@@ -192,7 +194,7 @@ export class HomeComponent implements OnInit {
                 '&numberOfAdults=' + m.room.people.total +
                 '&numberOfResults=10&rateType=sim')
             .subscribe(hotelList => {
-                self.vars.hotelList = hotelList;
+                self.vars.hotelList = JSON.parse(<string>hotelList);
             });
         return;
     }

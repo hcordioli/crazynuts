@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
             alt: 'HOTAX',
-            url: '/assets/img/logo.svg'
+            url: 'assets/img/logo.svg'
         },
         el: null,
         name: 0

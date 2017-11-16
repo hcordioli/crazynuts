@@ -5,7 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --open",
-    "build": "ng build --prod -op docs",
+    "build": "ng build --prod -op docs --base-href crazynuts/",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"

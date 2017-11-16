@@ -1,0 +1,7 @@
+{
+	"/api":
+	{
+		"target": "https://api.ean.com/ean-services/rs/hotel/v3/",
+		"secure": false
+	}
+}

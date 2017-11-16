@@ -26,7 +26,8 @@ export class HomeComponent implements OnInit {
         el: null,
         name: 0,
         hotelList: {
-            HotelListResponse: null
+            HotelListResponse: null,
+            HotelListResponseStr: ''
         }
     }
     open = {
@@ -188,13 +189,14 @@ export class HomeComponent implements OnInit {
                 'eanCID=' + k.cid +
                 '&eanAPIKey=' + k.api +
                 '&eanSharedSecret=' + k.secret +
-                '&city=' + m.busca +
+                '&city=' + m.busca.replace(/\s+/gi, '%20') +
                 '&countryCode=US&arrivalDate=' + m.entrada +
                 '&departureDate=' + m.saida +
                 '&numberOfAdults=' + m.room.people.total +
                 '&numberOfResults=10&rateType=sim')
             .subscribe(hotelList => {
-                self.vars.hotelList = JSON.parse(<string>hotelList);
+                self.vars.hotelList.HotelListResponseStr = <string>hotelList;
+                self.vars.hotelList.HotelListResponse = JSON.parse(<string>hotelList);
             });
         return;
     }

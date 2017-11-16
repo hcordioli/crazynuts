@@ -27,7 +27,8 @@ export class HomeComponent implements OnInit {
         name: 0,
         hotelList: {
             HotelListResponse: null,
-            HotelListResponseStr: ''
+            HotelListResponseStr: '',
+            markup: []
         }
     }
     open = {
@@ -162,6 +163,11 @@ export class HomeComponent implements OnInit {
             this.mdl.saida = this.cookie('saida');
         }
     }
+    decodeHTML(html) {
+        var txt = document.createElement("textarea");
+        txt.innerHTML = html;
+        return txt.value;
+    }
     onSubmit(frm) {
         var self = this,
             m = self.mdl,
@@ -195,8 +201,14 @@ export class HomeComponent implements OnInit {
                 '&numberOfAdults=' + m.room.people.total +
                 '&numberOfResults=10&rateType=sim')
             .subscribe(hotelList => {
-                self.vars.hotelList.HotelListResponseStr = <string>hotelList;
-                self.vars.hotelList.HotelListResponse = JSON.parse(<string>hotelList);
+                self.vars.hotelList.HotelListResponseStr = < string > hotelList;
+                self.vars.hotelList.HotelListResponse = JSON.parse( < string > hotelList);
+                if (self.vars.hotelList.HotelListResponse.HotelListResponse) {
+                    self.vars.hotelList.HotelListResponse = self.vars.hotelList.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
+                    for (var i = 0; i < self.vars.hotelList.HotelListResponse.length; ++i) {
+                        self.vars.hotelList.HotelListResponse[i].shortDescription = self.decodeHTML(self.vars.hotelList.HotelListResponse[i].shortDescription);
+                    }
+                }
             });
         return;
     }

@@ -79,6 +79,41 @@
 		</form>
 	</div>
 	<div class="foot" *ngIf="vars.hotelList.HotelListResponse">
-		{{ vars.hotelList.HotelListResponseStr }}
+		<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
+		<ng-template #content>
+			<div class="tabela">
+				<table>
+					<thead>
+						<tr>
+							<th>thumbNailUrl</th>
+							<th>name</th>
+							<th>hotelRating</th>
+							<th>address1</th>
+							<th>roomDescription</th>
+							<th>currencyCode</th>
+							<th>nonRefundable</th>
+							<th>Markup</th>
+							<th>HotaxFinalPrice</th>
+							<th>HotaxFinalCommission%</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngFor="let td of vars.hotelList.HotelListResponse">
+							<td><img [attr.src]="'https://i.travelapi.com' + td.thumbNailUrl" alt=""></td>
+							<td [textContent]="td.name"></td>
+							<td [textContent]="td.hotelRating"></td>
+							<td [textContent]="td.address1"></td>
+							<td [innerHTML]="td.shortDescription"></td>
+							<td [textContent]="td.rateCurrencyCode"></td>
+							<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.nonRefundable ? 'SIM' : 'NÃO' }}</td>
+							<td>Markup</td>
+							<td>HotaxFinalPrice</td>
+							<td>HotaxFinalCommission</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</ng-template>
+		<ng-template #other_content>{{ vars.hotelList.HotelListResponseStr }}</ng-template>
 	</div>
 </div>

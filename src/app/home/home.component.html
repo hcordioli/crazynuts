@@ -30,12 +30,12 @@
 							<span class="icon-room">
 								<img [attr.src]="vars.icons.room" alt="Q">
 							</span>
-							<span class="val" [textContent]="mdl.room.total"></span>
+						<span class="val" [textContent]="mdl.room.total"></span>
 						<span class="pessoas">
 								<span class="icon-people">
 									<img [attr.src]="vars.icons.people" alt="P">
 								</span>
-								<span class="val" [textContent]="mdl.room.people.total"></span>
+						<span class="val" [textContent]="mdl.room.people.total"></span>
 						</span>
 						</span>
 					</div>
@@ -78,5 +78,7 @@
 			</div>
 		</form>
 	</div>
-	<div class="foot"></div>
+	<div class="foot">
+		{{vars.hotelList}}
+	</div>
 </div>

@@ -193,21 +193,6 @@ export class HomeComponent implements OnInit {
                 '&numberOfResults=10&rateType=sim')
             .subscribe(hotelList => {
                 self.vars.hotelList = hotelList;
-                console.log(self.vars.hotelList)
-            }, error => {
-                self.http.get('/proxy/hotels?' +
-                        'eanCID=' + k.cid +
-                        '&eanAPIKey=' + k.api +
-                        '&eanSharedSecret=' + k.secret +
-                        '&city=' + m.busca +
-                        '&countryCode=US&arrivalDate=' + m.entrada +
-                        '&departureDate=' + m.saida +
-                        '&numberOfAdults=' + m.room.people.total +
-                        '&numberOfResults=10&rateType=sim')
-                    .subscribe(hotelList => {
-                        self.vars.hotelList = hotelList;
-                        console.log(self.vars.hotelList)
-                    });
             });
         return;
     }

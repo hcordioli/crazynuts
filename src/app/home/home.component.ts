@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgModel } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-home',
@@ -23,20 +24,37 @@ export class HomeComponent implements OnInit {
             remove: 'assets/img/icons/remove.png'
         },
         el: null,
-        name: 0
+        name: 0,
+        hotelList: {}
     }
     open = {
-        rooms: false
+        rooms: false,
+        keys: false
     }
     /*
         &room[room number, starting with 1]=
         [number of adults],
         [comma-delimited list of children's ages] 
+
+        city=Seattle
+        arrivalDate=12/2/2017
+        departureDate=12/4/2017
+        numberOfAdults=2
+        
+        
+        countryCode=US
+        numberOfResults=500
+        rateType=sim
     */
     mdl = {
         busca: '',
         entrada: '',
         saida: '',
+        keys: {
+            cid: '',
+            api: '',
+            secret: ''
+        },
         room: {
             total: 1,
             people: {
@@ -52,7 +70,13 @@ export class HomeComponent implements OnInit {
             }
         }
     }
-    constructor() {}
+    constructor(private http: HttpClient) {}
+    cookie = function(prop, val ? ) {
+        var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
+        if (val !== undefined)
+            document.cookie = prop + '=' + val + '' + '; path=/';
+        return val ? val : (ret && ret.length > 1 ? ret[1] : '');
+    }
     addRoom(index) {
         this.vars.name++;
         var self = this,
@@ -93,7 +117,7 @@ export class HomeComponent implements OnInit {
             old = p.list[index].less18.total;
         val = val | 0;
         p.total += val - old;
-        p.list[index].less18.list = resize(p.list[index].less18.list, val, {age:0});
+        p.list[index].less18.list = resize(p.list[index].less18.list, val, { age: 0 });
         p.list[index].less18.total = val;
     }
     rmRoom(index) {
@@ -122,9 +146,69 @@ export class HomeComponent implements OnInit {
     }
     ngOnInit() {
         this.vars.el = document.getElementById('rooms');
+        if (!this.cookie('cid'))
+            this.open.keys = true;
+        else {
+            this.mdl.keys = {
+                cid: this.cookie('cid'),
+                api: this.cookie('api'),
+                secret: this.cookie('secret')
+            }
+            this.mdl.busca = this.cookie('busca');
+            this.mdl.entrada = this.cookie('entrada');
+            this.mdl.saida = this.cookie('saida');
+        }
     }
     onSubmit(frm) {
-        return false;
+        var self = this,
+            m = self.mdl,
+            k = m.keys;
+        if (self.open.keys) {
+            if (!k.api || !k.cid || !k.secret) {
+                alert('Favor inserir token');
+                return;
+            } else {
+                self.cookie('cid', k.cid);
+                self.cookie('api', k.api);
+                self.cookie('secret', k.secret);
+                self.open.keys = false;
+            }
+        }
+        if (!m.busca || !m.entrada || !m.saida) {
+            alert('Favor preencher todos os campos');
+            return;
+        } else {
+            self.cookie('busca', m.busca);
+            self.cookie('entrada', m.entrada);
+            self.cookie('saida', m.saida);
+        }
+        self.http.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotels?' +
+                'eanCID=' + k.cid +
+                '&eanAPIKey=' + k.api +
+                '&eanSharedSecret=' + k.secret +
+                '&city=' + m.busca +
+                '&countryCode=US&arrivalDate=' + m.entrada +
+                '&departureDate=' + m.saida +
+                '&numberOfAdults=' + m.room.people.total +
+                '&numberOfResults=500&rateType=sim')
+            .subscribe(hotelList => {
+                self.vars.hotelList = hotelList;
+                console.log(self.vars.hotelList)
+            }, error => {
+                self.http.get('/proxy/hotels?' +
+                        'eanCID=' + k.cid +
+                        '&eanAPIKey=' + k.api +
+                        '&eanSharedSecret=' + k.secret +
+                        '&city=' + m.busca +
+                        '&countryCode=US&arrivalDate=' + m.entrada +
+                        '&departureDate=' + m.saida +
+                        '&numberOfAdults=' + m.room.people.total +
+                        '&numberOfResults=500&rateType=sim')
+                    .subscribe(hotelList => {
+                        self.vars.hotelList = hotelList;
+                        console.log(self.vars.hotelList)
+                    });
+            });
+        return;
     }
-
 }

@@ -71,6 +71,11 @@
 					<input class="bgc c1" type="submit" value="Busca">
 				</div>
 			</div>
+			<div class="eanKeys" *ngIf="open.keys">
+				<input placeholder="eanCID" name="cid" [(ngModel)]="mdl.keys.cid">
+				<input placeholder="eanAPIKey" name="api" [(ngModel)]="mdl.keys.api">
+				<input placeholder="eanSharedSecret" name="secret" [(ngModel)]="mdl.keys.secret">
+			</div>
 		</form>
 	</div>
 	<div class="foot"></div>

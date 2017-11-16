@@ -1,7 +1,13 @@
 {
-	"/api":
+	"/proxy/*":
 	{
-		"target": "https://api.ean.com/ean-services/rs/hotel/v3/",
-		"secure": false
+		"target": "https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/",
+		"secure": false,
+		"changeOrigin": true,
+		"logLevel": "debug",
+		"pathRewrite":
+		{
+			"^/proxy": ""
+		}
 	}
 }

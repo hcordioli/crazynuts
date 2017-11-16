@@ -19,7 +19,8 @@ export class HomeComponent implements OnInit {
         },
         icons: {
             people: 'assets/img/icons/people.png',
-            room: 'assets/img/icons/room.png'
+            room: 'assets/img/icons/room.png',
+            remove: 'assets/img/icons/remove.png'
         },
         el: null,
         name: 0

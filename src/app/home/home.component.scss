@@ -159,7 +159,7 @@
 							border: 1px solid #aaa;
 							margin-top: 1rem;
 							padding: 1rem;
-							overflow: scroll;
+							overflow: auto;
 							height: 17rem;
 							.header {
 								color: #222;
@@ -180,6 +180,10 @@
 								label {
 									margin-right: 1rem;
 									margin-bottom: 1rem;
+								}
+								label span {
+									white-space: nowrap;
+									padding-bottom: 0.2rem;
 								}
 								label,
 								label span,
@@ -220,6 +224,15 @@
 							border: 0;
 							text-align: center;
 						}
+					}
+				}
+				.icon-remove {
+					width: 1.4rem;
+					display: inline-block;
+					margin-top: -0.3rem;
+					img {
+						width: 100%;
+						height: auto;
 					}
 				}
 				.icon-room,

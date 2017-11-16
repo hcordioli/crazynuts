@@ -190,7 +190,7 @@ export class HomeComponent implements OnInit {
                 '&countryCode=US&arrivalDate=' + m.entrada +
                 '&departureDate=' + m.saida +
                 '&numberOfAdults=' + m.room.people.total +
-                '&numberOfResults=500&rateType=sim')
+                '&numberOfResults=10&rateType=sim')
             .subscribe(hotelList => {
                 self.vars.hotelList = hotelList;
                 console.log(self.vars.hotelList)
@@ -203,7 +203,7 @@ export class HomeComponent implements OnInit {
                         '&countryCode=US&arrivalDate=' + m.entrada +
                         '&departureDate=' + m.saida +
                         '&numberOfAdults=' + m.room.people.total +
-                        '&numberOfResults=500&rateType=sim')
+                        '&numberOfResults=10&rateType=sim')
                     .subscribe(hotelList => {
                         self.vars.hotelList = hotelList;
                         console.log(self.vars.hotelList)

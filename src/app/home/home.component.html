@@ -50,11 +50,11 @@
 							<div class="campos wrap">
 								<label>
 									<span>Adultos<br>(18+)</span>
-									<input type="number" placeholder="" min="1" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event)">
+									<input type="number" placeholder="" min="1" max="{{p.limit[0]}}" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event)">
 								</label>
 								<label>
 									<span>Menor<br>(até 17)</span>
-									<input min="0" step="1" type="number" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event)">
+									<input min="0" max="{{p.limit[1]}}" step="1" type="number" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event)">
 								</label>
 								<div class="children wrap">
 									<label *ngFor="let pp of p.less18.list; let nn = index">
@@ -78,7 +78,7 @@
 			</div>
 		</form>
 	</div>
-	<div class="foot" *ngIf="vars.hotelList.HotelListResponse">
+	<div class="foot" *ngIf="vars.hotelList.HotelListResponse || vars.hotelList.HotelListResponseStr.length">
 		<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
 		<ng-template #content>
 			<div class="tabela">
@@ -106,9 +106,9 @@
 							<td [innerHTML]="td.shortDescription"></td>
 							<td [textContent]="td.rateCurrencyCode"></td>
 							<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.nonRefundable ? 'SIM' : 'NÃO' }}</td>
-							<td>Markup</td>
-							<td>HotaxFinalPrice</td>
-							<td>HotaxFinalCommission</td>
+							<td [textContent]="td.Markup"></td>
+							<td [textContent]="td.HotaxFinalPrice"></td>
+							<td [textContent]="td.HotaxFinalCommission"></td>
 						</tr>
 					</tbody>
 				</table>

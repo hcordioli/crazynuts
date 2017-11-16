@@ -65,6 +65,7 @@ export class HomeComponent implements OnInit {
                 total: 2,
                 list: [{
                     name: 0,
+                    limit: [4, 4],
                     more18: 2,
                     less18: {
                         total: 0,
@@ -90,6 +91,7 @@ export class HomeComponent implements OnInit {
         r.total++;
         r.people.list.push({
             name: name,
+            limit: [4, 4],
             more18: 0,
             less18: {
                 total: 0,
@@ -105,6 +107,7 @@ export class HomeComponent implements OnInit {
         val = val | 0;
         p.total += val - old;
         p.list[index].more18 = val;
+        p.list[index].limit = [8 - val, 4 - val]; //TODO 4 adulto ou 4 kid
     }
     changeChild(index, val) {
         function resize(arr, size, defval) {
@@ -123,6 +126,8 @@ export class HomeComponent implements OnInit {
         p.total += val - old;
         p.list[index].less18.list = resize(p.list[index].less18.list, val, { age: 0 });
         p.list[index].less18.total = val;
+        val = p.list[index].more18;
+        p.list[index].limit = [8 - val, 4 - val]; //TODO 4 adulto ou 4 kid
     }
     rmRoom(index) {
         var self = this,
@@ -191,6 +196,8 @@ export class HomeComponent implements OnInit {
             self.cookie('entrada', m.entrada);
             self.cookie('saida', m.saida);
         }
+        self.vars.hotelList.HotelListResponse = null;
+        self.vars.hotelList.HotelListResponseStr = 'Loading...';
         self.http.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotels?' +
                 'eanCID=' + k.cid +
                 '&eanAPIKey=' + k.api +
@@ -201,12 +208,39 @@ export class HomeComponent implements OnInit {
                 '&numberOfAdults=' + m.room.people.total +
                 '&numberOfResults=10&rateType=sim')
             .subscribe(hotelList => {
-                self.vars.hotelList.HotelListResponseStr = < string > hotelList;
-                self.vars.hotelList.HotelListResponse = JSON.parse( < string > hotelList);
-                if (self.vars.hotelList.HotelListResponse.HotelListResponse) {
-                    self.vars.hotelList.HotelListResponse = self.vars.hotelList.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
-                    for (var i = 0; i < self.vars.hotelList.HotelListResponse.length; ++i) {
-                        self.vars.hotelList.HotelListResponse[i].shortDescription = self.decodeHTML(self.vars.hotelList.HotelListResponse[i].shortDescription);
+                var h = self.vars.hotelList,
+                    tgtComP = 0.13,
+                    storeComP = 0.15,
+                    gpShare = 0.5,
+                    rateInfo, gpShareH, eanNet, hInitialPrice, hInitialCom, hInitialComP, markup, hFinalPrice, storeCom, hFinalCom, hFinalComP;
+                h.HotelListResponseStr = < string > hotelList;
+                h.HotelListResponse = JSON.parse( < string > hotelList);
+                if (h.HotelListResponse.HotelListResponse) {
+                    h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
+                    for (var i = 0; i < h.HotelListResponse.length; ++i) {
+                        h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
+                        rateInfo = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo;
+                        gpShareH = rateInfo.ChargeableRateInfo['@grossProfitOnline'] * gpShare;
+                        eanNet = rateInfo.ChargeableRateInfo['@total'] - gpShareH;
+                        hInitialPrice = rateInfo['@pkgSavingsAmount'] + rateInfo.ChargeableRateInfo['@total'];
+                        hInitialCom = gpShareH + rateInfo['@pkgSavingsAmount'];
+                        hInitialComP = hInitialCom / hInitialPrice;
+                        markup = 0.0;
+                        if (hInitialComP >= (tgtComP + storeComP))
+                            markup = 1;
+                        else
+                            markup = (tgtComP + storeComP - 1) * -1;
+                        hFinalPrice = 0;
+                        if (markup >= 1)
+                            hFinalPrice = hInitialPrice;
+                        else
+                            hFinalPrice = eanNet / markup;
+                        storeCom = hFinalPrice * storeComP;
+                        hFinalCom = hFinalPrice - eanNet - storeCom;
+                        hFinalComP = hFinalCom / hFinalPrice;
+                        h.HotelListResponse[i].Markup = markup.toFixed(2);
+                        h.HotelListResponse[i].HotaxFinalPrice = hFinalPrice.toFixed(2);
+                        h.HotelListResponse[i].HotaxFinalCommission = hFinalComP.toFixed(2);
                     }
                 }
             });

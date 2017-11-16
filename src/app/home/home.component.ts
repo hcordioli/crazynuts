@@ -12,11 +12,14 @@ import { NgModel } from '@angular/forms';
 })
 export class HomeComponent implements OnInit {
     vars = {
-        //empowering travel agents everyday
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
             alt: 'HOTAX',
             url: 'assets/img/logo.svg'
+        },
+        icons: {
+            people: 'assets/img/icons/people.png',
+            room: 'assets/img/icons/room.png'
         },
         el: null,
         name: 0
@@ -89,14 +92,7 @@ export class HomeComponent implements OnInit {
             old = p.list[index].less18.total;
         val = val | 0;
         p.total += val - old;
-        p.list[index].less18.list = resize(p.list[index].less18.list, val, 0);
-        // if (a.list.length > val)
-        //     a.list = a.list.slice(0, index);
-        // else
-        //     for (var i = 0; i < val; i++)
-        //         a.list.push({
-        //             age: 0
-        //         })
+        p.list[index].less18.list = resize(p.list[index].less18.list, val, {age:0});
         p.list[index].less18.total = val;
     }
     rmRoom(index) {
@@ -116,8 +112,8 @@ export class HomeComponent implements OnInit {
         if (this.vars.el) {
             if (this.vars.el.contains(e.target)) {
                 this.open.rooms = true;
-                if (/touched/.test(this.vars.el.className))
-                    this.vars.el.className = ' touched';
+                if (!/touched/.test(this.vars.el.className))
+                    this.vars.el.className += ' touched';
             } else {
                 this.open.rooms = false;
             }

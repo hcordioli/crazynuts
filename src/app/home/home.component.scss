@@ -159,6 +159,8 @@
 							border: 1px solid #aaa;
 							margin-top: 1rem;
 							padding: 1rem;
+							overflow: scroll;
+							height: 17rem;
 							.header {
 								color: #222;
 								border-bottom: 1px solid #aaa;
@@ -174,13 +176,24 @@
 								}
 							}
 							.campos {
+								padding-bottom: 1rem;
+								label {
+									margin-right: 1rem;
+									margin-bottom: 1rem;
+								}
 								label,
 								label span,
 								label input {
-									display: inline-block;
-									width: 4rem;
+									float: left;
+									width: 4.4rem;
 								}
-								padding-bottom: 1rem;
+								.children {
+									float: none;
+									clear: both;
+									label span {
+										white-space: nowrap;
+									}
+								}
 							}
 						}
 						.room.show {
@@ -207,6 +220,15 @@
 							border: 0;
 							text-align: center;
 						}
+					}
+				}
+				.icon-room,
+				.icon-people {
+					width: 1rem;
+					display: inline-block;
+					img {
+						width: 100%;
+						height: auto;
 					}
 				}
 			}

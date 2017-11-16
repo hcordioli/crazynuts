@@ -543,19 +543,17 @@ var HomeComponent = (function () {
     HomeComponent.prototype.changeChild = function (index, val) {
         function resize(arr, size, defval) {
             var delta = arr.length - size;
-            if (delta > 0) {
+            if (delta > 0)
                 arr.length = size;
-            }
-            else {
-                while (delta++ < 0) {
+            else
+                while (delta++ < 0)
                     arr.push(defval);
-                }
-            }
+            return arr;
         }
         var p = this.mdl.room.people, a = p.list[index].less18, old = p.list[index].less18.total;
         val = val | 0;
         p.total += val - old;
-        resize(p.list[index].less18.list, val, 0);
+        p.list[index].less18.list = resize(p.list[index].less18.list, val, 0);
         // if (a.list.length > val)
         //     a.list = a.list.slice(0, index);
         // else

@@ -1,3 +1,8 @@
+$fstColor: #243E6F;
+$fstAltColor: #1C375C;
+$sndColor: #C0252E;
+$sndAltColor: #A42627;
+
 html,
 body,
 div,
@@ -148,16 +153,16 @@ table {
 
 .fgc {
     &.c1 {
-        color: #243E6F;
+        color: $fstColor;
     }
     &.c1Dark {
-        color: #1C375C;
+        color: $fstAltColor;
     }
     &.c2 {
-        color: #C0252E;
+        color: $sndColor;
     }
     &.c2Dark {
-        color: #A42627;
+        color: $sndAltColor;
     }
 }
 

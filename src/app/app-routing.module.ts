@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { HomeComponent } from './home/home.component';
-import { BuscaComponent } from './busca/busca.component';
 import { ErrComponent } from './err/err.component';
 
 const routes: Routes = [{
@@ -12,10 +11,6 @@ const routes: Routes = [{
     }, {
       path: 'home',
       redirectTo: '/'
-    },
-    {
-      path: 'busca',
-      component: BuscaComponent
     }
   ]
 }, {

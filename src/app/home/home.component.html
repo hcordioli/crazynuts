@@ -7,7 +7,7 @@
 		<form #frm="ngForm" class="wrap" (ngSubmit)="onSubmit(frm)" novalidate>
 			<div class="search">
 				<label>
-					<input placeholder="Ex: São Paulo" name="busca" [(ngModel)]="mdl.busca">
+					<ng2-completer [autoMatch]="true" [overrideSuggested]="true" [inputClass]="'busca-ctrl'" [textNoResults]="null" [autofocus]="true" [textSearching]="null" [textNoResults]="mdl.busca.noRet + mdl.busca.val" name="busca" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="dataService" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 					<span class="icon"></span>
 				</label>
 			</div>

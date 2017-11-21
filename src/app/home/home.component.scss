@@ -83,6 +83,17 @@
 				}
 
 				&.search {
+					.completer-dropdown {
+						width: 100%;
+					}
+					.completer-selected-row {
+						color: #fff;
+						background-color: #243E6F;
+					}
+					.completer-highlighted-word {
+						color: #fff;
+						background-color: #C0252E;
+					}
 					input {
 						padding-left: 3rem;
 						&::-webkit-input-placeholder {

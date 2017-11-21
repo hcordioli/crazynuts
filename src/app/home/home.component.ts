@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { CompleterService, CompleterData } from 'ng2-completer';
 
 @Component({
     selector: 'app-home',
@@ -12,6 +13,8 @@ import { HttpClient } from '@angular/common/http';
     }
 })
 export class HomeComponent implements OnInit {
+
+    dataService: CompleterData;
     vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
@@ -51,7 +54,78 @@ export class HomeComponent implements OnInit {
         rateType=sim
     */
     mdl = {
-        busca: '',
+        busca: {
+            val: '',
+            init: '',
+            loading: 'Buscando: ',
+            noRet: 'Não foram encontrados resultados contenham: ',
+            placeholder: 'Ex: São Paulo',
+            dataSrc: [{
+                    "regionId": "234",
+                    "regionType": "Province (State)",
+                    "regionName": "New York",
+                    "regionNameLong": "New York, United States of America",
+                    "parentRegionId": "201",
+                    "level": "0"
+                },
+                {
+                    "regionId": "1208",
+                    "regionType": "City",
+                    "regionName": "Fishers Island",
+                    "regionNameLong": "Fishers Island, New York, United States of America",
+                    "parentRegionId": "234",
+                    "parentRegionName": "New York, United States of America"
+                },
+                {
+                    "regionId": "1524",
+                    "regionType": "City",
+                    "regionName": "East Hampton",
+                    "regionNameLong": "East Hampton, New York, United States of America",
+                    "parentRegionId": "234",
+                    "parentRegionName": "New York, United States of America"
+                },
+                {
+                    "regionId": "7391",
+                    "regionType": "City",
+                    "regionName": "Waterloo",
+                    "regionNameLong": "Waterloo, New York, United States of America",
+                    "parentRegionId": "234",
+                    "parentRegionName": "New York, United States of America"
+                },
+                {
+                    "regionId": "6181516",
+                    "regionType": "Point of Interest",
+                    "regionName": "Discovery Center",
+                    "regionNameLong": "Discovery Center, Binghamton, New York, United States of America",
+                    "parentRegionId": "234",
+                    "level": "1"
+                },
+                {
+                    "regionId": "2297",
+                    "regionType": "City",
+                    "regionName": "Miami",
+                    "regionNameLong": "Miami, Florida, United States of America",
+                    "parentRegionId": "178286",
+                    "level": "0"
+                },
+                {
+                    "regionId": "800070",
+                    "regionType": "Neighborhood",
+                    "regionName": "Downtown Miami",
+                    "regionNameLong": "Downtown Miami, Miami, Florida, United States of America",
+                    "parentRegionId": "2297",
+                    "level": "1"
+                },
+                {
+                    "regionId": "6048102",
+                    "regionType": "Neighborhood",
+                    "regionName": "South Miami",
+                    "regionNameLong": "South Miami, Miami, Florida, United States of America",
+                    "parentRegionId": "2297",
+                    "level": "1"
+                }
+            ]
+        },
         entrada: '',
         saida: '',
         keys: {
@@ -75,11 +149,27 @@ export class HomeComponent implements OnInit {
             }
         }
     }
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient, private completerService: CompleterService) {}
+    ngOnInit() {
+        this.dataService = this.completerService.local(this.mdl.busca.dataSrc, 'regionNameLong', 'regionNameLong').imageField('regionType');
+        this.vars.el = document.getElementById('rooms');
+        if (!this.cookie('cid'))
+            this.open.keys = true;
+        else {
+            this.mdl.keys = {
+                cid: this.cookie('cid'),
+                api: this.cookie('api'),
+                secret: this.cookie('secret')
+            }
+            this.mdl.busca.init = this.cookie('busca');
+            this.mdl.entrada = this.cookie('entrada');
+            this.mdl.saida = this.cookie('saida');
+        }
+    }
     cookie = function(prop, val ? ) {
         var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
         if (val !== undefined)
-            document.cookie = prop + '=' + val + '' + '; path=/';
+            document.cookie = prop + '=' + val + '' + '; expires=' + new Date('01/01/2038').toUTCString() + '; path=/;';
         return val ? val : (ret && ret.length > 1 ? ret[1] : '');
     }
     addRoom(index) {
@@ -153,21 +243,6 @@ export class HomeComponent implements OnInit {
             }
         }
     }
-    ngOnInit() {
-        this.vars.el = document.getElementById('rooms');
-        if (!this.cookie('cid'))
-            this.open.keys = true;
-        else {
-            this.mdl.keys = {
-                cid: this.cookie('cid'),
-                api: this.cookie('api'),
-                secret: this.cookie('secret')
-            }
-            this.mdl.busca = this.cookie('busca');
-            this.mdl.entrada = this.cookie('entrada');
-            this.mdl.saida = this.cookie('saida');
-        }
-    }
     decodeHTML(html) {
         var txt = document.createElement("textarea");
         txt.innerHTML = html;
@@ -188,11 +263,11 @@ export class HomeComponent implements OnInit {
                 self.open.keys = false;
             }
         }
-        if (!m.busca || !m.entrada || !m.saida) {
+        if (!m.busca.val || !m.entrada || !m.saida) {
             alert('Favor preencher todos os campos');
             return;
         } else {
-            self.cookie('busca', m.busca);
+            self.cookie('busca', m.busca.val);
             self.cookie('entrada', m.entrada);
             self.cookie('saida', m.saida);
         }
@@ -202,7 +277,7 @@ export class HomeComponent implements OnInit {
                 'eanCID=' + k.cid +
                 '&eanAPIKey=' + k.api +
                 '&eanSharedSecret=' + k.secret +
-                '&city=' + m.busca.replace(/\s+/gi, '%20') +
+                '&city=' + m.busca.val.replace(/\s+/gi, '%20') +
                 '&countryCode=US&arrivalDate=' + m.entrada +
                 '&departureDate=' + m.saida +
                 '&numberOfAdults=' + m.room.people.total +

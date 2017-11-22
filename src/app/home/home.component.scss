@@ -52,6 +52,7 @@
 						vertical-align: middle;
 						font-size: 1.3rem;
 						color: #aaa;
+						cursor: pointer;
 						span {
 							vertical-align: middle;
 							display: inline-block;
@@ -83,16 +84,55 @@
 				}
 
 				&.search {
-					.completer-dropdown {
-						width: 100%;
-					}
-					.completer-selected-row {
-						color: #fff;
-						background-color: #243E6F;
-					}
-					.completer-highlighted-word {
-						color: #fff;
-						background-color: #C0252E;
+					.completer-dropdown-holder {
+						.completer-dropdown {
+							width: 100%;
+							border: 1px solid #aaa;
+							margin: 0;
+							border-radius: 0;
+							.completer-row-wrapper {
+								.completer-row {
+									width: 100%;
+									margin: 0;
+									border-radius: 0;
+									white-space: nowrap;
+									overflow: hidden;
+									&.completer-selected-row {
+										color: #fff;
+										background-color: #243E6F;
+										width: 100%;
+									}
+									.completer-image-holder {
+										float: none;
+										display: inline-block;
+										width: auto;
+										vertical-align: middle;
+										.completer-image {
+											max-width: 1.489rem;
+											width: 100%;
+											display: block;
+											height: auto;
+											&[src="assets/img/icons/lvl1.png"] {
+												margin-left: 2rem;
+											}
+										}
+									}
+									.completer-item-text {
+										float: none;
+										display: inline-block;
+										width: auto;
+										vertical-align: middle;
+										.completer-title {
+											.completer-list-item {}
+											.completer-highlighted-word {
+												color: #fff;
+												background-color: #C0252E;
+											}
+										}
+									}
+								}
+							}
+						}
 					}
 					input {
 						padding-left: 3rem;
@@ -137,16 +177,28 @@
 
 				&.opt {
 					&>div {
+						position: relative;
 						padding-left: .7rem;
+						&:before {
+							width: .7rem;
+							height: 100%;
+							display: block;
+							content: '';
+							position: absolute;
+							top: 0;
+							left: 0;
+							cursor: default;
+						}
 					}
 					.checkin {
-						width: 29%;
+						width: 24.5%;
 					}
 					.checkout {
-						width: 29%;
+						width: 24.5%;
 					}
 					.rooms {
-						width: 21%;
+						width: 30%;
+						cursor: pointer;
 						.quartos {
 							border: 1px solid #aaa;
 							display: block;
@@ -167,7 +219,7 @@
 							position: absolute;
 							right: 0;
 							top: 100%;
-							width: 365%;
+							width: 256%;
 							border: 1px solid #aaa;
 							margin-top: 1rem;
 							padding: 1rem;
@@ -248,6 +300,7 @@
 					img {
 						width: 100%;
 						height: auto;
+						display: block;
 					}
 				}
 				.icon-room,
@@ -257,6 +310,7 @@
 					img {
 						width: 100%;
 						height: auto;
+						display: block;
 					}
 				}
 			}

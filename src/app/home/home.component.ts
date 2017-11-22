@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { CompleterService, CompleterData } from 'ng2-completer';
+import { CompleterService, RemoteData } from 'ng2-completer';
 
 @Component({
     selector: 'app-home',
@@ -14,7 +14,7 @@ import { CompleterService, CompleterData } from 'ng2-completer';
 })
 export class HomeComponent implements OnInit {
 
-    dataService: CompleterData;
+    dataService: RemoteData;
     vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
@@ -57,74 +57,7 @@ export class HomeComponent implements OnInit {
         busca: {
             val: '',
             init: '',
-            loading: 'Buscando: ',
-            noRet: 'Não foram encontrados resultados contenham: ',
-            placeholder: 'Ex: São Paulo',
-            dataSrc: [{
-                    "regionId": "234",
-                    "regionType": "Province (State)",
-                    "regionName": "New York",
-                    "regionNameLong": "New York, United States of America",
-                    "parentRegionId": "201",
-                    "level": "0"
-                },
-                {
-                    "regionId": "1208",
-                    "regionType": "City",
-                    "regionName": "Fishers Island",
-                    "regionNameLong": "Fishers Island, New York, United States of America",
-                    "parentRegionId": "234",
-                    "parentRegionName": "New York, United States of America"
-                },
-                {
-                    "regionId": "1524",
-                    "regionType": "City",
-                    "regionName": "East Hampton",
-                    "regionNameLong": "East Hampton, New York, United States of America",
-                    "parentRegionId": "234",
-                    "parentRegionName": "New York, United States of America"
-                },
-                {
-                    "regionId": "7391",
-                    "regionType": "City",
-                    "regionName": "Waterloo",
-                    "regionNameLong": "Waterloo, New York, United States of America",
-                    "parentRegionId": "234",
-                    "parentRegionName": "New York, United States of America"
-                },
-                {
-                    "regionId": "6181516",
-                    "regionType": "Point of Interest",
-                    "regionName": "Discovery Center",
-                    "regionNameLong": "Discovery Center, Binghamton, New York, United States of America",
-                    "parentRegionId": "234",
-                    "level": "1"
-                },
-                {
-                    "regionId": "2297",
-                    "regionType": "City",
-                    "regionName": "Miami",
-                    "regionNameLong": "Miami, Florida, United States of America",
-                    "parentRegionId": "178286",
-                    "level": "0"
-                },
-                {
-                    "regionId": "800070",
-                    "regionType": "Neighborhood",
-                    "regionName": "Downtown Miami",
-                    "regionNameLong": "Downtown Miami, Miami, Florida, United States of America",
-                    "parentRegionId": "2297",
-                    "level": "1"
-                },
-                {
-                    "regionId": "6048102",
-                    "regionType": "Neighborhood",
-                    "regionName": "South Miami",
-                    "regionNameLong": "South Miami, Miami, Florida, United States of America",
-                    "parentRegionId": "2297",
-                    "level": "1"
-                }
-            ]
+            placeholder: 'Ex: São Paulo'
         },
         entrada: '',
         saida: '',
@@ -150,8 +83,30 @@ export class HomeComponent implements OnInit {
         }
     }
     constructor(private http: HttpClient, private completerService: CompleterService) {}
+/*    iconify() {
+        var o = this.mdl.busca,
+            k, nome;
+        for (k in o.dataSrc) {
+            if (!o.dataSrc.hasOwnProperty(k))
+                continue;
+            nome = o.dataSrc[k].level.indexOf('1') > -1 ? 'lvl1' :
+                (o.dataSrc[k].regionType.indexOf('Point of Interest') > -1 ? 'interest' :
+                (o.dataSrc[k].regionType.indexOf('Hotel') > -1 ? 'hotel' :
+                (o.dataSrc[k].regionType.indexOf('Metro') > -1 ? 'train' :
+                (o.dataSrc[k].regionType.indexOf('Train') > -1 ? 'train' :
+                (o.dataSrc[k].regionType.indexOf('Airport') > -1 ? 'airport' : 'default')))));
+            o.dataSrc[k]['icon'] = 'assets/img/icons/' + nome + '.png';
+        }
+    }*/
     ngOnInit() {
-        this.dataService = this.completerService.local(this.mdl.busca.dataSrc, 'regionNameLong', 'regionNameLong').imageField('regionType');
+        this.dataService = this.completerService.remote(
+            null,
+            "regionNameLong",
+            "regionNameLong");
+        this.dataService.urlFormater(termo => {
+            return `https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/regions?termo=${termo}`;
+        });
+        this.dataService.imageField('icon');
         this.vars.el = document.getElementById('rooms');
         if (!this.cookie('cid'))
             this.open.keys = true;
@@ -291,7 +246,14 @@ export class HomeComponent implements OnInit {
                 h.HotelListResponseStr = < string > hotelList;
                 h.HotelListResponse = JSON.parse( < string > hotelList);
                 if (h.HotelListResponse.HotelListResponse) {
+                    if(h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
+                        h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;
+                        h.HotelListResponse = null;
+                        return;
+                    }
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
+                    if(!Array.isArray(h.HotelListResponse))
+                        h.HotelListResponse = [h.HotelListResponse];
                     for (var i = 0; i < h.HotelListResponse.length; ++i) {
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
                         rateInfo = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo;

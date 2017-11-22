@@ -7,7 +7,7 @@
 		<form #frm="ngForm" class="wrap" (ngSubmit)="onSubmit(frm)" novalidate>
 			<div class="search">
 				<label>
-					<ng2-completer [(initialValue)]="mdl.busca.init" [autoMatch]="true" [overrideSuggested]="true" [inputClass]="'busca-ctrl'" [autofocus]="true" [textSearching]="null" [textNoResults]="null" name="busca" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="dataService" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+					<ng2-completer [(initialValue)]="mdl.busca.init" [autoMatch]="true" [overrideSuggested]="true" [inputClass]="'busca-ctrl'" [autofocus]="true" [textSearching]="null" [textNoResults]="null" name="busca" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 					<span class="icon"></span>
 				</label>
 			</div>

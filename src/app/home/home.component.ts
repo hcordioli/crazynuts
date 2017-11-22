@@ -1,7 +1,9 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Http } from "@angular/http";
 import { CompleterService, RemoteData } from 'ng2-completer';
+import { CustomData } from "./regions";
 
 @Component({
     selector: 'app-home',
@@ -14,7 +16,6 @@ import { CompleterService, RemoteData } from 'ng2-completer';
 })
 export class HomeComponent implements OnInit {
 
-    dataService: RemoteData;
     vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
@@ -82,7 +83,9 @@ export class HomeComponent implements OnInit {
             }
         }
     }
-    constructor(private http: HttpClient, private completerService: CompleterService) {}
+    public customData: CustomData;
+    public dataService: RemoteData;
+    constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {}
 /*    iconify() {
         var o = this.mdl.busca,
             k, nome;
@@ -99,14 +102,7 @@ export class HomeComponent implements OnInit {
         }
     }*/
     ngOnInit() {
-        this.dataService = this.completerService.remote(
-            null,
-            "regionNameLong",
-            "regionNameLong");
-        this.dataService.urlFormater(termo => {
-            return `https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/regions?termo=${termo}`;
-        });
-        this.dataService.imageField('icon');
+        this.customData = new CustomData(this.http);
         this.vars.el = document.getElementById('rooms');
         if (!this.cookie('cid'))
             this.open.keys = true;
@@ -228,7 +224,7 @@ export class HomeComponent implements OnInit {
         }
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';
-        self.http.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotels?' +
+        self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotels?' +
                 'eanCID=' + k.cid +
                 '&eanAPIKey=' + k.api +
                 '&eanSharedSecret=' + k.secret +

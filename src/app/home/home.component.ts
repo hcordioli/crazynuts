@@ -139,7 +139,13 @@ export class HomeComponent implements OnInit {
             r = self.mdl.room,
             i = r.people.list.length,
             ii = index,
-            name = ++self.vars.name;
+            name = ++self.vars.name,
+            el;
+        setTimeout(function() {
+            el = document.activeElement;
+            if(el)
+                el.blur();
+        }, 0)
         if (r.total >= r.limit)
             return;
         if (r.people.total >= r.people.limit) {

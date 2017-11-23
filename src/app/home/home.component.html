@@ -39,7 +39,7 @@
 						</span>
 						</span>
 					</div>
-					<div [attr.class]="'room' + (open.rooms ? ' show' : '')">
+					<div [attr.class]="'room' + (open.rooms ? ' show topArrow rightAlign' : '')">
 						<div class="header">
 							<a (click)="show.room = n" [attr.class]="'btn' + (show.room === n ? ' bgc c1 active':'')" *ngFor="let p of mdl.room.people.list; let n = index;">
 								<span>

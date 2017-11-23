@@ -62,6 +62,7 @@ export class HomeComponent implements OnInit {
         busca: {
             val: '',
             init: '',
+            regionId: '0',
             placeholder: 'Ex: São Paulo'
         },
         entrada: '',
@@ -188,7 +189,7 @@ export class HomeComponent implements OnInit {
             if (el)
                 el.value = old;
         } else {
-            a.list = resize(a.list, val, { age: 0 });
+            a.list = resize(a.list, val, 0);
             p.total += val - old;
             a.total = val;
         }
@@ -197,7 +198,7 @@ export class HomeComponent implements OnInit {
     rmRoom(index) {
         var self = this,
             i = index;
-        if(self.mdl.room.total <= 1)
+        if (self.mdl.room.total <= 1)
             return;
         setTimeout(function() {
             var r = self.mdl.room,
@@ -211,8 +212,13 @@ export class HomeComponent implements OnInit {
             r.disabled = p.total >= p.limit;
         }, 0);
     }
+    onCompleterSelected(e) {
+        if (e.description) {
+            this.mdl.busca.regionId = e.description || '0';
+        }
+    }
     onKey(e) {
-        if(e.key === 'Escape' && this.open.rooms) {
+        if (e.key === 'Escape' && this.open.rooms) {
             this.open.rooms = false;
         }
     }
@@ -238,7 +244,13 @@ export class HomeComponent implements OnInit {
     onSubmit() {
         var self = this,
             m = self.mdl,
-            k = m.keys;
+            k = m.keys,
+            quartos = '',
+            tmp, i;
+        for (i = 0; i < m.room.people.list.length; i++) {
+            tmp = m.room.people.list[i];
+            quartos += '&room' + (i + 1) + '=' + tmp.more18 + (tmp.less18.total ? ',' + tmp.less18.list.join(',') : '');
+        }
         if (self.open.keys) {
             if (!k.api || !k.cid || !k.secret) {
                 alert('Favor inserir token');
@@ -250,7 +262,7 @@ export class HomeComponent implements OnInit {
                 self.open.keys = false;
             }
         }
-        if (!m.busca.val || !m.entrada || !m.saida) {
+        if (!m.busca.val || m.busca.regionId === '0' || !m.entrada || !m.saida) {
             alert('Favor preencher todos os campos');
             return;
         } else {
@@ -260,15 +272,14 @@ export class HomeComponent implements OnInit {
         }
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';
-        self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotels?' +
-                'eanCID=' + k.cid +
-                '&eanAPIKey=' + k.api +
-                '&eanSharedSecret=' + k.secret +
-                '&city=' + m.busca.val.replace(/\s+/gi, '%20') +
-                '&countryCode=US&arrivalDate=' + m.entrada +
-                '&departureDate=' + m.saida +
-                '&numberOfAdults=' + m.room.people.total +
-                '&numberOfResults=10&rateType=sim')
+        self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
+                'cid=' + k.cid +
+                '&apiKey=' + k.api +
+                '&secret=' + k.secret +
+                '&checkin=' + m.entrada +
+                '&checkout=' + m.saida +
+                '&regionId=' + m.busca.regionId +
+                quartos)
             .subscribe(hotelList => {
                 var h = self.vars.hotelList,
                     tgtComP = 0.13,
@@ -312,6 +323,10 @@ export class HomeComponent implements OnInit {
                         h.HotelListResponse[i].HotaxFinalCommission = hFinalComP.toFixed(2);
                     }
                 }
+            }, err => {
+                var h = self.vars.hotelList;
+                h.HotelListResponseStr = 'Erro!';
+                h.HotelListResponse = null;
             });
         return;
     }

@@ -187,26 +187,27 @@ body {
     font-family: Helvetica, Arial, "Helvetica Neue", sans-serif;
 }
 
-@media (min-width: 1000px) and (max-width: 1919px) {
+.app-main {
+    width: 100%;
+    margin: 0 auto;
+}
+
+@media (min-width: 961px) and (max-width: 1919px) {
     html,
     body {
         font-size: 1.18vw !important;
     }
     .app-main {
-        width: 100%;
-        max-width: 1366px;
-        margin: 0 auto;
         padding: 0 10rem;
     }
 }
 
-@media (min-width: 1920px) {
+@media (min-width: 1440px) {
     html,
     body {
-        font-size: 23px !important;
+        font-size: 16.992px !important;
     }
-}
-
-.app-main {
-    width: 100%;
+    .app-main {
+        max-width: 1440px;
+    }
 }

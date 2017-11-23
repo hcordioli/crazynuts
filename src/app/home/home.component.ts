@@ -61,7 +61,12 @@ export class HomeComponent implements OnInit {
     mdl = {
         busca: {
             val: '',
-            init: '',
+            init: {
+                title: '',
+                description: '',
+                image: ''
+            },
+            icon: '',
             regionId: '0',
             placeholder: 'Ex: São Paulo'
         },
@@ -104,7 +109,13 @@ export class HomeComponent implements OnInit {
                 api: this.cookie('api'),
                 secret: this.cookie('secret')
             }
-            this.mdl.busca.init = this.cookie('busca');
+            if(this.cookie('busca')) {
+                this.mdl.busca.init = {
+                    title: this.cookie('busca-val'),
+                    image: this.cookie('busca-img'),
+                    description: this.cookie('busca-id')
+                };
+            }
             this.mdl.entrada = this.cookie('entrada');
             this.mdl.saida = this.cookie('saida');
         }
@@ -215,6 +226,7 @@ export class HomeComponent implements OnInit {
     onCompleterSelected(e) {
         if (e.description) {
             this.mdl.busca.regionId = e.description || '0';
+            this.mdl.busca.icon = e.image;
         }
     }
     onKey(e) {
@@ -266,7 +278,9 @@ export class HomeComponent implements OnInit {
             alert('Favor preencher todos os campos');
             return;
         } else {
-            self.cookie('busca', m.busca.val);
+            self.cookie('busca-val', m.busca.val);
+            self.cookie('busca-image', m.busca.icon);
+            self.cookie('busca-id', m.busca.regionId);
             self.cookie('entrada', m.entrada);
             self.cookie('saida', m.saida);
         }
@@ -286,8 +300,8 @@ export class HomeComponent implements OnInit {
                     storeComP = 0.15,
                     gpShare = 0.5,
                     rateInfo, gpShareH, eanNet, hInitialPrice, hInitialCom, hInitialComP, markup, hFinalPrice, storeCom, hFinalCom, hFinalComP;
-                h.HotelListResponseStr = < string > hotelList;
-                h.HotelListResponse = JSON.parse( < string > hotelList);
+                h.HotelListResponseStr = JSON.stringify(hotelList);
+                h.HotelListResponse = hotelList;
                 if (h.HotelListResponse.HotelListResponse) {
                     if (h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
                         h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;

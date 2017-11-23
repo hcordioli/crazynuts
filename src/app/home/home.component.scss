@@ -348,6 +348,15 @@
 						.room.show {
 							display: block;
 							cursor: default !important;
+							.alignL {
+								left: -100%;
+							}
+							.alignC {
+								left: 0%;
+							}
+							.alignR {
+								left: 100%;
+							}
 						}
 						.add {
 							cursor: pointer;

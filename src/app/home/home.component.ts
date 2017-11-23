@@ -109,7 +109,7 @@ export class HomeComponent implements OnInit {
                 api: this.cookie('api'),
                 secret: this.cookie('secret')
             }
-            if(this.cookie('busca')) {
+            if (this.cookie('busca')) {
                 this.mdl.busca.init = {
                     title: this.cookie('busca-val'),
                     image: this.cookie('busca-img'),
@@ -143,7 +143,7 @@ export class HomeComponent implements OnInit {
             el;
         setTimeout(function() {
             el = document.activeElement;
-            if(el)
+            if (el)
                 el.blur();
         }, 0)
         if (r.total >= r.limit)
@@ -206,7 +206,7 @@ export class HomeComponent implements OnInit {
             if (el)
                 el.value = old;
         } else {
-            a.list = resize(a.list, val, {age: 0});
+            a.list = resize(a.list, val, { age: 0 });
             p.total += val - old;
             a.total = val;
         }
@@ -233,7 +233,7 @@ export class HomeComponent implements OnInit {
         if (e && e.description) {
             this.mdl.busca.regionId = e.description || '0';
             this.mdl.busca.icon = e.image;
-            if(!e.title && e.originalObject.title)
+            if (!e.title && e.originalObject.title)
                 this.mdl.busca.val = e.originalObject.title;
         }
     }

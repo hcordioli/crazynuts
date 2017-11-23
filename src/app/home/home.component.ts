@@ -224,9 +224,11 @@ export class HomeComponent implements OnInit {
         }, 0);
     }
     onCompleterSelected(e) {
-        if (e.description) {
+        if (e && e.description) {
             this.mdl.busca.regionId = e.description || '0';
             this.mdl.busca.icon = e.image;
+            if(!e.title && e.originalObject.title)
+                this.mdl.busca.val = e.originalObject.title;
         }
     }
     onKey(e) {
@@ -279,7 +281,7 @@ export class HomeComponent implements OnInit {
             return;
         } else {
             self.cookie('busca-val', m.busca.val);
-            self.cookie('busca-image', m.busca.icon);
+            self.cookie('busca-img', m.busca.icon);
             self.cookie('busca-id', m.busca.regionId);
             self.cookie('entrada', m.entrada);
             self.cookie('saida', m.saida);

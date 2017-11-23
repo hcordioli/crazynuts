@@ -42,7 +42,8 @@ export class CustomData extends Subject <CompleterItem[]> implements CompleterDa
         return {
             title: typeof data === 'string' ? data : data.regionNameLong,
             image: 'assets/img/icons/' + nome + '.png',
-            description: data.regionId || 0
+            description: data.regionId || data.description || 0,
+            originalObject: data
         } as CompleterItem;
     }
 }

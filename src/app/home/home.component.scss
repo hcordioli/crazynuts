@@ -81,6 +81,9 @@
 					font-size: 1.2rem;
 					padding: 0.5rem;
 					color: #222;
+					&:focus {
+						outline: 1px solid #243E6F;
+					}
 				}
 
 				&.search {
@@ -90,6 +93,31 @@
 							border: 1px solid #aaa;
 							margin: 0;
 							border-radius: 0;
+							margin-bottom: 2rem;
+							margin-top: 1rem;
+							position: relative;
+							&:before,
+							&:after {
+								content: '';
+								display: block;
+								position: absolute;
+								left: 0;
+								top: -1rem;
+								width: 0;
+								height: 0;
+							}
+							&:before {
+								border: 0 solid transparent;
+								border-width: 0 1rem 1rem 1rem;
+								border-bottom-color: #aaa;
+							}
+							&:after {
+								border: 0 solid transparent;
+								border-width: 0 .8rem .8rem .8rem;
+								border-bottom-color: #fff;
+								margin-top: 1px;
+								margin-left: 1px;
+							}
 							.completer-row-wrapper {
 								.completer-row {
 									width: 100%;
@@ -211,8 +239,11 @@
 								float: right;
 							}
 						}
-						&.touched .quartos .label .val {
-							color: #222;
+						&.touched {
+							cursor: default;
+							.quartos .label .val {
+								color: #222;
+							}
 						}
 						.room {
 							display: none;
@@ -223,16 +254,34 @@
 							border: 1px solid #aaa;
 							margin-top: 1rem;
 							padding: 1rem;
-							overflow: auto;
-							height: 17rem;
 							background-color: #fff;
 							z-index: 1;
+							.content {
+								overflow: hidden;
+								position: relative;
+								min-height: 11rem;
+								&>div {
+									position: absolute;
+									top: 0;
+									left: 0;
+									height: 100%;
+									width: 100%;
+									display: block;
+									transition: left .4s ease;
+								}
+							}
 							.header {
 								color: #222;
 								border-bottom: 1px solid #aaa;
 								display: block;
 								padding-bottom: 0.5rem;
 								margin-bottom: 1.5rem;
+								.btn {
+									padding: 0.5rem;
+									&.active {
+										color: #fff;
+									}
+								}
 								.remove {
 									float: right;
 									font-weight: 600;
@@ -243,6 +292,10 @@
 							}
 							.campos {
 								padding-bottom: 1rem;
+								overflow: auto;
+								height: 100%;
+								display: block;
+								width: 103%;
 								label {
 									margin-right: 1rem;
 									margin-bottom: 1rem;
@@ -251,17 +304,28 @@
 									white-space: nowrap;
 									padding-bottom: 0.2rem;
 								}
-								label,
-								label span,
-								label input {
+								.people {
+									display: block;
 									float: left;
-									width: 4.4rem;
+									width: 50%;
+									label,
+									label span,
+									label input {
+										display: block;
+									}
 								}
 								.children {
-									float: none;
-									clear: both;
+									display: block;
+									float: left;
+									width: 50%;
 									label span {
 										white-space: nowrap;
+									}
+									label,
+									label span,
+									label input {
+										float: left;
+										width: 4.4rem;
 									}
 								}
 							}
@@ -276,6 +340,7 @@
 							padding: 0.5rem;
 							display: inline-block;
 							margin: 1rem 0 0;
+							float: right;
 						}
 					}
 					.submit {

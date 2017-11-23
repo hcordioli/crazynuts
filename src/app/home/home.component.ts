@@ -39,6 +39,9 @@ export class HomeComponent implements OnInit {
         rooms: false,
         keys: false
     }
+    show = {
+        room: 0
+    }
     /*
         &room[room number, starting with 1]=
         [number of adults],
@@ -68,12 +71,13 @@ export class HomeComponent implements OnInit {
             secret: ''
         },
         room: {
+            limit: 4,
             total: 1,
             people: {
                 total: 2,
+                limit: 8,
                 list: [{
                     name: 0,
-                    limit: [4, 4],
                     more18: 2,
                     less18: {
                         total: 0,
@@ -86,21 +90,6 @@ export class HomeComponent implements OnInit {
     public customData: CustomData;
     public dataService: RemoteData;
     constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {}
-/*    iconify() {
-        var o = this.mdl.busca,
-            k, nome;
-        for (k in o.dataSrc) {
-            if (!o.dataSrc.hasOwnProperty(k))
-                continue;
-            nome = o.dataSrc[k].level.indexOf('1') > -1 ? 'lvl1' :
-                (o.dataSrc[k].regionType.indexOf('Point of Interest') > -1 ? 'interest' :
-                (o.dataSrc[k].regionType.indexOf('Hotel') > -1 ? 'hotel' :
-                (o.dataSrc[k].regionType.indexOf('Metro') > -1 ? 'train' :
-                (o.dataSrc[k].regionType.indexOf('Train') > -1 ? 'train' :
-                (o.dataSrc[k].regionType.indexOf('Airport') > -1 ? 'airport' : 'default')))));
-            o.dataSrc[k]['icon'] = 'assets/img/icons/' + nome + '.png';
-        }
-    }*/
     ngOnInit() {
         this.customData = new CustomData(this.http);
         this.vars.el = document.getElementById('rooms');
@@ -117,6 +106,14 @@ export class HomeComponent implements OnInit {
             this.mdl.saida = this.cookie('saida');
         }
     }
+    nextInput(ev) {
+        var tgt = ev.target;
+        tgt = tgt ? tgt.parentNode.parentNode.parentNode : document;
+        tgt = tgt.querySelector('.room input');
+        this.open.rooms = true;
+        if (tgt)
+            tgt.focus();
+    }
     cookie = function(prop, val ? ) {
         var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
         if (val !== undefined)
@@ -124,15 +121,20 @@ export class HomeComponent implements OnInit {
         return val ? val : (ret && ret.length > 1 ? ret[1] : '');
     }
     addRoom(index) {
-        this.vars.name++;
         var self = this,
             r = self.mdl.room,
             i = r.people.list.length,
-            name = this.vars.name;
+            ii = index,
+            name = self.vars.name;
+        setTimeout(function() {
+            self.show.room = ii;
+        }, 0);
+        if (r.total >= r.limit)
+            return;
+        self.vars.name++;
         r.total++;
         r.people.list.push({
             name: name,
-            limit: [4, 4],
             more18: 0,
             less18: {
                 total: 0,
@@ -146,9 +148,11 @@ export class HomeComponent implements OnInit {
         var p = this.mdl.room.people,
             old = p.list[index].more18;
         val = val | 0;
+        if (val - old >= p.limit) {
+            return;
+        }
         p.total += val - old;
         p.list[index].more18 = val;
-        p.list[index].limit = [8 - val, 4 - val]; //TODO 4 adulto ou 4 kid
     }
     changeChild(index, val) {
         function resize(arr, size, defval) {
@@ -164,11 +168,12 @@ export class HomeComponent implements OnInit {
             a = p.list[index].less18,
             old = p.list[index].less18.total;
         val = val | 0;
-        p.total += val - old;
-        p.list[index].less18.list = resize(p.list[index].less18.list, val, { age: 0 });
-        p.list[index].less18.total = val;
+        if ((val - old) >= p.limit)
+            val =
+            p.total += val - old;
+        a.list = resize(a.list, val, { age: 0 });
+        a.total = val;
         val = p.list[index].more18;
-        p.list[index].limit = [8 - val, 4 - val]; //TODO 4 adulto ou 4 kid
     }
     rmRoom(index) {
         var self = this,
@@ -183,7 +188,7 @@ export class HomeComponent implements OnInit {
     }
     onClick(e) {
         if (!e || !e.target)
-            return;
+            return true;
         if (this.vars.el) {
             if (this.vars.el.contains(e.target)) {
                 this.open.rooms = true;
@@ -193,6 +198,7 @@ export class HomeComponent implements OnInit {
                 this.open.rooms = false;
             }
         }
+        return true;
     }
     decodeHTML(html) {
         var txt = document.createElement("textarea");
@@ -242,13 +248,13 @@ export class HomeComponent implements OnInit {
                 h.HotelListResponseStr = < string > hotelList;
                 h.HotelListResponse = JSON.parse( < string > hotelList);
                 if (h.HotelListResponse.HotelListResponse) {
-                    if(h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
+                    if (h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
                         h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;
                         h.HotelListResponse = null;
                         return;
                     }
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
-                    if(!Array.isArray(h.HotelListResponse))
+                    if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
                     for (var i = 0; i < h.HotelListResponse.length; ++i) {
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);

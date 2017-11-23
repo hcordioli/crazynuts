@@ -20,11 +20,11 @@
 				</div>
 				<div class="checkout">
 					<label>
-						<input placeholder="MM/DD/YYYY" name="saida" [(ngModel)]="mdl.saida">
+						<input (keydown.Tab)="nextInput($event)" placeholder="MM/DD/YYYY" name="saida" [(ngModel)]="mdl.saida">
 						<span class="label"><span>Check-out</span></span>
 					</label>
 				</div>
-				<div id="rooms" class="rooms">
+				<div id="rooms" class="rooms" (keydown.Escape)="open.rooms = false;">
 					<div class="quartos" (click)="onClick($event.target)">
 						<span class="label">
 							<span class="icon-room">
@@ -40,31 +40,39 @@
 						</span>
 					</div>
 					<div [attr.class]="'room' + (open.rooms ? ' show' : '')">
-						<div [attr.class]="'room' + (n + 1)" *ngFor="let p of mdl.room.people.list; let n = index;">
-							<span class="header">
-								Quarto {{n + 1}}
-								<span class="icon-remove remove" (click)="rmRoom(n)">
-									<img [attr.src]="vars.icons.remove" alt="&times;">
+						<div class="header">
+							<a (click)="show.room = n" [attr.class]="'btn' + (show.room === n ? ' bgc c1 active':'')" *ngFor="let p of mdl.room.people.list; let n = index;">
+								<span>
+									Quarto {{n + 1}}
 								</span>
+							</a>
+							<span class="icon-remove remove" (click)="rmRoom(show.room)">
+								<img [attr.src]="vars.icons.remove" alt="&times;">
 							</span>
-							<div class="campos wrap">
-								<label>
-									<span>Adultos<br>(18+)</span>
-									<input type="number" placeholder="" min="1" max="{{p.limit[0]}}" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event)">
-								</label>
-								<label>
-									<span>Menor<br>(até 17)</span>
-									<input min="0" max="{{p.limit[1]}}" step="1" type="number" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event)">
-								</label>
-								<div class="children wrap">
-									<label *ngFor="let pp of p.less18.list; let nn = index">
-										<span>{{ nn + 1 }}º Menor</span>
-										<input type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
-									</label>
+						</div>
+						<div class="content">
+							<div [ngStyle]="{left: (show.room > n ? '-100%' : (show.room === n ? '0' : '100%'))}" [attr.class]="'room' + (n + 1)" *ngFor="let p of mdl.room.people.list; let n = index;">
+								<div class="campos wrap">
+									<div class="people">
+										<label>
+											<span>Adultos (18 anos)</span>
+											<input type="number" placeholder="" min="1" max="{{mdl.room.people.limit}}" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event)">
+										</label>
+										<label>
+											<span>Crianças (0-17 anos)</span>
+											<input min="0" max="{{mdl.room.people.limit}}" step="1" type="number" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event)">
+										</label>
+									</div>
+									<div class="children wrap">
+										<label *ngFor="let pp of p.less18.list; let nn = index">
+											<span>Criança {{ nn + 1 }}</span>
+											<input type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
+										</label>
+									</div>
 								</div>
 							</div>
 						</div>
-						<a href="javascript:;" class="add bgc c1" (click)="addRoom(mdl.room.total)">Adicionar Quarto</a>
+						<a [hidden]="mdl.room.total > mdl.room.limit" href="javascript:;" class="add bgc c1" (click)="addRoom(mdl.room.total)">Adicionar Quarto</a>
 					</div>
 				</div>
 				<div class="submit">

@@ -8,6 +8,7 @@ export class CustomData extends Subject <CompleterItem[]> implements CompleterDa
         super();
     }
     public search(term: string): void {
+        console.log(term);
         this.http.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/regions?termo=' + term)
             .subscribe((ret) => {
                 let data = ret.json();

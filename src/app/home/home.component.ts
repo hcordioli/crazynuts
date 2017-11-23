@@ -73,16 +73,15 @@ export class HomeComponent implements OnInit {
         room: {
             limit: 4,
             total: 1,
+            disabled: false,
             people: {
                 total: 2,
                 limit: 8,
                 list: [{
                     name: 0,
                     more18: 2,
-                    max: 8,
                     less18: {
                         total: 0,
-                        max: 8,
                         list: []
                     }
                 }]
@@ -128,8 +127,12 @@ export class HomeComponent implements OnInit {
             i = r.people.list.length,
             ii = index,
             name = ++self.vars.name;
-        if (r.total >= r.limit || r.people.total >= r.people.limit)
+        if (r.total >= r.limit)
             return;
+        if (r.people.total >= r.people.limit) {
+            r.disabled = true;
+            return;
+        }
         setTimeout(function() {
             self.show.room = ii;
         }, 0);
@@ -137,29 +140,33 @@ export class HomeComponent implements OnInit {
         r.people.list.push({
             name: name,
             more18: 0,
-            max: 8,
             less18: {
                 total: 0,
-                max: 8,
                 list: []
             }
         });
         r.people.total++;
         r.people.list[i].more18 = 1;
+        r.disabled = r.people.total >= r.people.limit;
     }
-    changeAdult(index, val) {
+    changeAdult(index, val, nome) {
         var p = this.mdl.room.people,
-            old = p.list[index].more18;
+            i = index,
+            old = p.list[i].more18,
+            el;
         val = val | 0;
-        if ((val + p.list[index].less18.total) >= p.total && p.total >= p.limit) {
-            p.list[index].more18 = old;
-            p.list[index].max = old;
-            return;
+        if ((p.total + (val - old)) > p.limit) {
+            p.list[i].more18 = old;
+            el = document.getElementById(nome);
+            if (el)
+                el.value = old;
+        } else {
+            p.list[i].more18 = val;
+            p.total += val - old;
         }
-        p.total += val - old;
-        p.list[index].more18 = val;
+        this.mdl.room.disabled = p.total >= p.limit;
     }
-    changeChild(index, val) {
+    changeChild(index, val, nome) {
         function resize(arr, size, defval) {
             var delta = arr.length - size;
             if (delta > 0)
@@ -171,12 +178,20 @@ export class HomeComponent implements OnInit {
         }
         var p = this.mdl.room.people,
             a = p.list[index].less18,
-            old = p.list[index].less18.total;
+            old = p.list[index].less18.total,
+            i = index,
+            el;
         val = val | 0;
-        p.total += val - old;
-        a.list = resize(a.list, val, { age: 0 });
-        a.total = val;
-        val = p.list[index].more18;
+        if ((p.total + (val - old)) > p.limit) {
+            el = document.getElementById(nome);
+            if (el)
+                el.value = old;
+        } else {
+            a.list = resize(a.list, val, { age: 0 });
+            p.total += val - old;
+            a.total = val;
+        }
+        this.mdl.room.disabled = p.total >= p.limit;
     }
     rmRoom(index) {
         var self = this,
@@ -211,7 +226,7 @@ export class HomeComponent implements OnInit {
         txt.innerHTML = html;
         return txt.value;
     }
-    onSubmit(frm) {
+    onSubmit() {
         var self = this,
             m = self.mdl,
             k = m.keys;

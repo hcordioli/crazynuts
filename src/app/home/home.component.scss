@@ -279,7 +279,9 @@
 								margin-bottom: 1.5rem;
 								.btn {
 									padding: 0.5rem;
+									cursor: pointer;
 									&.active {
+										cursor: default;
 										color: #fff;
 									}
 								}
@@ -343,7 +345,10 @@
 							margin: 1rem 0 0;
 							float: right;
 							&[hidden] {
-								display: none;
+								visibility: hidden;
+							}
+							&.disabled {
+								background-color: #aaa;
 							}
 						}
 					}

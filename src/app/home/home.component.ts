@@ -189,7 +189,7 @@ export class HomeComponent implements OnInit {
             if (el)
                 el.value = old;
         } else {
-            a.list = resize(a.list, val, 0);
+            a.list = resize(a.list, val, {age: 0});
             p.total += val - old;
             a.total = val;
         }

@@ -7,7 +7,7 @@
 		<form class="wrap" (ngSubmit)="onSubmit()" novalidate>
 			<div class="search">
 				<label>
-					<ng2-completer (selected)="onCompleterSelected($event)" [clearUnselected]="true" [autoMatch]="true" [overrideSuggested]="true" [inputClass]="'busca-ctrl'" [autofocus]="true" [textSearching]="null" [textNoResults]="null" name="busca" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+					<ng2-completer (selected)="onCompleterSelected($event)" [clearUnselected]="true" [autoMatch]="true" [inputClass]="'busca-ctrl'" [autofocus]="true" [textSearching]="null" [textNoResults]="null" name="busca" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 					<span class="icon"></span>
 				</label>
 			</div>
@@ -66,7 +66,7 @@
 									<div class="children wrap">
 										<label *ngFor="let pp of p.less18.list; let nn = index">
 											<span>Criança {{ nn + 1 }}</span>
-											<input (focus)="show.room = n" type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="p.less18.list[nn]">
+											<input (focus)="show.room = n" type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
 										</label>
 									</div>
 								</div>

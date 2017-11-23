@@ -79,8 +79,10 @@ export class HomeComponent implements OnInit {
                 list: [{
                     name: 0,
                     more18: 2,
+                    max: 8,
                     less18: {
                         total: 0,
+                        max: 8,
                         list: []
                     }
                 }]
@@ -125,19 +127,20 @@ export class HomeComponent implements OnInit {
             r = self.mdl.room,
             i = r.people.list.length,
             ii = index,
-            name = self.vars.name;
+            name = ++self.vars.name;
+        if (r.total >= r.limit || r.people.total >= r.people.limit)
+            return;
         setTimeout(function() {
             self.show.room = ii;
         }, 0);
-        if (r.total >= r.limit)
-            return;
-        self.vars.name++;
         r.total++;
         r.people.list.push({
             name: name,
             more18: 0,
+            max: 8,
             less18: {
                 total: 0,
+                max: 8,
                 list: []
             }
         });
@@ -148,7 +151,9 @@ export class HomeComponent implements OnInit {
         var p = this.mdl.room.people,
             old = p.list[index].more18;
         val = val | 0;
-        if (val - old >= p.limit) {
+        if ((val + p.list[index].less18.total) >= p.total && p.total >= p.limit) {
+            p.list[index].more18 = old;
+            p.list[index].max = old;
             return;
         }
         p.total += val - old;
@@ -168,9 +173,7 @@ export class HomeComponent implements OnInit {
             a = p.list[index].less18,
             old = p.list[index].less18.total;
         val = val | 0;
-        if ((val - old) >= p.limit)
-            val =
-            p.total += val - old;
+        p.total += val - old;
         a.list = resize(a.list, val, { age: 0 });
         a.total = val;
         val = p.list[index].more18;
@@ -180,10 +183,13 @@ export class HomeComponent implements OnInit {
             i = index;
         setTimeout(function() {
             var r = self.mdl.room,
-                p = r.people;
-            p.total -= p.list[i].more18 + p.list[i].less18.total;
+                p = r.people,
+                tp = p.list[i].more18 + p.list[i].less18.total;
+            p.total -= tp;
             r.total--;
             p.list.splice(i, 1);
+            if (self.show.room)
+                self.show.room--;
         }, 0);
     }
     onClick(e) {

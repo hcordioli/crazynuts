@@ -56,11 +56,11 @@
 									<div class="people">
 										<label>
 											<span>Adultos (18 anos)</span>
-											<input type="number" placeholder="" min="1" max="{{mdl.room.people.limit}}" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event)">
+											<input type="number" placeholder="" min="1" max="{{p.max}}" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event)">
 										</label>
 										<label>
 											<span>Crianças (0-17 anos)</span>
-											<input min="0" max="{{mdl.room.people.limit}}" step="1" type="number" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event)">
+											<input min="0" max="{{p.max}}" step="1" type="number" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event)">
 										</label>
 									</div>
 									<div class="children wrap">
@@ -72,7 +72,7 @@
 								</div>
 							</div>
 						</div>
-						<a [hidden]="mdl.room.total > mdl.room.limit" href="javascript:;" class="add bgc c1" (click)="addRoom(mdl.room.total)">Adicionar Quarto</a>
+						<a [hidden]="mdl.room.total >= mdl.room.limit" href="javascript:;" class="add bgc c1" (click)="addRoom(mdl.room.total)">Adicionar Quarto</a>
 					</div>
 				</div>
 				<div class="submit">

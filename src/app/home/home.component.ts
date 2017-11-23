@@ -196,6 +196,8 @@ export class HomeComponent implements OnInit {
     rmRoom(index) {
         var self = this,
             i = index;
+        if(self.mdl.room.total <= 1)
+            return;
         setTimeout(function() {
             var r = self.mdl.room,
                 p = r.people,
@@ -205,6 +207,7 @@ export class HomeComponent implements OnInit {
             p.list.splice(i, 1);
             if (self.show.room)
                 self.show.room--;
+            r.disabled = p.total >= p.limit;
         }, 0);
     }
     onClick(e) {

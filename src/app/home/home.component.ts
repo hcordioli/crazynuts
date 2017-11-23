@@ -12,6 +12,7 @@ import { CustomData } from "./regions";
     encapsulation: ViewEncapsulation.None,
     host: {
         '(document:click)': 'onClick($event)',
+        '(document:keydown)': 'onKey($event)',
     }
 })
 export class HomeComponent implements OnInit {
@@ -209,6 +210,11 @@ export class HomeComponent implements OnInit {
                 self.show.room--;
             r.disabled = p.total >= p.limit;
         }, 0);
+    }
+    onKey(e) {
+        if(e.key === 'Escape' && this.open.rooms) {
+            this.open.rooms = false;
+        }
     }
     onClick(e) {
         if (!e || !e.target)

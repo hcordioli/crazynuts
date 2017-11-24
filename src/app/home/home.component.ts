@@ -266,10 +266,13 @@ export class HomeComponent implements OnInit {
             m = self.mdl,
             k = m.keys,
             quartos = '',
-            tmp, i;
+            tmp, i, j;
         for (i = 0; i < m.room.people.list.length; i++) {
             tmp = m.room.people.list[i];
-            quartos += '&room' + (i + 1) + '=' + tmp.more18 + (tmp.less18.total ? ',' + tmp.less18.list.join(',') : '');
+            quartos += '&room' + (i + 1) + '=' + tmp.more18;
+            if(tmp.less18.total)
+	            for(j = 0; j < tmp.less18.list.length; j++)
+	            	quartos += ',' + tmp.less18.list[j].age;
         }
         if (self.open.keys) {
             if (!k.api || !k.cid || !k.secret) {

@@ -272,7 +272,7 @@ export class HomeComponent implements OnInit {
             quartos += '&room' + (i + 1) + '=' + tmp.more18;
             if(tmp.less18.total)
 	            for(j = 0; j < tmp.less18.list.length; j++)
-	            	quartos += ',' + tmp.less18.list[j].age;
+	            	quartos += ',' + tmp.less18.list[j].age
         }
         if (self.open.keys) {
             if (!k.api || !k.cid || !k.secret) {
@@ -322,6 +322,8 @@ export class HomeComponent implements OnInit {
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
+                    for (var i = 0; i < h.HotelListResponse.length; ++i)
+                        h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
                 }
             }, err => {
                 var h = self.vars.hotelList;

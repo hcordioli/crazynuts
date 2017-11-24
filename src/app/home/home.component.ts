@@ -319,31 +319,6 @@ export class HomeComponent implements OnInit {
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
-                    for (var i = 0; i < h.HotelListResponse.length; ++i) {
-                        h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
-                        rateInfo = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo;
-                        gpShareH = rateInfo.ChargeableRateInfo['@grossProfitOnline'] * gpShare;
-                        eanNet = rateInfo.ChargeableRateInfo['@total'] - gpShareH;
-                        hInitialPrice = rateInfo['@pkgSavingsAmount'] + rateInfo.ChargeableRateInfo['@total'];
-                        hInitialCom = gpShareH + rateInfo['@pkgSavingsAmount'];
-                        hInitialComP = hInitialCom / hInitialPrice;
-                        markup = 0.0;
-                        if (hInitialComP >= (tgtComP + storeComP))
-                            markup = 1;
-                        else
-                            markup = (tgtComP + storeComP - 1) * -1;
-                        hFinalPrice = 0;
-                        if (markup >= 1)
-                            hFinalPrice = hInitialPrice;
-                        else
-                            hFinalPrice = eanNet / markup;
-                        storeCom = hFinalPrice * storeComP;
-                        hFinalCom = hFinalPrice - eanNet - storeCom;
-                        hFinalComP = hFinalCom / hFinalPrice;
-                        h.HotelListResponse[i].Markup = markup.toFixed(2);
-                        h.HotelListResponse[i].HotaxFinalPrice = hFinalPrice.toFixed(2);
-                        h.HotelListResponse[i].HotaxFinalCommission = hFinalComP.toFixed(2);
-                    }
                 }
             }, err => {
                 var h = self.vars.hotelList;

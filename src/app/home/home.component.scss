@@ -123,6 +123,9 @@
 				}
 
 				&.search {
+					[ng-reflect-model=""] + div {
+						display: none;
+					}
 					.completer-dropdown-holder {
 						margin-top: 1.3rem;
 						.completer-dropdown {

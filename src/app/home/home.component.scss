@@ -123,8 +123,8 @@
 				}
 
 				&.search {
-					[ng-reflect-model=""] + div,
-					input.lessthanthree + div {
+					[ng-reflect-model=""]+div,
+					input.lessthanthree+div {
 						display: none;
 					}
 					.completer-dropdown-holder {

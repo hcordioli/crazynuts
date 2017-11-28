@@ -120,14 +120,14 @@ export class HomeComponent implements OnInit {
             this.mdl.entrada = this.cookie('entrada');
             this.mdl.saida = this.cookie('saida');
         }
-/*        var body = document.body,
-            cw = body.clientWidth,
-            prev, sw;
-        prev = cw;
-        body.style.overflow = 'scroll';
-        sw = cw - body.clientWidth;
-        body.style.overflow = 'auto';
-        body.style.marginRight = sw + 'px';*/
+        /*        var body = document.body,
+                    cw = body.clientWidth,
+                    prev, sw;
+                prev = cw;
+                body.style.overflow = 'scroll';
+                sw = cw - body.clientWidth;
+                body.style.overflow = 'auto';
+                body.style.marginRight = sw + 'px';*/
     }
     nextInput(ev) {
         var tgt = ev.target;
@@ -137,10 +137,10 @@ export class HomeComponent implements OnInit {
         if (tgt)
             tgt.focus();
     }
-    cookie = function(prop, val ? ) {
+    cookie = function(prop, val ? , eternal ? ) {
         var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
         if (val !== undefined)
-            document.cookie = prop + '=' + val + '' + '; expires=' + new Date('01/01/2038').toUTCString() + '; path=/;';
+            document.cookie = prop + '=' + val + (eternal ? '; expires=' + new Date('01/01/2038').toUTCString() : '') + '; path=/;';
         return val ? val : (ret && ret.length > 1 ? ret[1] : '');
     }
     addRoom(index) {
@@ -288,9 +288,9 @@ export class HomeComponent implements OnInit {
                 alert('Favor inserir token');
                 return;
             } else {
-                self.cookie('cid', k.cid);
-                self.cookie('api', k.api);
-                self.cookie('secret', k.secret);
+                self.cookie('cid', k.cid, true);
+                self.cookie('api', k.api, true);
+                self.cookie('secret', k.secret, true);
                 self.open.keys = false;
             }
         }

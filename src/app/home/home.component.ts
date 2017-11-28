@@ -68,7 +68,8 @@ export class HomeComponent implements OnInit {
             },
             icon: '',
             regionId: '0',
-            placeholder: 'Ex: São Paulo'
+            placeholder: 'Ex: São Paulo',
+            cls: ''
         },
         entrada: '',
         saida: '',
@@ -119,6 +120,14 @@ export class HomeComponent implements OnInit {
             this.mdl.entrada = this.cookie('entrada');
             this.mdl.saida = this.cookie('saida');
         }
+/*        var body = document.body,
+            cw = body.clientWidth,
+            prev, sw;
+        prev = cw;
+        body.style.overflow = 'scroll';
+        sw = cw - body.clientWidth;
+        body.style.overflow = 'auto';
+        body.style.marginRight = sw + 'px';*/
     }
     nextInput(ev) {
         var tgt = ev.target;
@@ -270,9 +279,9 @@ export class HomeComponent implements OnInit {
         for (i = 0; i < m.room.people.list.length; i++) {
             tmp = m.room.people.list[i];
             quartos += '&room' + (i + 1) + '=' + tmp.more18;
-            if(tmp.less18.total)
-	            for(j = 0; j < tmp.less18.list.length; j++)
-	            	quartos += ',' + tmp.less18.list[j].age
+            if (tmp.less18.total)
+                for (j = 0; j < tmp.less18.list.length; j++)
+                    quartos += ',' + tmp.less18.list[j].age
         }
         if (self.open.keys) {
             if (!k.api || !k.cid || !k.secret) {

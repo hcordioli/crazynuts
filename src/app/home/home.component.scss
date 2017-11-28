@@ -123,18 +123,20 @@
 				}
 
 				&.search {
-					[ng-reflect-model=""] + div {
+					[ng-reflect-model=""] + div,
+					input.lessthanthree + div {
 						display: none;
 					}
 					.completer-dropdown-holder {
 						margin-top: 1.3rem;
+						position: relative;
 						.completer-dropdown {
 							width: 100%;
 							border: 1px solid #aaa;
 							margin: 0;
 							border-radius: 0;
 							margin-bottom: 2rem;
-							position: relative;
+							position: absolute;
 							.completer-row-wrapper {
 								.completer-row {
 									width: 100%;

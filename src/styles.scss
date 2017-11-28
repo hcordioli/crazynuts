@@ -192,6 +192,10 @@ body {
     margin: 0 auto;
 }
 
+html {
+    margin-right: calc(100vw - 100%);
+}
+
 @media (min-width: 961px) and (max-width: 1919px) {
     html,
     body {

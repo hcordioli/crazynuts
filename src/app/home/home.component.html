@@ -12,16 +12,18 @@
 				</label>
 			</div>
 			<div class="opt">
-				<div class="checkin">
-					<label>
-						<input placeholder="MM/DD/YYYY" name="entrada" [(ngModel)]="mdl.entrada">
-						<span class="label"><span>Check-in</span></span>
-					</label>
-				</div>
-				<div class="checkout">
-					<label>
-						<input (keydown.Tab)="nextInput($event)" placeholder="MM/DD/YYYY" name="saida" [(ngModel)]="mdl.saida">
-						<span class="label"><span>Check-out</span></span>
+				<div class="dateRange">
+					<label (keydown.Tab)="nextInput($event)">
+						<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)" />
+						<div class="checkin">
+							<span class="txt" [textContent]="mdl.entrada"></span>
+							<span class="label"><span>Check-in</span></span>
+						</div>
+						<div class="checkout">
+							<span class="txt" [textContent]="mdl.saida"></span>
+							<span class="label"><span>Check-out</span></span>
+						</div>
+						<div id="pickMe"></div>
 					</label>
 				</div>
 				<div id="rooms" class="rooms">
@@ -113,7 +115,7 @@
 							<td [textContent]="td.address1"></td>
 							<td [innerHTML]="td.shortDescription"></td>
 							<td [textContent]="td.rateCurrencyCode"></td>
-							<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.nonRefundable ? 'SIM' : 'NÃO' }}</td>
+							<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable ? 'SIM' : 'NÃO' }}</td>
 							<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup"></td>
 							<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></td>
 							<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent"></td>

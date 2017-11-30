@@ -12,10 +12,40 @@ import { CustomData } from "./regions";
     encapsulation: ViewEncapsulation.None,
     host: {
         '(document:click)': 'onClick($event)',
+        '(document:keyup)': 'onFocus($event)',
         '(document:keydown)': 'onKey($event)',
     }
 })
 export class HomeComponent implements OnInit {
+    public daterange: any = {};
+
+    // see original project for full list of options
+    // can also be setup using the config service to apply to multiple pickers
+    public options: any = {
+        locale: { format: 'MM/DD/YY' },
+        alwaysShowCalendars: false,
+        autoApply: true,
+        parentEl: '#pickMe'
+    };
+
+    public selectedDate(value: any, datepicker ? : any) {
+        // this is the date the iser selected
+        console.log(value);
+
+        // any object can be passed to the selected event and it will be passed back here
+        datepicker.start = value.start;
+        datepicker.end = value.end;
+        this.mdl.entrada = value.start.format('MM/DD/YY');
+        this.mdl.saida = value.end.format('MM/DD/YY');
+        this.onClick({
+            target: this.vars.el
+        })
+
+        // or manupulat your own internal property
+        this.daterange.start = value.start;
+        this.daterange.end = value.end;
+        this.daterange.label = 'test';
+    }
 
     vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
@@ -246,6 +276,20 @@ export class HomeComponent implements OnInit {
                 this.mdl.busca.val = e.originalObject.title;
         }
     }
+    onFocus(e) {
+        if (!e || !e.target)
+            return true;
+        if (this.vars.el) {
+            if (this.vars.el.contains(e.target)) {
+                this.open.rooms = true;
+                if (!/touched/.test(this.vars.el.className))
+                    this.vars.el.className += ' touched';
+            } else {
+                this.open.rooms = false;
+            }
+        }
+        return true;
+    }
     onKey(e) {
         if (e.key === 'Escape' && this.open.rooms) {
             this.open.rooms = false;
@@ -319,9 +363,14 @@ export class HomeComponent implements OnInit {
                     tgtComP = 0.13,
                     storeComP = 0.15,
                     gpShare = 0.5,
-                    rateInfo, gpShareH, eanNet, hInitialPrice, hInitialCom, hInitialComP, markup, hFinalPrice, storeCom, hFinalCom, hFinalComP;
-                h.HotelListResponseStr = JSON.stringify(hotelList);
-                h.HotelListResponse = hotelList;
+                    msg = 'Erro!';
+                try {
+                    h.HotelListResponseStr = JSON.stringify(hotelList);
+                    h.HotelListResponse = hotelList;
+                } catch (e) {
+                    h.HotelListResponseStr = '';
+                    h.HotelListResponse = null;
+                }
                 if (h.HotelListResponse.HotelListResponse) {
                     if (h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
                         h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;
@@ -335,9 +384,15 @@ export class HomeComponent implements OnInit {
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
                 }
             }, err => {
-                var h = self.vars.hotelList;
-                h.HotelListResponseStr = 'Erro!';
-                h.HotelListResponse = null;
+                var h = self.vars.hotelList,
+                	erro = err ? err.error && err.error.text : '{message: Erro!}';
+                try {
+                    h.HotelListResponseStr = erro;
+                    h.HotelListResponse = JSON.parse(erro);
+                } catch (e) {
+                    h.HotelListResponseStr = 'Erro!';
+                    h.HotelListResponse = null;
+                }
             });
         return;
     }

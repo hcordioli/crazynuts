@@ -239,11 +239,17 @@
 							cursor: default;
 						}
 					}
-					.checkin {
-						width: 24.5%;
-					}
-					.checkout {
-						width: 24.5%;
+					.dateRange {
+						width: 49%;
+						.checkin {
+							width: 50%;
+						}
+						.checkout {
+							width: 50%;
+						}
+						.daterangepicker {
+							display: none;
+						}
 					}
 					.rooms {
 						width: 30%;

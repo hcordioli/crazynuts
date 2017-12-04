@@ -419,8 +419,12 @@ body {
 								color: #aaa;
 								text-align: left;
 								.pessoas {
-									float: right;
-								}
+    float: right;
+    position: absolute;
+    right: 1rem;
+    background-color: #fff;
+    top: 50%;
+    transform: translate(0, -50%);								}
 							}
 							&.touched {
 								cursor: default;

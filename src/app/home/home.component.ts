@@ -13,8 +13,7 @@ import { CustomData } from './regions';
     host: {
         '(document:click)': 'onClick($event)',
         '(document:keyup)': 'onFocus($event)',
-        '(document:keydown)': 'onKey($event)',
-        '(document:apply.daterangepicker)': 'selectedDate($event)'
+        '(document:keydown)': 'onKey($event)'
     }
 })
 export class HomeComponent implements OnInit {
@@ -26,7 +25,7 @@ export class HomeComponent implements OnInit {
         locale: {
             format: 'MM/DD/YYYY',
             monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+            daysOfWeek: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
         },
         alwaysShowCalendars: false,
         autoApply: true,
@@ -39,10 +38,6 @@ export class HomeComponent implements OnInit {
     };
 
     public selectedDate(value: any) {
-        // this is the date the iser selected
-        console.log(value);
-
-        // any object can be passed to the selected event and it will be passed back here
         this.mdl.entrada.val = value.start.format('MM/DD/YYYY');
         this.mdl.entrada.txt = value.start.format('DD/MM/YY');
         this.mdl.saida.val = value.end.format('MM/DD/YYYY');
@@ -50,11 +45,9 @@ export class HomeComponent implements OnInit {
         this.onClick({
             target: this.vars.el
         })
-
-        // or manupulat your own internal property
         this.daterange.start = value.start;
         this.daterange.end = value.end;
-        this.daterange.label = 'test';
+        this.daterange.label = '';
     }
 
     vars = {
@@ -309,11 +302,11 @@ export class HomeComponent implements OnInit {
         return true;
     }
     onKey(e) {
-        var el = <HTMLElement>document.querySelector('#pickMe .daterangepicker');
+        var el = < HTMLElement > document.querySelector('#pickMe .daterangepicker');
         if (e.key === 'Escape') {
             if (this.open.rooms)
                 this.open.rooms = false;
-            else if(el && el.style.display !== 'none')
+            else if (el && el.style.display !== 'none')
                 el.style.display = 'none';
         }
     }
@@ -389,7 +382,7 @@ export class HomeComponent implements OnInit {
                 try {
                     h.HotelListResponseStr = JSON.stringify(hotelList);
                     h.HotelListResponse = hotelList,
-                    msg = h.HotelListResponse.messagem;
+                        msg = h.HotelListResponse.messagem;
                 } catch (e) {
                     h.HotelListResponseStr = '';
                     h.HotelListResponse = null;

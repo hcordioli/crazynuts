@@ -25,7 +25,7 @@ export class HomeComponent implements OnInit {
         locale: {
             format: 'MM/DD/YYYY',
             monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-            daysOfWeek: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S', 'D'],
+            daysOfWeek: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
         },
         alwaysShowCalendars: false,
         autoApply: true,

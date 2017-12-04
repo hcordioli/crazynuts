@@ -123,6 +123,10 @@ body {
 					.dateRange label {
 						position: relative;
 						display: block;
+						& input:focus~div .txt,
+						{
+							border-color: #243E6F;
+						}
 						.label {
 							position: absolute;
 							top: 0;
@@ -176,7 +180,7 @@ body {
 						padding: 0.5rem;
 						color: #222;
 						&:focus {
-							outline: 1px solid #243E6F;
+							border-color: #243E6F;
 						}
 					}
 
@@ -338,6 +342,7 @@ body {
 									&.topArrow {
 										margin-top: 22px;
 										& .daterangepicker {
+
 											&:before,
 											&:after {
 												content: '';
@@ -396,6 +401,15 @@ body {
 											td {
 												line-height: 1.5;
 											}
+											td.in-range {
+												background-color: #aaa;
+												color: #222;
+											}
+											td.active,
+											td.active:hover {
+												background-color: #243E6F;
+												color: #fff;
+											}
 											.month {
 												font-weight: 600;
 												padding: 0.5rem 0 1rem;
@@ -408,6 +422,9 @@ body {
 						.rooms {
 							width: 30%;
 							cursor: pointer !important;
+							&.touched .quartos {
+								border-color: #243E6F;
+							}
 							.quartos {
 								border: 1px solid #aaa;
 								border-radius: 4px;

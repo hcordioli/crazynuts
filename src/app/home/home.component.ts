@@ -23,7 +23,7 @@ export class HomeComponent implements OnInit {
     // see original project for full list of options
     // can also be setup using the config service to apply to multiple pickers
     public options: any = {
-        locale: { format: 'MM/DD/YY' },
+        locale: { format: 'MM/DD/YYYY' },
         alwaysShowCalendars: false,
         autoApply: true,
         showDropdowns: false,
@@ -39,8 +39,10 @@ export class HomeComponent implements OnInit {
         console.log(value);
 
         // any object can be passed to the selected event and it will be passed back here
-        this.mdl.entrada = value.start.format('MM/DD/YY');
-        this.mdl.saida = value.end.format('MM/DD/YY');
+        this.mdl.entrada.val = value.start.format('MM/DD/YYYY');
+        this.mdl.entrada.txt = value.start.format('DD/MM/YY');
+        this.mdl.saida.val = value.end.format('MM/DD/YYYY');
+        this.mdl.saida.txt = value.end.format('DD/MM/YY');
         this.onClick({
             target: this.vars.el
         })
@@ -105,8 +107,14 @@ export class HomeComponent implements OnInit {
             placeholder: 'Ex: São Paulo',
             cls: ''
         },
-        entrada: '',
-        saida: '',
+        entrada: {
+            val: '',
+            txt: ''
+        },
+        saida: {
+            val: '',
+            txt: ''
+        },
         keys: {
             cid: '',
             api: '',
@@ -151,8 +159,10 @@ export class HomeComponent implements OnInit {
                     description: this.cookie('busca-id')
                 };
             }
-            this.mdl.entrada = this.cookie('entrada');
-            this.mdl.saida = this.cookie('saida');
+            this.mdl.entrada.val = this.cookie('entrada');
+            this.mdl.entrada.txt = this.mdl.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
+            this.mdl.saida.val = this.cookie('saida');
+            this.mdl.saida.txt = this.mdl.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
         }
         /*        var body = document.body,
                     cw = body.clientWidth,
@@ -342,15 +352,15 @@ export class HomeComponent implements OnInit {
                 self.open.keys = false;
             }
         }
-        if (!m.busca.val || m.busca.regionId === '0' || !m.entrada || !m.saida) {
+        if (!m.busca.val || m.busca.regionId === '0' || !m.entrada.val || !m.saida.val) {
             alert('Favor preencher todos os campos');
             return;
         } else {
             self.cookie('busca-val', m.busca.val);
             self.cookie('busca-img', m.busca.icon);
             self.cookie('busca-id', m.busca.regionId);
-            self.cookie('entrada', m.entrada);
-            self.cookie('saida', m.saida);
+            self.cookie('entrada', m.entrada.val);
+            self.cookie('saida', m.saida.val);
         }
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';
@@ -358,8 +368,8 @@ export class HomeComponent implements OnInit {
                 'cid=' + k.cid +
                 '&apiKey=' + k.api +
                 '&secret=' + k.secret +
-                '&checkin=' + m.entrada +
-                '&checkout=' + m.saida +
+                '&checkin=' + m.entrada.val +
+                '&checkout=' + m.saida.val +
                 '&regionId=' + m.busca.regionId +
                 quartos)
             .subscribe(hotelList => {

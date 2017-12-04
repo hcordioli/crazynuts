@@ -15,17 +15,17 @@
 					</div>
 					<div class="opt">
 						<div class="dateRange">
-							<label [attr.class]="'wrap' + ((mdl.entrada || mdl.saida || '').length ? ' touched' : '')" (keydown.Tab)="nextInput($event)">
+							<label class="wrap" (keydown.Tab)="nextInput($event)">
 								<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event)" (apply.daterangepicker)="selectedDate($event)"/>
-								<div class="checkin">
-									<span class="txt" [textContent]="mdl.entrada || '&nbsp;'"></span>
+								<div [attr.class]="'checkin' + ((mdl.entrada.val || '').length ? ' touched' : '')">
+									<span class="txt" [textContent]="mdl.entrada.txt || '&nbsp;'"></span>
 									<span class="label"><span>Check-in</span></span>
 								</div>
-								<div class="checkout">
-									<span class="txt" [textContent]="mdl.saida || '&nbsp;'"></span>
+								<div [attr.class]="'checkout' + ((mdl.saida.val || '').length ? ' touched' : '')">
+									<span class="txt" [textContent]="mdl.saida.txt || '&nbsp;'"></span>
 									<span class="label"><span>Check-out</span></span>
 								</div>
-								<div id="pickMe" [attr.class]="'topArrow' + ((mdl.entrada || '').length ? ' rightAlign': '')"></div>
+								<div id="pickMe" [attr.class]="'topArrow' + ((mdl.entrada.val || '').length ? ' rightAlign': '')"></div>
 							</label>
 						</div>
 						<div id="rooms" class="rooms">

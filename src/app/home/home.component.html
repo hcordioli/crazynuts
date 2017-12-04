@@ -16,7 +16,7 @@
 					<div class="opt">
 						<div class="dateRange">
 							<label [attr.class]="'wrap' + ((mdl.entrada || mdl.saida || '').length ? ' touched' : '')" (keydown.Tab)="nextInput($event)">
-								<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)" />
+								<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event)" (apply.daterangepicker)="selectedDate($event)"/>
 								<div class="checkin">
 									<span class="txt" [textContent]="mdl.entrada || '&nbsp;'"></span>
 									<span class="label"><span>Check-in</span></span>
@@ -25,7 +25,7 @@
 									<span class="txt" [textContent]="mdl.saida || '&nbsp;'"></span>
 									<span class="label"><span>Check-out</span></span>
 								</div>
-								<div id="pickMe"></div>
+								<div id="pickMe" [attr.class]="'topArrow' + ((mdl.entrada || '').length ? ' rightAlign': '')"></div>
 							</label>
 						</div>
 						<div id="rooms" class="rooms">
@@ -90,7 +90,7 @@
 					</div>
 				</form>
 			</div>
-			<div class="foot" [hidden]="vars.hotelList.HotelListResponse || vars.hotelList.HotelListResponseStr.length">
+			<div class="foot" [hidden]="!(vars.hotelList.HotelListResponse || (vars.hotelList.HotelListResponseStr || '').length)">
 				<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
 				<ng-template #content>
 					<div class="tabela">

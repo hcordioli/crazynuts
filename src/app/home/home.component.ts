@@ -3,7 +3,7 @@ import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Http } from "@angular/http";
 import { CompleterService, RemoteData } from 'ng2-completer';
-import { CustomData } from "./regions";
+import { CustomData } from './regions';
 
 @Component({
     selector: 'app-home',
@@ -14,6 +14,7 @@ import { CustomData } from "./regions";
         '(document:click)': 'onClick($event)',
         '(document:keyup)': 'onFocus($event)',
         '(document:keydown)': 'onKey($event)',
+        '(document:apply.daterangepicker)': 'selectedDate($event)'
     }
 })
 export class HomeComponent implements OnInit {
@@ -25,16 +26,19 @@ export class HomeComponent implements OnInit {
         locale: { format: 'MM/DD/YY' },
         alwaysShowCalendars: false,
         autoApply: true,
+        showDropdowns: false,
+        minDate: (new Date()),
+        dateLimit: {
+            days: 28
+        },
         parentEl: '#pickMe'
     };
 
-    public selectedDate(value: any, datepicker ? : any) {
+    public selectedDate(value: any) {
         // this is the date the iser selected
         console.log(value);
 
         // any object can be passed to the selected event and it will be passed back here
-        datepicker.start = value.start;
-        datepicker.end = value.end;
         this.mdl.entrada = value.start.format('MM/DD/YY');
         this.mdl.saida = value.end.format('MM/DD/YY');
         this.onClick({

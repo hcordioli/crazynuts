@@ -1,7 +1,7 @@
 <div class="app-home">
 	<div>
 		<div>
-			<div class="head">
+			<div class="head wrap">
 				<h1><img [attr.src]="vars.logo.url" [attr.alt]="vars.logo.alt"></h1>
 				<p class="fgc c1" [innerHTML]="vars.slogan"></p>
 			</div>
@@ -9,20 +9,20 @@
 				<form class="wrap" (ngSubmit)="onSubmit()" novalidate>
 					<div class="search">
 						<label>
-							<ng2-completer (input)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''" (blur)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [clearUnselected]="true" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+							<ng2-completer (input)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (blur)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [clearUnselected]="true" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 							<span class="icon"></span>
 						</label>
 					</div>
 					<div class="opt">
 						<div class="dateRange">
-							<label [attr.class]="'wrap' + (mdl.entrada.length || mdl.saida.length ? ' touched' : '')" (keydown.Tab)="nextInput($event)">
+							<label [attr.class]="'wrap' + ((mdl.entrada || mdl.saida || '').length ? ' touched' : '')" (keydown.Tab)="nextInput($event)">
 								<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)" />
 								<div class="checkin">
-									<span class="txt" [textContent]="mdl.entrada"></span>
+									<span class="txt" [textContent]="mdl.entrada || '&nbsp;'"></span>
 									<span class="label"><span>Check-in</span></span>
 								</div>
 								<div class="checkout">
-									<span class="txt" [textContent]="mdl.saida"></span>
+									<span class="txt" [textContent]="mdl.saida || '&nbsp;'"></span>
 									<span class="label"><span>Check-out</span></span>
 								</div>
 								<div id="pickMe"></div>
@@ -90,7 +90,7 @@
 					</div>
 				</form>
 			</div>
-			<div class="foot" *ngIf="vars.hotelList.HotelListResponse || vars.hotelList.HotelListResponseStr.length">
+			<div class="foot" [hidden]="vars.hotelList.HotelListResponse || vars.hotelList.HotelListResponseStr.length">
 				<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
 				<ng-template #content>
 					<div class="tabela">

@@ -23,7 +23,11 @@ export class HomeComponent implements OnInit {
     // see original project for full list of options
     // can also be setup using the config service to apply to multiple pickers
     public options: any = {
-        locale: { format: 'MM/DD/YYYY' },
+        locale: {
+            format: 'MM/DD/YYYY',
+            monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+            monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+        },
         alwaysShowCalendars: false,
         autoApply: true,
         showDropdowns: false,
@@ -305,8 +309,12 @@ export class HomeComponent implements OnInit {
         return true;
     }
     onKey(e) {
-        if (e.key === 'Escape' && this.open.rooms) {
-            this.open.rooms = false;
+        var el = <HTMLElement>document.querySelector('#pickMe .daterangepicker');
+        if (e.key === 'Escape') {
+            if (this.open.rooms)
+                this.open.rooms = false;
+            else if(el && el.style.display !== 'none')
+                el.style.display = 'none';
         }
     }
     onClick(e) {
@@ -380,7 +388,8 @@ export class HomeComponent implements OnInit {
                     msg = 'Erro!';
                 try {
                     h.HotelListResponseStr = JSON.stringify(hotelList);
-                    h.HotelListResponse = hotelList;
+                    h.HotelListResponse = hotelList,
+                    msg = h.HotelListResponse.messagem;
                 } catch (e) {
                     h.HotelListResponseStr = '';
                     h.HotelListResponse = null;
@@ -396,10 +405,13 @@ export class HomeComponent implements OnInit {
                         h.HotelListResponse = [h.HotelListResponse];
                     for (var i = 0; i < h.HotelListResponse.length; ++i)
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
+                } else {
+                    h.HotelListResponseStr = msg;
+                    h.HotelListResponse = null;
                 }
             }, err => {
                 var h = self.vars.hotelList,
-                	erro = err ? err.error && err.error.text : '{message: Erro!}';
+                    erro = err ? err.error && err.error.text : '{messagem: Erro!}';
                 try {
                     h.HotelListResponseStr = erro;
                     h.HotelListResponse = JSON.parse(erro);

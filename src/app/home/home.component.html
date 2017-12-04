@@ -1,150 +1,133 @@
 <div class="app-home">
-	<div class="head">
-		<h1><img [attr.src]="vars.logo.url" [attr.alt]="vars.logo.alt"></h1>
-		<p class="fgc c1" [innerHTML]="vars.slogan"></p>
-	</div>
-	<div class="body">
-		<form class="wrap" (ngSubmit)="onSubmit()" novalidate>
-			<div class="search">
-				<label>
-					<ng2-completer
-						(input)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''"
-						(focus)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''"
-						(blur)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''"
-						name="busca"
-						(selected)="onCompleterSelected($event)"
-						[(initialValue)]="mdl.busca.init"
-						[clearUnselected]="true"
-						[autoMatch]="true"
-						[inputClass]="mdl.busca.cls"
-						[autofocus]="true"
-						[textSearching]="null"
-						[textNoResults]="null"
-						[inputName]="'busca'"
-						[placeholder]="mdl.busca.placeholder"
-						[(ngModel)]="mdl.busca.val"
-						[datasource]="customData"
-						[minSearchLength]="3"
-						[fieldTabindex]="1"
-						[selectOnClick]="true"
-						[openOnClick]="true"
-						[matchClass]="'completer-highlighted-word'"></ng2-completer>
-					<span class="icon"></span>
-				</label>
+	<div>
+		<div>
+			<div class="head">
+				<h1><img [attr.src]="vars.logo.url" [attr.alt]="vars.logo.alt"></h1>
+				<p class="fgc c1" [innerHTML]="vars.slogan"></p>
 			</div>
-			<div class="opt">
-				<div class="dateRange">
-					<label (keydown.Tab)="nextInput($event)">
-						<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)" />
-						<div class="checkin">
-							<span class="txt" [textContent]="mdl.entrada"></span>
-							<span class="label"><span>Check-in</span></span>
+			<div class="body">
+				<form class="wrap" (ngSubmit)="onSubmit()" novalidate>
+					<div class="search">
+						<label>
+							<ng2-completer (input)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''" (blur)="mdl.busca.cls = mdl.busca.val.length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [clearUnselected]="true" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+							<span class="icon"></span>
+						</label>
+					</div>
+					<div class="opt">
+						<div class="dateRange">
+							<label [attr.class]="'wrap' + (mdl.entrada.length || mdl.saida.length ? ' touched' : '')" (keydown.Tab)="nextInput($event)">
+								<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event, daterange)" />
+								<div class="checkin">
+									<span class="txt" [textContent]="mdl.entrada"></span>
+									<span class="label"><span>Check-in</span></span>
+								</div>
+								<div class="checkout">
+									<span class="txt" [textContent]="mdl.saida"></span>
+									<span class="label"><span>Check-out</span></span>
+								</div>
+								<div id="pickMe"></div>
+							</label>
 						</div>
-						<div class="checkout">
-							<span class="txt" [textContent]="mdl.saida"></span>
-							<span class="label"><span>Check-out</span></span>
-						</div>
-						<div id="pickMe"></div>
-					</label>
-				</div>
-				<div id="rooms" class="rooms">
-					<div class="quartos" (click)="onClick($event.target)">
-						<span class="label">
+						<div id="rooms" class="rooms">
+							<div class="quartos" (click)="onClick($event.target)">
+								<span class="label">
 							<span class="icon-room">
 								<img [attr.src]="vars.icons.room" alt="Q">
 							</span>
-						<span class="val" [textContent]="mdl.room.total"></span>
-						<span class="pessoas">
+								<span class="val" [textContent]="mdl.room.total"></span>
+								<span class="pessoas">
 								<span class="icon-people">
 									<img [attr.src]="vars.icons.people" alt="P">
 								</span>
-						<span class="val" [textContent]="mdl.room.people.total"></span>
-						</span>
-						</span>
-					</div>
-					<div [attr.class]="'room' + (open.rooms ? ' show topArrow rightAlign' : '')">
-						<div class="header">
-							<a (click)="show.room = n" [attr.class]="'btn' + (show.room === n ? ' bgc c1 active':'')" *ngFor="let p of mdl.room.people.list; let n = index;">
+								<span class="val" [textContent]="mdl.room.people.total"></span>
+								</span>
+								</span>
+							</div>
+							<div [attr.class]="'room' + (open.rooms ? ' show topArrow rightAlign' : '')">
+								<div class="header">
+									<a (click)="show.room = n" [attr.class]="'btn' + (show.room === n ? ' bgc c1 active':'')" *ngFor="let p of mdl.room.people.list; let n = index;">
 								<span>
 									Quarto {{n + 1}}
 								</span>
 							</a>
-							<span [hidden]="mdl.room.total <= 1" class="icon-remove remove" (click)="rmRoom(show.room)">
+									<span [hidden]="mdl.room.total <= 1" class="icon-remove remove" (click)="rmRoom(show.room)">
 								<img [attr.src]="vars.icons.remove" alt="&times;">
 							</span>
-						</div>
-						<div class="content" #quartosWrap>
-							<div [attr.class]="'room' + (n + 1) + ' ' + (show.room > n ? 'alignL' : (show.room === n ? 'alignC' : 'alignR'))" *ngFor="let p of mdl.room.people.list; let n = index;">
-								<div class="campos wrap">
-									<div class="people">
-										<label>
-											<span>Adultos (18 anos)</span>
-											<input (focus)="show.room = n; quartosWrap.scrollLeft = 0;" type="number" placeholder="" min="1" max="{{mdl.room.people.limit}}" id="adults[{{p.name}}]" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event, 'adults[' + p.name + ']')">
-										</label>
-										<label>
-											<span>Crianças (0-17 anos)</span>
-											<input (focus)="show.room = n" min="0" max="{{mdl.room.people.limit}}" step="1" type="number" id="children[{{p.name}}]" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event, 'children[' + p.name + ']')">
-										</label>
-									</div>
-									<div class="children wrap">
-										<label *ngFor="let pp of p.less18.list; let nn = index">
-											<span>Criança {{ nn + 1 }}</span>
-											<input (focus)="show.room = n" type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
-										</label>
+								</div>
+								<div class="content" #quartosWrap>
+									<div [attr.class]="'room' + (n + 1) + ' ' + (show.room > n ? 'alignL' : (show.room === n ? 'alignC' : 'alignR'))" *ngFor="let p of mdl.room.people.list; let n = index;">
+										<div class="campos wrap">
+											<div class="people">
+												<label>
+													<span>Adultos (18 anos)</span>
+													<input (focus)="show.room = n; quartosWrap.scrollLeft = 0;" type="number" placeholder="" min="1" max="{{mdl.room.people.limit}}" id="adults[{{p.name}}]" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event, 'adults[' + p.name + ']')">
+												</label>
+												<label>
+													<span>Crianças (0-17 anos)</span>
+													<input (focus)="show.room = n" min="0" max="{{mdl.room.people.limit}}" step="1" type="number" id="children[{{p.name}}]" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event, 'children[' + p.name + ']')">
+												</label>
+											</div>
+											<div class="children wrap">
+												<label *ngFor="let pp of p.less18.list; let nn = index">
+													<span>Criança {{ nn + 1 }}</span>
+													<input (focus)="show.room = n" type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
+												</label>
+											</div>
+										</div>
 									</div>
 								</div>
+								<a [hidden]="mdl.room.total >= mdl.room.limit" [attr.class]="'add bgc c1' + (mdl.room.disabled ? ' disabled' : '')" href="javascript:;" (click)="addRoom(mdl.room.total)">Adicionar Quarto</a>
 							</div>
 						</div>
-						<a [hidden]="mdl.room.total >= mdl.room.limit" [attr.class]="'add bgc c1' + (mdl.room.disabled ? ' disabled' : '')" href="javascript:;" (click)="addRoom(mdl.room.total)">Adicionar Quarto</a>
+						<div class="submit">
+							<input class="bgc c1" type="submit" value="Busca">
+						</div>
 					</div>
-				</div>
-				<div class="submit">
-					<input class="bgc c1" type="submit" value="Busca">
-				</div>
+					<div class="eanKeys" *ngIf="open.keys">
+						<input placeholder="eanCID" name="cid" [(ngModel)]="mdl.keys.cid">
+						<input placeholder="eanAPIKey" name="api" [(ngModel)]="mdl.keys.api">
+						<input placeholder="eanSharedSecret" name="secret" [(ngModel)]="mdl.keys.secret">
+					</div>
+				</form>
 			</div>
-			<div class="eanKeys" *ngIf="open.keys">
-				<input placeholder="eanCID" name="cid" [(ngModel)]="mdl.keys.cid">
-				<input placeholder="eanAPIKey" name="api" [(ngModel)]="mdl.keys.api">
-				<input placeholder="eanSharedSecret" name="secret" [(ngModel)]="mdl.keys.secret">
+			<div class="foot" *ngIf="vars.hotelList.HotelListResponse || vars.hotelList.HotelListResponseStr.length">
+				<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
+				<ng-template #content>
+					<div class="tabela">
+						<table>
+							<thead>
+								<tr>
+									<th>thumbNailUrl</th>
+									<th>name</th>
+									<th>hotelRating</th>
+									<th>address1</th>
+									<th>roomDescription</th>
+									<th>currencyCode</th>
+									<th>nonRefundable</th>
+									<th>Markup</th>
+									<th>HotaxFinalPrice</th>
+									<th>HotaxFinalCommission%</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let td of vars.hotelList.HotelListResponse">
+									<td><img [attr.src]="'https://i.travelapi.com' + td.thumbNailUrl" alt=""></td>
+									<td [textContent]="td.name"></td>
+									<td [textContent]="td.hotelRating"></td>
+									<td [textContent]="td.address1"></td>
+									<td [innerHTML]="td.shortDescription"></td>
+									<td [textContent]="td.rateCurrencyCode"></td>
+									<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable ? 'SIM' : 'NÃO' }}</td>
+									<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup"></td>
+									<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></td>
+									<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</ng-template>
+				<ng-template #other_content>{{ vars.hotelList.HotelListResponseStr }}</ng-template>
 			</div>
-		</form>
-	</div>
-	<div class="foot" *ngIf="vars.hotelList.HotelListResponse || vars.hotelList.HotelListResponseStr.length">
-		<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
-		<ng-template #content>
-			<div class="tabela">
-				<table>
-					<thead>
-						<tr>
-							<th>thumbNailUrl</th>
-							<th>name</th>
-							<th>hotelRating</th>
-							<th>address1</th>
-							<th>roomDescription</th>
-							<th>currencyCode</th>
-							<th>nonRefundable</th>
-							<th>Markup</th>
-							<th>HotaxFinalPrice</th>
-							<th>HotaxFinalCommission%</th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr *ngFor="let td of vars.hotelList.HotelListResponse">
-							<td><img [attr.src]="'https://i.travelapi.com' + td.thumbNailUrl" alt=""></td>
-							<td [textContent]="td.name"></td>
-							<td [textContent]="td.hotelRating"></td>
-							<td [textContent]="td.address1"></td>
-							<td [innerHTML]="td.shortDescription"></td>
-							<td [textContent]="td.rateCurrencyCode"></td>
-							<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable ? 'SIM' : 'NÃO' }}</td>
-							<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup"></td>
-							<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></td>
-							<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent"></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</ng-template>
-		<ng-template #other_content>{{ vars.hotelList.HotelListResponseStr }}</ng-template>
+		</div>
 	</div>
 </div>

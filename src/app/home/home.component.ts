@@ -315,7 +315,7 @@ export class HomeComponent implements OnInit {
                 if (!/focus/.test(this.vars.el.className))
                     this.vars.el.className += ' focus';
             } else {
-                this.vars.el.className = this.vars.el.className.replace(/\S*focus\S*/gi, '');
+                this.vars.el.className = this.vars.el.className.replace(/\s*focus\s*/gi, ' ');
                 this.open.rooms = false;
             }
         }

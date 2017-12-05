@@ -737,10 +737,13 @@ body {
 			&>div {
 				vertical-align: top;
 				height: 0;
-				padding-top: 12rem;
+				padding-top: .8rem;
 				.head {
+					margin: 0;
+					padding: 0 0 .8rem;
 					h1 {
-						width: 10rem;
+						width: 12rem;
+						padding-left: 2rem;
 						border: 0;
 					}
 					p {

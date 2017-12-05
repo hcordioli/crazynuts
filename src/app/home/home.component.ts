@@ -160,15 +160,8 @@ export class HomeComponent implements OnInit {
             this.mdl.entrada.txt = this.mdl.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
             this.mdl.saida.val = this.cookie('saida');
             this.mdl.saida.txt = this.mdl.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
+            this.mdl.room = JSON.parse(this.cookie('room'));
         }
-        /*        var body = document.body,
-                    cw = body.clientWidth,
-                    prev, sw;
-                prev = cw;
-                body.style.overflow = 'scroll';
-                sw = cw - body.clientWidth;
-                body.style.overflow = 'auto';
-                body.style.marginRight = sw + 'px';*/
     }
     nextInput(ev) {
         var tgt = ev.target;
@@ -295,7 +288,10 @@ export class HomeComponent implements OnInit {
                 this.open.rooms = true;
                 if (!/touched/.test(this.vars.el.className))
                     this.vars.el.className += ' touched';
+                if (!/focus/.test(this.vars.el.className))
+                    this.vars.el.className += ' focus';
             } else {
+                this.vars.el.className = this.vars.el.className.replace(/\s+focus\s+/gi, ' ');
                 this.open.rooms = false;
             }
         }

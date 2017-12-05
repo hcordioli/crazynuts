@@ -8,7 +8,6 @@ import { Daterangepicker } from 'ng2-daterangepicker';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
-import { BuscaComponent } from './busca/busca.component';
 import { ErrComponent } from './err/err.component';
 import { RangePipe } from './range.pipe';
 
@@ -16,7 +15,6 @@ import { RangePipe } from './range.pipe';
     declarations: [
         AppComponent,
         HomeComponent,
-        BuscaComponent,
         ErrComponent,
         RangePipe
     ],

@@ -444,6 +444,9 @@ body {
 									transform: translate(0, -50%);
 								}
 							}
+							&.focus {
+								margin-bottom: 11rem;
+							}
 							&.touched {
 								cursor: default;
 								.quartos .label .val {

@@ -358,6 +358,7 @@ export class HomeComponent implements OnInit {
             self.cookie('busca-id', m.busca.regionId);
             self.cookie('entrada', m.entrada.val);
             self.cookie('saida', m.saida.val);
+            self.cookie('room', JSON.stringify(m.room));
         }
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';

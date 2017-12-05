@@ -160,7 +160,7 @@ export class HomeComponent implements OnInit {
             this.mdl.entrada.txt = this.mdl.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
             this.mdl.saida.val = this.cookie('saida');
             this.mdl.saida.txt = this.mdl.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-            this.mdl.room = JSON.parse(this.cookie('room'));
+            this.mdl.room = JSON.parse(((this.cookie('room') || JSON.stringify(this.mdl.room))));
         }
     }
     nextInput(ev) {
@@ -288,10 +288,7 @@ export class HomeComponent implements OnInit {
                 this.open.rooms = true;
                 if (!/touched/.test(this.vars.el.className))
                     this.vars.el.className += ' touched';
-                if (!/focus/.test(this.vars.el.className))
-                    this.vars.el.className += ' focus';
             } else {
-                this.vars.el.className = this.vars.el.className.replace(/\s+focus\s+/gi, ' ');
                 this.open.rooms = false;
             }
         }
@@ -307,6 +304,7 @@ export class HomeComponent implements OnInit {
         }
     }
     onClick(e) {
+        console.log(arguments);
         if (!e || !e.target)
             return true;
         if (this.vars.el) {
@@ -314,7 +312,10 @@ export class HomeComponent implements OnInit {
                 this.open.rooms = true;
                 if (!/touched/.test(this.vars.el.className))
                     this.vars.el.className += ' touched';
+                if (!/focus/.test(this.vars.el.className))
+                    this.vars.el.className += ' focus';
             } else {
+                this.vars.el.className = this.vars.el.className.replace(/\S*focus\S*/gi, '');
                 this.open.rooms = false;
             }
         }
@@ -359,7 +360,7 @@ export class HomeComponent implements OnInit {
             self.cookie('entrada', m.entrada.val);
             self.cookie('saida', m.saida.val);
             self.cookie('room', JSON.stringify(m.room));
-        }
+            }
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';
         self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +

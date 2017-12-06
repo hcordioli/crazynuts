@@ -623,7 +623,7 @@ body {
 				}
 			}
 		}
-		.foot {
+		.result {
 			padding-top: 4rem;
 			display: block;
 			&[hidden] {
@@ -740,7 +740,9 @@ body {
 				padding-top: .8rem;
 				.head {
 					margin: 0;
-					padding: 0 0 .8rem;
+					position: relative;
+					padding: 0;
+					margin-bottom: .8rem;
 					h1 {
 						width: 10rem;
 						border: 0;
@@ -748,9 +750,50 @@ body {
 					p {
 						display: none;
 					}
+					.menu {
+						position: absolute;
+						right: 0;
+						top: 0;
+						height: 100%;
+						overflow: hidden;
+						display: block;
+						ul {
+							display: block;
+							cursor: default;
+							li {
+								display: inline-block;
+								a {
+									display: block;
+									text-decoration: none;
+									color: #aaa;
+									font-weight: 600;
+									cursor: default;
+									&:before {
+										cursor: default;
+										content: '|';
+										display: inline-block;
+										vertical-align: middle;
+									}
+									span {
+										cursor: pointer;
+										vertical-align: middle;
+										display: inline-block;
+										line-height: 2;
+										margin-right: .5rem;
+									}
+								}
+							}
+						}
+					}
 				}
-				.body .opt .rooms.focus {
-					margin-bottom: 0;
+				.body {
+					.sub {
+						margin-top: 22px;
+						text-align: left;
+					}
+					.opt .rooms.focus {
+						margin-bottom: 0;
+					}
 				}
 			}
 		}

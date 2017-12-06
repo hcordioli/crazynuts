@@ -65,6 +65,7 @@ export class HomeComponent implements OnInit {
         name: 0,
         hotelList: {
             HotelListResponse: null,
+            properties: 0,
             HotelListResponseStr: '',
             state: 0
         }
@@ -94,6 +95,7 @@ export class HomeComponent implements OnInit {
     mdl = {
         busca: {
             val: '',
+            lastVal: '',
             init: {
                 title: '',
                 description: '',
@@ -286,7 +288,7 @@ export class HomeComponent implements OnInit {
             this.mdl.busca.regionId = e.description || '0';
             this.mdl.busca.icon = e.image;
             if (!e.title && e.originalObject.title)
-                this.mdl.busca.val = e.originalObject.title;
+                this.mdl.busca.lastVal = this.mdl.busca.val = e.originalObject.title;
         }
     }
     onKey(e) {
@@ -360,6 +362,7 @@ export class HomeComponent implements OnInit {
         }
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';
+        self.vars.hotelList.state = 1;
         self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
                 'cid=' + k.cid +
                 '&apiKey=' + k.api +
@@ -382,13 +385,15 @@ export class HomeComponent implements OnInit {
                     h.HotelListResponseStr = '';
                     h.HotelListResponse = null;
                 }
-                if (h.HotelListResponse.HotelListResponse) {
+                if (h.HotelListResponse.HotelListResponse && h.HotelListResponse.HotelListResponse.HotelList['@size']) {
                     if (h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
                         h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;
                         h.HotelListResponse = null;
                         return;
                     }
-                    h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList.HotelSummary;
+                    h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList;
+                    h.properties = h.HotelListResponse['@activePropertyCount'];
+                    h.HotelListResponse = h.HotelListResponse['HotelSummary'];
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
                     for (var i = 0; i < h.HotelListResponse.length; ++i)
@@ -397,7 +402,7 @@ export class HomeComponent implements OnInit {
                     h.HotelListResponseStr = msg;
                     h.HotelListResponse = null;
                 }
-                h.state = 1;
+                h.state = 2;
             }, err => {
                 var h = self.vars.hotelList,
                     erro = err ? err.error && err.error.text : '{messagem: Erro!}';
@@ -408,6 +413,7 @@ export class HomeComponent implements OnInit {
                     h.HotelListResponseStr = 'Erro!';
                     h.HotelListResponse = null;
                 }
+                h.state = 3;
             });
         return;
     }

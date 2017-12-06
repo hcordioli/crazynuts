@@ -4,6 +4,20 @@
 			<div class="head wrap">
 				<h1><img [attr.src]="vars.logo.url" [attr.alt]="vars.logo.alt"></h1>
 				<p class="fgc c1" [innerHTML]="vars.slogan"></p>
+				<div class="menu" *ngIf="vars.hotelList.state > 1">
+					<ul>
+						<li>
+							<a href="javascript:;">
+								<span>BRL</span>
+							</a>
+						</li>
+						<li>
+							<a href="javascript:;">
+								<span>Login</span>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 			<div class="body">
 				<form class="wrap" (ngSubmit)="onSubmit()" novalidate>
@@ -94,8 +108,13 @@
 						<input placeholder="eanSharedSecret" name="secret" [(ngModel)]="mdl.keys.secret">
 					</div>
 				</form>
+				<div class="sub" *ngIf="vars.hotelList.state > 1">
+					<span class="txt">
+						{{mdl.busca.lastVal}}: {{vars.hotelList.properties}} propriedade{{vars.hotelList.properties > 1 ? 's' : ''}}
+					</span>
+				</div>
 			</div>
-			<div class="foot" [hidden]="!(vars.hotelList.HotelListResponse || (vars.hotelList.HotelListResponseStr || '').length)">
+			<div class="result" [hidden]="!(vars.hotelList.HotelListResponse || (vars.hotelList.HotelListResponseStr || '').length)">
 				<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
 				<ng-template #content>
 					<div class="tabela">

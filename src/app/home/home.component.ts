@@ -149,7 +149,7 @@ export class HomeComponent implements OnInit {
                 api: this.cookie('api'),
                 secret: this.cookie('secret')
             }
-            if (this.cookie('busca')) {
+            if (this.cookie('busca-val')) {
                 this.mdl.busca.init = {
                     title: this.cookie('busca-val'),
                     image: this.cookie('busca-img'),

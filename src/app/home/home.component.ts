@@ -139,6 +139,7 @@ export class HomeComponent implements OnInit {
     public dataService: RemoteData;
     constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {}
     ngOnInit() {
+        var roomCok;
         this.customData = new CustomData(this.http);
         this.vars.el = document.getElementById('rooms');
         if (!this.cookie('cid'))
@@ -160,7 +161,15 @@ export class HomeComponent implements OnInit {
             this.mdl.entrada.txt = this.mdl.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
             this.mdl.saida.val = this.cookie('saida');
             this.mdl.saida.txt = this.mdl.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-            this.mdl.room = JSON.parse(((this.cookie('room') || JSON.stringify(this.mdl.room))));
+            roomCok = this.cookie('room');
+            if (roomCok) {
+                if (roomCok !== JSON.stringify(this.mdl.room)) {
+                    this.mdl.room = JSON.parse(roomCok);
+                    this.vars.el.className += ' touched';
+                } else {
+                    console.log('same');
+                }
+            }
         }
     }
     nextInput(ev) {
@@ -348,7 +357,7 @@ export class HomeComponent implements OnInit {
             self.cookie('entrada', m.entrada.val);
             self.cookie('saida', m.saida.val);
             self.cookie('room', JSON.stringify(m.room));
-            }
+        }
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';
         self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +

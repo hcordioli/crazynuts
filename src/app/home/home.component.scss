@@ -423,7 +423,7 @@ body {
 						.rooms {
 							width: 30%;
 							cursor: pointer !important;
-							&.touched .quartos {
+							&.focus .quartos {
 								border-color: #243E6F;
 							}
 							.quartos {
@@ -742,8 +742,7 @@ body {
 					margin: 0;
 					padding: 0 0 .8rem;
 					h1 {
-						width: 12rem;
-						padding-left: 2rem;
+						width: 10rem;
 						border: 0;
 					}
 					p {

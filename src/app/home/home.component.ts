@@ -280,20 +280,6 @@ export class HomeComponent implements OnInit {
                 this.mdl.busca.val = e.originalObject.title;
         }
     }
-    onFocus(e) {
-        if (!e || !e.target)
-            return true;
-        if (this.vars.el) {
-            if (this.vars.el.contains(e.target)) {
-                this.open.rooms = true;
-                if (!/touched/.test(this.vars.el.className))
-                    this.vars.el.className += ' touched';
-            } else {
-                this.open.rooms = false;
-            }
-        }
-        return true;
-    }
     onKey(e) {
         var el = < HTMLElement > document.querySelector('#pickMe .daterangepicker');
         if (e.key === 'Escape') {
@@ -303,8 +289,10 @@ export class HomeComponent implements OnInit {
                 el.style.display = 'none';
         }
     }
+    onFocus(e) {
+        this.onClick.apply(this, arguments)
+    }
     onClick(e) {
-        console.log(arguments);
         if (!e || !e.target)
             return true;
         if (this.vars.el) {

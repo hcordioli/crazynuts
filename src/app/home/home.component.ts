@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
         hotelList: {
             HotelListResponse: null,
             HotelListResponseStr: '',
-            markup: []
+            state: 0
         }
     }
     open = {
@@ -388,6 +388,7 @@ export class HomeComponent implements OnInit {
                     h.HotelListResponseStr = msg;
                     h.HotelListResponse = null;
                 }
+                h.state = 1;
             }, err => {
                 var h = self.vars.hotelList,
                     erro = err ? err.error && err.error.text : '{messagem: Erro!}';

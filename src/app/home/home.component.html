@@ -1,5 +1,5 @@
 <div class="app-home">
-	<div [attr.class]="(vars.hotelList.HotelListResponse !== null ? 'search' : '')">
+	<div [attr.class]="(vars.hotelList.state ? 'search' : '')">
 		<div>
 			<div class="head wrap">
 				<h1><img [attr.src]="vars.logo.url" [attr.alt]="vars.logo.alt"></h1>

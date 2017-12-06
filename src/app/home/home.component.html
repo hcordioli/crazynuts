@@ -45,7 +45,7 @@
 										<span class="txt" [textContent]="mdl.saida.txt || '&nbsp;'"></span>
 										<span class="label"><span>Check-out</span></span>
 									</div>
-									<div (click)="onClick" id="pickMe" [attr.class]="'topArrow' + ((mdl.entrada.val || '').length ? ' rightAlign': '')"></div>
+									<div id="pickMe" [attr.class]="'topArrow' + ((mdl.entrada.val || '').length ? ' rightAlign': '')"></div>
 								</label>
 							</div>
 							<div id="rooms" class="rooms">
@@ -71,8 +71,8 @@
 											</span>
 										</a>
 										<span [hidden]="mdl.room.total <= 1" class="icon-remove remove" (click)="rmRoom(show.room)">
-									<img [attr.src]="vars.icons.remove" alt="&times;">
-								</span>
+											<img [attr.src]="vars.icons.remove" alt="&times;">
+										</span>
 									</div>
 									<div class="content" #quartosWrap>
 										<div [attr.class]="'room' + (n + 1) + ' ' + (show.room > n ? 'alignL' : (show.room === n ? 'alignC' : 'alignR'))" *ngFor="let p of mdl.room.people.list; let n = index;">

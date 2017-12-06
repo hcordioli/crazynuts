@@ -284,7 +284,7 @@ export class HomeComponent implements OnInit {
         }, 0);
     }
     onCompleterSelected(e) {
-        var title = e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : e.title;
+        var title = e && e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : (e ? e.title : '');
         if (e && e.description) {
             this.mdl.busca.regionId = e.description || '0';
             this.mdl.busca.icon = e.image;

@@ -742,11 +742,13 @@ body {
 				&>.wrap {
 					position: fixed;
 					top: 0;
-					left: 0;
+					left: 50%;
 					width: inherit;
 					z-index: 1;
 					background-color: #fff;
-					padding: 1rem 10rem;
+					padding-top: 1rem;
+					padding-bottom: 1rem;
+					transform: translate(-50%, 0);
 				}
 				.head {
 					margin: 0;
@@ -783,6 +785,7 @@ body {
 										content: '|';
 										display: inline-block;
 										vertical-align: middle;
+										margin-right: .5rem;
 									}
 									span {
 										cursor: pointer;

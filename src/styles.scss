@@ -202,8 +202,10 @@ body {
     body {
         font-size: 1.18vw !important;
     }
-    .app-main {
-        padding: 0 10rem;
+    .app-main,
+    .app-home .search > div > .wrap {
+        padding-left: 10rem !important;
+        padding-right: 10rem !important;
     }
 }
 
@@ -212,8 +214,10 @@ body {
     body {
         font-size: 16.992px !important;
     }
-    .app-main {
+    .app-main,
+    .app-home .search > div > .wrap {
         max-width: 1440px;
-        padding: 0 170px !important;
+        padding-left: 170px !important;
+        padding-right: 170px !important;
     }
 }

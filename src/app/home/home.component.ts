@@ -284,11 +284,11 @@ export class HomeComponent implements OnInit {
         }, 0);
     }
     onCompleterSelected(e) {
+        var title = e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : e.title;
         if (e && e.description) {
             this.mdl.busca.regionId = e.description || '0';
             this.mdl.busca.icon = e.image;
-            if (!e.title && e.originalObject.title)
-                this.mdl.busca.lastVal = this.mdl.busca.val = e.originalObject.title;
+            this.mdl.busca.val = title;
         }
     }
     onKey(e) {
@@ -363,6 +363,7 @@ export class HomeComponent implements OnInit {
         self.vars.hotelList.HotelListResponse = null;
         self.vars.hotelList.HotelListResponseStr = 'Loading...';
         self.vars.hotelList.state = 1;
+        m.busca.lastVal = m.busca.val;
         self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
                 'cid=' + k.cid +
                 '&apiKey=' + k.api +

@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, Directive, AfterViewInit, ViewEncapsulation, ViewChild, QueryList, ElementRef } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Http } from "@angular/http";
 import { CompleterService, RemoteData } from 'ng2-completer';
 import { CustomData } from './regions';
+import { DaterangePickerComponent } from 'ng2-daterangepicker';
 
 @Component({
     selector: 'app-home',
@@ -13,14 +14,15 @@ import { CustomData } from './regions';
     host: {
         '(document:click)': 'onClick($event)',
         '(document:keyup)': 'onFocus($event)',
-        '(document:keydown)': 'onKey($event)'
+        '(document:keydown)': 'onKey($event)',
+        '(window:mouseup)': 'onClick($event)',
+        '(window:touchend)': 'onClick($event)'
     }
 })
-export class HomeComponent implements OnInit {
-    public daterange: any = {};
 
-    // see original project for full list of options
-    // can also be setup using the config service to apply to multiple pickers
+export class HomeComponent implements AfterViewInit {
+    @ViewChild(DaterangePickerComponent) rangepicker: DaterangePickerComponent;
+    public daterange: any = {};
     public options: any = {
         locale: {
             format: 'MM/DD/YYYY',
@@ -28,28 +30,15 @@ export class HomeComponent implements OnInit {
             daysOfWeek: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
         },
         alwaysShowCalendars: false,
-        autoApply: true,
-        showDropdowns: false,
+        autoApply: false,
+        autoUpdateInput: false,
+        showDropdowns: true,
         minDate: (new Date()),
         dateLimit: {
             days: 28
         },
         parentEl: '#pickMe'
     };
-
-    public selectedDate(value: any) {
-        this.mdl.entrada.val = value.start.format('MM/DD/YYYY');
-        this.mdl.entrada.txt = value.start.format('DD/MM/YY');
-        this.mdl.saida.val = value.end.format('MM/DD/YYYY');
-        this.mdl.saida.txt = value.end.format('DD/MM/YY');
-        this.onClick({
-            target: this.vars.el
-        })
-        this.daterange.start = value.start;
-        this.daterange.end = value.end;
-        this.daterange.label = '';
-    }
-
     vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
@@ -77,21 +66,6 @@ export class HomeComponent implements OnInit {
     show = {
         room: 0
     }
-    /*
-        &room[room number, starting with 1]=
-        [number of adults],
-        [comma-delimited list of children's ages] 
-
-        city=Seattle
-        arrivalDate=12/2/2017
-        departureDate=12/4/2017
-        numberOfAdults=2
-        
-        
-        countryCode=US
-        numberOfResults=500
-        rateType=sim
-    */
     mdl = {
         busca: {
             val: '',
@@ -139,11 +113,9 @@ export class HomeComponent implements OnInit {
     }
     public customData: CustomData;
     public dataService: RemoteData;
-    constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {}
-    ngOnInit() {
+    constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {
         var roomCok;
         this.customData = new CustomData(this.http);
-        this.vars.el = document.getElementById('rooms');
         if (!this.cookie('cid'))
             this.open.keys = true;
         else {
@@ -174,7 +146,14 @@ export class HomeComponent implements OnInit {
             }
         }
     }
-    nextInput(ev) {
+    ngAfterViewInit() {
+        var self = this,
+            fn = [self.rangepicker.datePicker.clickDate,
+            self.rangepicker.datePicker.outsideClick];
+        console.log(self.rangepicker);
+        self.vars.el = document.getElementById('rooms');
+    }
+    public nextInput(ev) {
         var tgt = ev.target;
         tgt = tgt ? tgt.parentNode.parentNode.parentNode : document;
         tgt = tgt.querySelector('.room input');
@@ -182,13 +161,13 @@ export class HomeComponent implements OnInit {
         if (tgt)
             tgt.focus();
     }
-    cookie = function(prop, val ? , eternal ? ) {
+    public cookie = function(prop, val ? , eternal ? ) {
         var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
         if (val !== undefined)
             document.cookie = prop + '=' + val + (eternal ? '; expires=' + new Date('01/01/2038').toUTCString() : '') + '; path=/;';
         return val ? val : (ret && ret.length > 1 ? ret[1] : '');
     }
-    addRoom(index) {
+    public addRoom(index) {
         var self = this,
             r = self.mdl.room,
             i = r.people.list.length,
@@ -222,7 +201,7 @@ export class HomeComponent implements OnInit {
         r.people.list[i].more18 = 1;
         r.disabled = r.people.total >= r.people.limit;
     }
-    changeAdult(index, val, nome) {
+    public changeAdult(index, val, nome) {
         var p = this.mdl.room.people,
             i = index,
             old = p.list[i].more18,
@@ -239,7 +218,7 @@ export class HomeComponent implements OnInit {
         }
         this.mdl.room.disabled = p.total >= p.limit;
     }
-    changeChild(index, val, nome) {
+    public changeChild(index, val, nome) {
         function resize(arr, size, defval) {
             var delta = arr.length - size;
             if (delta > 0)
@@ -266,7 +245,7 @@ export class HomeComponent implements OnInit {
         }
         this.mdl.room.disabled = p.total >= p.limit;
     }
-    rmRoom(index) {
+    public rmRoom(index) {
         var self = this,
             i = index;
         if (self.mdl.room.total <= 1)
@@ -283,7 +262,7 @@ export class HomeComponent implements OnInit {
             r.disabled = p.total >= p.limit;
         }, 0);
     }
-    onCompleterSelected(e) {
+    public onCompleterSelected(e) {
         var title = e && e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : (e ? e.title : '');
         if (e && e.description) {
             this.mdl.busca.regionId = e.description || '0';
@@ -291,41 +270,78 @@ export class HomeComponent implements OnInit {
             this.mdl.busca.val = title;
         }
     }
-    onKey(e) {
-        var el = < HTMLElement > document.querySelector('#pickMe .daterangepicker');
+    public onKey(e) {
+        var el;
         if (e.key === 'Escape') {
+            el = < HTMLElement > document.querySelector('#pickMe .daterangepicker');
             if (this.open.rooms)
                 this.open.rooms = false;
             else if (el && el.style.display !== 'none')
                 el.style.display = 'none';
         }
     }
-    onFocus(e) {
+    public onFocus(e) {
         this.onClick.apply(this, arguments)
     }
-    onClick(e) {
+    public onClick(e) {
+        var self = this,
+            el = document.querySelector('#pickMe'),
+            start = false,
+            val, date;
         if (!e || !e.target)
             return true;
-        if (this.vars.el) {
-            if (this.vars.el.contains(e.target)) {
-                this.open.rooms = true;
-                if (!/touched/.test(this.vars.el.className))
-                    this.vars.el.className += ' touched';
-                if (!/focus/.test(this.vars.el.className))
-                    this.vars.el.className += ' focus';
+        if (/(start|end)[-]date/.exec(e.target.className)) {
+            start = e.target.className.indexOf('start') > 0;
+            val = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');
+            val = val ? val.value : '';
+            val = (val || '/').split('/');
+            if (val && val.length && val.length > 2 && (parseInt(val[1], 10) === parseInt(e.target.innerHTML, 10))) {
+                date = val.join('/');
+                val[2] = val[2].slice(-2);
+                setTimeout(function() {
+                    self.rangepicker.datePicker['set' + (start ? 'Start' : 'End') + 'Date'](date);
+                    self.mdl[start ? 'entrada' : 'saida'].val = val.join('/');
+                    self.mdl[start ? 'entrada' : 'saida'].txt = [val[1], val[0], val[2]].join('/');
+                    if(!start)
+                        self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
+                }, 0);
+            }
+        } else if (self.vars.el) {
+            if (self.vars.el.contains(e.target)) {
+                self.open.rooms = true;
+                if (!/touched/.test(self.vars.el.className))
+                    self.vars.el.className += ' touched';
+                if (!/focus/.test(self.vars.el.className))
+                    self.vars.el.className += ' focus';
             } else {
-                this.vars.el.className = this.vars.el.className.replace(/\s*focus\s*/gi, ' ');
-                this.open.rooms = false;
+                self.vars.el.className = self.vars.el.className.replace(/\s*focus\s*/gi, ' ');
+                self.open.rooms = false;
             }
         }
         return true;
     }
-    decodeHTML(html) {
+    public showCal(e) {
+        console.log(e);
+    }
+    public selectedDate(value: any) {
+        var self = this;
+        self.mdl.entrada.val = value.start.format('MM/DD/YYYY');
+        self.mdl.entrada.txt = value.start.format('DD/MM/YY');
+        self.mdl.saida.val = value.end.format('MM/DD/YYYY');
+        self.mdl.saida.txt = value.end.format('DD/MM/YY');
+        self.onClick({
+            target: self.rangepicker.datePicker.element[0]
+        })
+        self.daterange.start = value.start;
+        self.daterange.end = value.end;
+        self.daterange.label = '';
+    }
+    public decodeHTML(html) {
         var txt = document.createElement("textarea");
         txt.innerHTML = html;
         return txt.value;
     }
-    onSubmit() {
+    public onSubmit() {
         var self = this,
             m = self.mdl,
             k = m.keys,

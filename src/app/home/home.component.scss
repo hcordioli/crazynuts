@@ -743,6 +743,7 @@ body {
 					width: 75%;
 					ul {
 						display: block;
+						padding-top: 0.4rem;
 						li {
 							display: block;
 							width: 100%;
@@ -750,7 +751,13 @@ body {
 							border: 2px solid #aaa;
 							border-radius: 4px;
 							margin-bottom: 1rem;
-							box-shadow: 0px 0px 10px -1px rgba(0, 0, 0, 0.75);
+							box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.75);
+							&.line-red {
+								box-shadow: 0px 0px 16px 4px #C0252E;
+							}
+							&.line-blue {
+								box-shadow: 0px 0px 16px 4px #243E6F;
+							}
 							.img {
 								float: left;
 								width: 30%;
@@ -816,7 +823,7 @@ body {
 										position: absolute;
 										bottom: 0;
 										right: 0;
-										width: 100%;
+										width: 120%;
 										padding: 0.4rem;
 										.apartir {
 											font-size: 0.88rem;

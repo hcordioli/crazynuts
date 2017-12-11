@@ -126,7 +126,7 @@
 			</div>
 			<div class="cards">
 				<ul>
-					<li class="wrap" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
+					<li [attr.class]="'wrap ' + (['', 'line-red', 'line-blue'][i % 3])" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
 						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1">
 							<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
 								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img" alt="">

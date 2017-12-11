@@ -1,7 +1,7 @@
 <div class="app-home">
 	<div [attr.class]="(vars.hotelList.state ? 'search' : '')">
 		<div>
-			<div class="wrap">
+			<div class="wrap main">
 				<div class="head wrap">
 					<h1><img [attr.src]="vars.logo.url" [attr.alt]="vars.logo.alt"></h1>
 					<p class="fgc c1" [innerHTML]="vars.slogan"></p>
@@ -114,44 +114,51 @@
 			<div class="result" [hidden]="!(vars.hotelList.HotelListResponse || (vars.hotelList.HotelListResponseStr || '').length)">
 				<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
 			</div>
+			<div class="sticky-ref"></div>
 		</div>
 	</div>
 	<ng-template #content>
-		<sticky>
-			<img src="http://placehold.it/500x1500" alt="">
-		</sticky>
-		<div class="tabela">
-			<table>
-				<thead>
-					<tr>
-						<th>thumbNailUrl</th>
-						<th>name</th>
-						<th>hotelRating</th>
-						<th>address1</th>
-						<th>roomDescription</th>
-						<th>currencyCode</th>
-						<th>nonRefundable</th>
-						<th>Markup</th>
-						<th>HotaxFinalPrice</th>
-						<th>HotaxFinalCommission%</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr *ngFor="let td of vars.hotelList.HotelListResponse">
-						<td><img [attr.src]="'https://i.travelapi.com' + td.thumbNailUrl" alt=""></td>
-						<td [textContent]="td.name"></td>
+		<div class="wrap">
+			<div class="filtro">
+				<div ngui-sticky sticky-after=".sticky-ref">
+					FILTRO(s)
+				</div>
+			</div>
+			<div class="cards">
+				<ul>
+					<li class="wrap" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
+						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1">
+							<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
+								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img" alt="">
+							</div>
+						</div>
+						<div class="info wrap">
+							<div class="left">
+								<span class="nome" [textContent]="item.name"></span>
+							</div>
+							<div class="right">
+								<span class="preco fgc c1">
+									<span class="apartir">
+										A partir de 
+										<span class="old-val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+									</span>
+									<span class="val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+								</span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template #other_content>{{ vars.hotelList.HotelListResponseStr }}</ng-template>
+</div>
+<!-- <td ></td>
 						<td [textContent]="td.hotelRating"></td>
 						<td [textContent]="td.address1"></td>
 						<td [innerHTML]="td.shortDescription"></td>
 						<td [textContent]="td.rateCurrencyCode"></td>
 						<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable ? 'SIM' : 'NÃO' }}</td>
 						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup"></td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent"></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</ng-template>
-	<ng-template #other_content>{{ vars.hotelList.HotelListResponseStr }}</ng-template>
-</div>
+						<td ></td>
+						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent"></td> -->

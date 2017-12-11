@@ -64,7 +64,8 @@ export class HomeComponent implements AfterViewInit {
         keys: false
     }
     show = {
-        room: 0
+        room: 0,
+        cardImg: []
     }
     mdl = {
         busca: {
@@ -113,33 +114,35 @@ export class HomeComponent implements AfterViewInit {
     }
     public customData: CustomData;
     public dataService: RemoteData;
+    private cookied = false;
     constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {
-        var roomCok;
-        this.customData = new CustomData(this.http);
-        if (!this.cookie('cid'))
-            this.open.keys = true;
+        var self = this,
+            roomCok;
+        self.customData = new CustomData(self.http);
+        if (!self.cookie('cid'))
+            self.open.keys = true;
         else {
-            this.mdl.keys = {
-                cid: this.cookie('cid'),
-                api: this.cookie('api'),
-                secret: this.cookie('secret')
+            self.mdl.keys = {
+                cid: self.cookie('cid'),
+                api: self.cookie('api'),
+                secret: self.cookie('secret')
             }
-            if (this.cookie('busca-val')) {
-                this.mdl.busca.init = {
-                    title: this.cookie('busca-val'),
-                    image: this.cookie('busca-img'),
-                    description: this.cookie('busca-id')
+            if (self.cookie('busca-val')) {
+                self.mdl.busca.init = {
+                    title: self.cookie('busca-val'),
+                    image: self.cookie('busca-img'),
+                    description: self.cookie('busca-id')
                 };
             }
-            this.mdl.entrada.val = this.cookie('entrada');
-            this.mdl.entrada.txt = this.mdl.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-            this.mdl.saida.val = this.cookie('saida');
-            this.mdl.saida.txt = this.mdl.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-            roomCok = this.cookie('room');
+            self.mdl.entrada.val = self.cookie('entrada');
+            self.mdl.entrada.txt = self.mdl.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
+            self.mdl.saida.val = self.cookie('saida');
+            self.mdl.saida.txt = self.mdl.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
+            roomCok = self.cookie('room');
             if (roomCok) {
-                if (roomCok !== JSON.stringify(this.mdl.room)) {
-                    this.mdl.room = JSON.parse(roomCok);
-                    this.vars.el.className += ' touched';
+                if (roomCok !== JSON.stringify(self.mdl.room)) {
+                    self.mdl.room = JSON.parse(roomCok);
+                    self.cookied = true;
                 } else {
                     console.log('same');
                 }
@@ -149,9 +152,11 @@ export class HomeComponent implements AfterViewInit {
     ngAfterViewInit() {
         var self = this,
             fn = [self.rangepicker.datePicker.clickDate,
-            self.rangepicker.datePicker.outsideClick];
-        console.log(self.rangepicker);
+                self.rangepicker.datePicker.outsideClick
+            ];
         self.vars.el = document.getElementById('rooms');
+        if (self.cookied)
+            self.vars.el.className += ' touched';
     }
     public nextInput(ev) {
         var tgt = ev.target;
@@ -302,7 +307,7 @@ export class HomeComponent implements AfterViewInit {
                     self.rangepicker.datePicker['set' + (start ? 'Start' : 'End') + 'Date'](date);
                     self.mdl[start ? 'entrada' : 'saida'].val = val.join('/');
                     self.mdl[start ? 'entrada' : 'saida'].txt = [val[1], val[0], val[2]].join('/');
-                    if(!start)
+                    if (!start)
                         self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
                 }, 0);
             }
@@ -413,8 +418,11 @@ export class HomeComponent implements AfterViewInit {
                     h.HotelListResponse = h.HotelListResponse['HotelSummary'];
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
-                    for (var i = 0; i < h.HotelListResponse.length; ++i)
+                    self.show.cardImg = new Array(h.HotelListResponse.length);
+                    for (var i = 0; i < h.HotelListResponse.length; ++i) {
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
+                        self.show.cardImg[i] = 0;
+                    }
                 } else {
                     h.HotelListResponseStr = msg;
                     h.HotelListResponse = null;

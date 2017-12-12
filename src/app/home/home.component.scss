@@ -640,7 +640,7 @@ body {
 					z-index: 2;
 					background-color: #fff;
 					padding-top: 1rem;
-					padding-bottom: 1rem;
+					padding-bottom: 0.1rem;
 					transform: translate(-50%, 0);
 				}
 				.head {
@@ -738,110 +738,149 @@ body {
 			&>.wrap {
 				margin: 0;
 				position: relative;
-				.cards {
-					float: right;
-					width: 75%;
-					ul {
-						display: block;
-						padding-top: 0.4rem;
-						li {
-							display: block;
+			}
+		}
+		.cards {
+			float: right;
+			width: 75%;
+			&>ul {
+				display: block;
+				padding-top: 0.4rem;
+				&>li {
+					display: block;
+					width: 100%;
+					position: relative;
+					border: 2px solid #aaa;
+					border-radius: 4px;
+					margin-bottom: 1rem;
+					box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.4);
+					&.line-red {
+						box-shadow: 0px 0px 16px 4px #C0252E;
+					}
+					&.line-blue {
+						box-shadow: 0px 0px 16px 4px #243E6F;
+					}
+					.img {
+						float: left;
+						width: 30%;
+						padding-bottom: 30%;
+						overflow: hidden;
+						position: relative;
+						.abs {
+							position: absolute;
+							top: 0;
+							left: 0;
+							height: auto;
 							width: 100%;
-							position: relative;
-							border: 2px solid #aaa;
-							border-radius: 4px;
-							margin-bottom: 1rem;
-							box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.4);
-							&.line-red {
-								box-shadow: 0px 0px 16px 4px #C0252E;
+							display: block;
+							transition: left .4s ease;
+							background-color: #fff;
+							&.alignL {
+								left: -100%;
 							}
-							&.line-blue {
-								box-shadow: 0px 0px 16px 4px #243E6F;
+							&.alignC {
+								left: 0%;
 							}
-							.img {
-								float: left;
-								width: 30%;
-								padding-bottom: 30%;
-								overflow: hidden;
-								position: relative;
-								.abs {
-									position: absolute;
-									top: 0;
-									left: 0;
-									height: auto;
-									width: 100%;
-									display: block;
-									transition: left .4s ease;
-									background-color: #fff;
-									&.alignL {
-										left: -100%;
-									}
-									&.alignC {
-										left: 0%;
-									}
-									&.alignR {
-										left: 100%;
-									}
+							&.alignR {
+								left: 100%;
+							}
 
-									img {
-										display: block;
-										width: 100%;
-									}
-									img.flipped {
-										transform: scaleX(-1) rotate(180deg);
-										filter: FlipH;
-										-ms-filter: "FlipH";
-									}
-								}
+							img {
+								display: block;
+								width: 100%;
 							}
-							.info {
+							img.flipped {
+								transform: scaleX(-1) rotate(180deg);
+								filter: FlipH;
+							}
+						}
+					}
+					.info {
+						width: 70%;
+						height: 100%;
+						position: absolute;
+						top: 0;
+						left: 30%;
+						/* .top {
+							.left {
+								text-align: left;
+								float: left;
 								width: 70%;
-								height: 100%;
-								position: absolute;
-								top: 0;
-								left: 30%;
-								.left {
-									text-align: left;
-									float: left;
-									width: 70%;
-									position: relative;
-									.nome {
-										font-size: 1.2rem;
-										color: #222;
-										padding: 1rem;
-										display: block;
+								position: relative;
+							}
+							.right {}
+						}
+						.bot {
+							.left {
+								text-align: left;
+								float: left;
+								width: 50%;
+								position: relative;
+							}
+							.right {
+								text-align: left;
+								float: left;
+								width: 50%;
+								position: relative;
+							}
+						}
+						.left {
+							.nome {
+								font-size: 1.2rem;
+								color: #222;
+								padding: 1rem;
+								display: block;
+							}
+						} */
+						.right {
+							// text-align: right;
+							// float: left;
+							// width: 30%;
+							// position: relative;
+							// height: 100%;
+							.preco {
+								// white-space: nowrap;
+								// position: absolute;
+								// bottom: 0;
+								// right: 0;
+								// width: 120%;
+								// padding: 0.4rem;
+								.apartir {
+									font-size: 0.88rem;
+									.old-val {
+										font-size: inherit;
+										text-decoration: line-through;
 									}
 								}
-								.right {
-									text-align: right;
-									float: left;
-									width: 30%;
-									position: relative;
-									height: 100%;
-									.preco {
-										white-space: nowrap;
-										position: absolute;
-										bottom: 0;
-										right: 0;
-										width: 120%;
-										padding: 0.4rem;
-										.apartir {
-											font-size: 0.88rem;
-											.old-val {
-												font-size: inherit;
-												text-decoration: line-through;
-											}
-										}
-										.val {
-											font-size: 1.7rem;
-											display: block;
-										}
-									}
+								.val {
+									font-size: 1.7rem;
+									display: block;
 								}
 							}
 						}
 					}
 				}
+			}
+		}
+		.cards {
+			.stars {
+				span {
+					color: #ecb939;
+					font-size: 2em;
+					position: relative;
+					&:before {
+						content: '\2605';
+						position: absolute;
+						left: 0;
+					}
+					&.half:before {
+						width: 50%;
+						overflow: hidden;
+					}
+				}
+			}
+			.amenidades li {
+				display: inline-block;
 			}
 		}
 	}

@@ -31,7 +31,7 @@
 						<div class="opt">
 							<div class="dateRange">
 								<label class="wrap" (keydown.Tab)="nextInput($event)">
-									<input (showCalendarDaterangepicker)="showCal($event)" type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event)" />
+									<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event)" />
 									<div [attr.class]="'checkin' + ((mdl.entrada.val || '').length ? ' touched' : '')">
 										<span class="txt" [textContent]="mdl.entrada.txt || '&nbsp;'"></span>
 										<span class="label"><span>Check-in</span></span>
@@ -47,12 +47,12 @@
 								<div class="quartos" (click)="onClick($event.target)">
 									<span class="label">
 								<span class="icon-room">
-									<img [attr.src]="vars.icons.room" alt="Q">
+									<img [attr.src]="vars.icons.base + vars.icons.room" alt="Q">
 								</span>
 									<span class="val" [textContent]="mdl.room.total"></span>
 									<span class="pessoas">
 									<span class="icon-people">
-										<img [attr.src]="vars.icons.people" alt="P">
+										<img [attr.src]="vars.icons.base + vars.icons.people" alt="P">
 									</span>
 									<span class="val" [textContent]="mdl.room.people.total"></span>
 									</span>
@@ -66,7 +66,7 @@
 											</span>
 										</a>
 										<span [hidden]="mdl.room.total <= 1" class="icon-remove remove" (click)="rmRoom(show.room)">
-											<img [attr.src]="vars.icons.remove" alt="&times;">
+											<img [attr.src]="vars.icons.base + vars.icons.remove" alt="&times;">
 										</span>
 									</div>
 									<div class="content" #quartosWrap>
@@ -128,22 +128,67 @@
 				<ul>
 					<li [attr.class]="'wrap ' + (['', 'line-red', 'line-blue'][i % 3])" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
 						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1">
+							<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
+								<img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt="">
+							</span>
 							<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
 								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img" alt="">
 							</div>
 						</div>
 						<div class="info wrap">
-							<div class="left">
-								<span class="nome" [textContent]="item.name"></span>
+							<div class="top wrap">
+								<div class="left">
+									<span class="nome" [textContent]="item.name"></span>
+									<div class="rateStar">
+										<div class="stars">
+											<span [attr.class]="(item.hotelRating % 1 !== 0 && j + 1 > item.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:item.hotelRating; let j = index;">
+												☆
+											</span>
+										</div>
+									</div>
+									<div class="amenidades">
+										<ul *ngIf="show.valueAdds[i].slice(1).join('').length">
+											<li *ngFor="let desc of show.valueAdds[i]; let k = index;">
+												<span [attr.data-tooltip]="desc || a">
+													<img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[k] + '.png'" alt="">
+												</span>
+											</li>
+										</ul>
+										<span *ngIf="show.remainAdds[i].length" [textContent]="'+' + show.remainAdds[i].length" [attr.data-tooltip]="show.remainAdds[i].join(' &#013; ')"></span>
+									</div>
+								</div>
+								<div class="right">
+									<div class="rateTrip">
+										<span [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
+									</div>
+								</div>
 							</div>
-							<div class="right">
-								<span class="preco fgc c1">
-									<span class="apartir">
-										A partir de 
-										<span class="old-val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+							<div class="bot wrap">
+								<div class="left">
+									<span [attr.data-tooltip]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">
+										<img [attr.src]="vars.icons.base + vars.icons.room" alt="">
 									</span>
-									<span class="val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
-								</span>
+								</div>
+								<div class="right">
+									<div class="preco fgc c1">
+										<div class="apartir">
+											<span>A partir de</span>
+											<span class="old-val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+											<span class="val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+										</div>
+									</div>
+									<div class="details">
+										<div class="selecionar">
+											<a href="javascript:;" class="btn">
+												<span>Selecionar</span>
+											</a>
+										</div>
+										<div class="tarifa">
+											<span class="refundable" [textContent]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable ? 'Tarifa não reembolsável' : 'Cancelamento GRÁTIS'"></span>
+											<span class="iof">Sem IOF</span>
+										</div>
+									</div>
+								</div>
 							</div>
 						</div>
 					</li>
@@ -154,11 +199,11 @@
 	<ng-template #other_content>{{ vars.hotelList.HotelListResponseStr }}</ng-template>
 </div>
 <!-- <td ></td>
-						<td [textContent]="td.hotelRating"></td>
 						<td [textContent]="td.address1"></td>
 						<td [innerHTML]="td.shortDescription"></td>
 						<td [textContent]="td.rateCurrencyCode"></td>
-						<td>{{ td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable ? 'SIM' : 'NÃO' }}</td>
+						<td>{{ td ? 'SIM' : 'NÃO' }}</td>
+						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.roomDescription"></td>
 						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup"></td>
 						<td ></td>
 						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent"></td> -->

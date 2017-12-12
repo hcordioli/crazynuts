@@ -40,7 +40,7 @@ export class CustomData extends Subject <CompleterItem[]> implements CompleterDa
         // data will be string if an initial value is set
         return {
             title: typeof data === 'string' ? data : data.regionNameLong,
-            image: 'assets/img/icons/' + nome + '.png',
+            image: 'assets/img/icons/search-' + nome + '.png',
             description: data.regionId || data.description || 0,
             originalObject: data
         } as CompleterItem;

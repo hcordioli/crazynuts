@@ -1,4 +1,4 @@
-import { Component, Directive, AfterViewInit, ViewEncapsulation, ViewChild, QueryList, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation, ViewChild } from '@angular/core';
 import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Http } from "@angular/http";
@@ -39,16 +39,17 @@ export class HomeComponent implements AfterViewInit {
         },
         parentEl: '#pickMe'
     };
-    vars = {
+    public vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
             alt: 'HOTAX',
             url: 'assets/img/logo.svg'
         },
         icons: {
-            people: 'assets/img/icons/people.png',
-            room: 'assets/img/icons/room.png',
-            remove: 'assets/img/icons/remove.png'
+            base: 'assets/img/icons/',
+            people: 'room-people.png',
+            room: 'room-bed.png',
+            remove: 'room-remove.png'
         },
         el: null,
         name: 0,
@@ -59,15 +60,17 @@ export class HomeComponent implements AfterViewInit {
             state: 0
         }
     }
-    open = {
+    public open = {
         rooms: false,
         keys: false
     }
-    show = {
+    public show = {
         room: 0,
-        cardImg: []
+        cardImg: [],
+        valueAdds: [],
+        remainAdds: []
     }
-    mdl = {
+    public mdl = {
         busca: {
             val: '',
             lastVal: '',
@@ -115,6 +118,43 @@ export class HomeComponent implements AfterViewInit {
     public customData: CustomData;
     public dataService: RemoteData;
     private cookied = false;
+    public valueAdds = {
+        ids: {
+            '2098': 0,
+            '2103': 0,
+            '2104': 0,
+            '2105': 0,
+            '2193': 0,
+            '2194': 0,
+            '2205': 0,
+            '2209': 0,
+            '2210': 0,
+            '2211': 0,
+            '1073742621': 0,
+            '1073742786': 0,
+            '1073742857': 0,
+            '2192': 1,
+            '2220': 1,
+            '2106': 2,
+            '2107': 2,
+            '2109': 3,
+            '2110': 3,
+            '2215': 3,
+            '1073742617': 3,
+            '1073742861': 3,
+            '2212': 4,
+            '2200': 5,
+            '1073742618': 5
+        },
+        icons: [
+            'cafe',
+            'wifi',
+            'restaurant',
+            'parking',
+            'gym',
+            'spa'
+        ]
+    }
     constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {
         var self = this,
             roomCok;
@@ -143,8 +183,6 @@ export class HomeComponent implements AfterViewInit {
                 if (roomCok !== JSON.stringify(self.mdl.room)) {
                     self.mdl.room = JSON.parse(roomCok);
                     self.cookied = true;
-                } else {
-                    console.log('same');
                 }
             }
         }
@@ -325,9 +363,6 @@ export class HomeComponent implements AfterViewInit {
         }
         return true;
     }
-    public showCal(e) {
-        console.log(e);
-    }
     public selectedDate(value: any) {
         var self = this;
         self.mdl.entrada.val = value.start.format('MM/DD/YYYY');
@@ -398,9 +433,11 @@ export class HomeComponent implements AfterViewInit {
                     tgtComP = 0.13,
                     storeComP = 0.15,
                     gpShare = 0.5,
-                    msg = 'Erro!';
+                    msg = 'Erro!',
+                    valueAdds,
+                    i, j, k, tmp1, tmp2;
                 try {
-                    h.HotelListResponseStr = JSON.stringify(hotelList);
+                    h.HotelListResponseStr = '';
                     h.HotelListResponse = hotelList,
                         msg = h.HotelListResponse.messagem;
                 } catch (e) {
@@ -419,15 +456,36 @@ export class HomeComponent implements AfterViewInit {
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
                     self.show.cardImg = new Array(h.HotelListResponse.length);
-                    for (var i = 0; i < h.HotelListResponse.length; ++i) {
+                    self.show.valueAdds = new Array(h.HotelListResponse.length);
+                    for (i = 0; i < h.HotelListResponse.length; ++i) {
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
                         self.show.cardImg[i] = 0;
+                        self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
+                        self.show.remainAdds[i] = [];
+                        valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
+                        if (valueAdds) {
+                            if (!Array.isArray(valueAdds.ValueAdd))
+                                valueAdds.ValueAdd = [valueAdds.ValueAdd];
+                            for (j = 0; j < valueAdds.ValueAdd.length; ++j) {
+                                k = valueAdds.ValueAdd[j];
+                                if (k['@id'] in self.valueAdds.ids) {
+                                    if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
+                                        self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
+                                    else
+                                        self.show.remainAdds[i].push(k.description);
+                                } else {
+                                    self.show.remainAdds[i].push(k.description);
+                                }
+                            }
+                        }
                     }
                 } else {
                     h.HotelListResponseStr = msg;
                     h.HotelListResponse = null;
                 }
                 h.state = 2;
+                console.log(self);
+                console.log(h);
             }, err => {
                 var h = self.vars.hotelList,
                     erro = err ? err.error && err.error.text : '{messagem: Erro!}';

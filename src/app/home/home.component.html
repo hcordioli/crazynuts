@@ -126,10 +126,14 @@
 			</div>
 			<div class="cards">
 				<ul>
-					<li [attr.class]="'wrap ' + (['', 'line-red', 'line-blue'][i % 3])" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
+					<li [attr.class]="'wrap ' + (['', 'line-red', 'line-blue'][i % 3]) + ' cardN' + i" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
 						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1">
 							<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
 								<img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt="">
+								<span class="fgc c1">
+									Café da manhã
+									<span class="fgc c2">incluído</span>
+								</span>
 							</span>
 							<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
 								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img" alt="">
@@ -148,38 +152,44 @@
 									</div>
 									<div class="amenidades">
 										<ul *ngIf="show.valueAdds[i].slice(1).join('').length">
-											<li *ngFor="let desc of show.valueAdds[i]; let k = index;">
-												<span [attr.data-tooltip]="desc || a">
+											<li [hidden]="!desc || !k" *ngFor="let desc of show.valueAdds[i]; let k = index;">
+												<span [attr.data-tooltip]="desc">
 													<img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[k] + '.png'" alt="">
 												</span>
 											</li>
 										</ul>
-										<span *ngIf="show.remainAdds[i].length" [textContent]="'+' + show.remainAdds[i].length" [attr.data-tooltip]="show.remainAdds[i].join(' &#013; ')"></span>
+										<span *ngIf="show.remainAdds[i].length" [textContent]="(show.remainAdds[i].length + show.valueAdds[i].slice(1).sort().indexOf(undefined) + 1) + ' comodidade' + ((show.valueAdds[i].slice(1).sort().indexOf(undefined) + 1 + show.remainAdds[i].length) > 1 ? 's' : '')" [attr.data-tooltip]="show.remainAdds[i].join(' &#013; ')"></span>
+									</div>
+									<div class="room-desc" [attr.data-tooltip]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">
+										<img [attr.src]="vars.icons.base + vars.icons.room" alt="">
 									</div>
 								</div>
 								<div class="right">
-									<div class="rateTrip">
+									<div class="rateTrip" *ngIf="item.tripAdvisorRating > 0">
 										<span [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
 									</div>
 								</div>
 							</div>
 							<div class="bot wrap">
 								<div class="left">
-									<span [attr.data-tooltip]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">
-										<img [attr.src]="vars.icons.base + vars.icons.room" alt="">
-									</span>
 								</div>
 								<div class="right">
 									<div class="preco fgc c1">
+										<div class="aincluir">
+											A incluir taxas e impostos
+										</div>
 										<div class="apartir">
 											<span>A partir de</span>
 											<span class="old-val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+										</div>
+										<div class="cheio">
+											<span class="media">Média / Noite</span>
 											<span class="val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
 										</div>
 									</div>
 									<div class="details">
 										<div class="selecionar">
-											<a href="javascript:;" class="btn">
+											<a href="javascript:;" class="btn bgc c1">
 												<span>Selecionar</span>
 											</a>
 										</div>

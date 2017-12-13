@@ -724,7 +724,7 @@ body {
 				position: absolute;
 				margin-top: 0;
 				float: left;
-				width: 25%;
+				width: 32%;
 				height: 100%;
 				top: -12rem;
 				left: 0;
@@ -742,7 +742,7 @@ body {
 		}
 		.cards {
 			float: right;
-			width: 75%;
+			width: 68%;
 			&>ul {
 				display: block;
 				padding-top: 0.4rem;
@@ -766,6 +766,31 @@ body {
 						padding-bottom: 30%;
 						overflow: hidden;
 						position: relative;
+						.cafe-incluso {
+							position: absolute;
+							top: 0.5rem;
+							left: 0;
+							z-index: 1;
+							background: rgba(255, 255, 255, 0.5);
+							padding-right: 0.3rem;
+							&>img,
+							&>span {
+								vertical-align: middle;
+								display: inline-block;
+							}
+							&>img {
+								width: 1.6rem;
+							}
+							&>span {
+								font-size: 0.75rem;
+								font-weight: 600;
+								&>span {
+									display: inline-block;
+									vertical-align: middle;
+									font-size: 0.8em;
+								}
+							}
+						}
 						.abs {
 							position: absolute;
 							top: 0;
@@ -801,72 +826,98 @@ body {
 						position: absolute;
 						top: 0;
 						left: 30%;
-						/* .top {
-							.left {
-								text-align: left;
-								float: left;
-								width: 70%;
-								position: relative;
-							}
-							.right {}
-						}
-						.bot {
-							.left {
-								text-align: left;
-								float: left;
-								width: 50%;
-								position: relative;
-							}
-							.right {
-								text-align: left;
-								float: left;
-								width: 50%;
-								position: relative;
-							}
-						}
-						.left {
-							.nome {
-								font-size: 1.2rem;
-								color: #222;
-								padding: 1rem;
-								display: block;
-							}
-						} */
-						.right {
-							// text-align: right;
-							// float: left;
-							// width: 30%;
-							// position: relative;
-							// height: 100%;
-							.preco {
-								// white-space: nowrap;
-								// position: absolute;
-								// bottom: 0;
-								// right: 0;
-								// width: 120%;
-								// padding: 0.4rem;
-								.apartir {
-									font-size: 0.88rem;
-									.old-val {
-										font-size: inherit;
-										text-decoration: line-through;
-									}
-								}
-								.val {
-									font-size: 1.7rem;
-									display: block;
-								}
-							}
-						}
 					}
 				}
 			}
 		}
 		.cards {
+			.top,
+			.bot {
+				.left {
+					text-align: left;
+					position: relative;
+				}
+				.right {
+					text-align: right;
+					position: relative;
+				}
+			}
+			.top {
+				padding: 0.6rem;
+				padding-bottom: 0;
+				.left {
+					float: left;
+					max-width: 70%;
+				}
+				.right {
+					float: right;
+					max-width: 30%;
+				}
+			}
+			.bot {
+				padding: 0.6rem;
+				padding-top: 0;
+				position: absolute;
+				bottom: 0;
+				right: 0;
+				width: 100%;
+				.left {
+					float: left;
+					width: 40%;
+				}
+				.right {}
+			}
+			.room-desc {
+				display: inline-block;
+				width: 1.5rem;
+				img {
+					display: block;
+					width: 100%;
+					height: auto;
+				}
+			}
+			.nome {
+				font-size: 1.2rem;
+				color: #222;
+				display: block;
+			}
+			.preco {
+				.aincluir {
+					display: block;
+					font-size: .75rem;
+					color: #222;
+				}
+				.apartir {
+					font-size: 0.88rem;
+					.old-val {
+						font-size: inherit;
+						text-decoration: line-through;
+					}
+				}
+				.cheio {
+					position: relative;
+					display: inline-block;
+					.media {
+						display: block;
+						position: absolute;
+						white-space: nowrap;
+						right: 100%;
+						top: 50%;
+						font-size: .75rem;
+						margin-right: 0.4rem;
+						color: #222;
+						transform: translate(0, -50%);
+					}
+					.val {
+						font-size: 1.7rem;
+						display: block;
+					}
+				}
+			}
 			.stars {
 				span {
 					color: #ecb939;
-					font-size: 2em;
+					font-size: 1.15rem;
 					position: relative;
 					&:before {
 						content: '\2605';
@@ -879,8 +930,48 @@ body {
 					}
 				}
 			}
-			.amenidades li {
-				display: inline-block;
+			.amenidades {
+				li {
+					display: inline-block;
+					&[hidden] {
+						display: none;
+					}
+					&>span {
+						width: 2rem;
+						position: relative;
+						display: inline-block;
+						&>img {
+							display: block;
+							height: auto;
+							width: 100%;
+						}
+					}
+				}
+			}
+			.details {
+				padding-top: 1rem;
+				.selecionar {
+					a {
+						cursor: pointer;
+						text-decoration: none;
+						color: #fff;
+						padding: 0.5rem;
+						display: inline-block;
+						margin: 0 0 0 0.5rem;
+						float: right;
+						border-radius: 4px;
+					}
+				}
+				.tarifa {
+					.refundable {
+						display: block;
+					}
+					.iof {
+						display: block;
+						font-size: .75rem;
+						color: #222;
+					}
+				}
 			}
 		}
 	}

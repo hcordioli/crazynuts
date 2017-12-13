@@ -457,7 +457,7 @@ export class HomeComponent implements AfterViewInit {
                         h.HotelListResponse = [h.HotelListResponse];
                     self.show.cardImg = new Array(h.HotelListResponse.length);
                     self.show.valueAdds = new Array(h.HotelListResponse.length);
-                    for (i = 0; i < h.HotelListResponse.length; ++i) {
+                    for (i = 0; i < h.HotelListResponse.length; i++) {
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
                         self.show.cardImg[i] = 0;
                         self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
@@ -466,9 +466,9 @@ export class HomeComponent implements AfterViewInit {
                         if (valueAdds) {
                             if (!Array.isArray(valueAdds.ValueAdd))
                                 valueAdds.ValueAdd = [valueAdds.ValueAdd];
-                            for (j = 0; j < valueAdds.ValueAdd.length; ++j) {
+                            for (j = 0; j < valueAdds.ValueAdd.length; j++) {
                                 k = valueAdds.ValueAdd[j];
-                                if (k['@id'] in self.valueAdds.ids) {
+                                if (k['@id'] in self.valueAdds.ids) { 
                                     if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
                                         self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
                                     else

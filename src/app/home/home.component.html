@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<div class="body">
-					<form class="wrap" (ngSubmit)="onSubmit()" novalidate>
+					<form class="wrap" (ngSubmit)="onSubmit(false)" novalidate>
 						<div class="search">
 							<label>
 								<ng2-completer (input)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (blur)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [clearUnselected]="true" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>

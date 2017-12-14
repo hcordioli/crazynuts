@@ -12,6 +12,7 @@ import { DaterangePickerComponent } from 'ng2-daterangepicker';
     styleUrls: ['./home.component.scss'],
     encapsulation: ViewEncapsulation.None,
     host: {
+        '(window:scroll)': 'onScroll($event)',
         '(document:click)': 'onClick($event)',
         '(document:keyup)': 'onFocus($event)',
         '(document:keydown)': 'onKey($event)',
@@ -57,7 +58,10 @@ export class HomeComponent implements AfterViewInit {
             HotelListResponse: null,
             properties: 0,
             HotelListResponseStr: '',
-            state: 0
+            state: 0,
+            searchId: '',
+            hasMorePages: false,
+            page: 0
         }
     }
     public open = {
@@ -363,6 +367,20 @@ export class HomeComponent implements AfterViewInit {
         }
         return true;
     }
+    public onScrollTimer;
+    public onScroll(e) {
+        var self = this,
+            ev = e;
+        clearTimeout(self.onScrollTimer);
+        self.onScrollTimer = setTimeout(function() {
+            var d = ev.target,
+                el = d.querySelector('.app-main');
+            if (d.documentElement.scrollTop === (d.body.scrollHeight - (el ? el.offsetHeight : d.body.scrollHeight * 0.1))) {
+                if (self.vars.hotelList.hasMorePages)
+                    self.onSubmit(true);
+            }
+        }, 400);
+    }
     public selectedDate(value: any) {
         var self = this;
         self.mdl.entrada.val = value.start.format('MM/DD/YYYY');
@@ -381,9 +399,11 @@ export class HomeComponent implements AfterViewInit {
         txt.innerHTML = html;
         return txt.value;
     }
-    public onSubmit() {
+    public onSubmit(emulated) {
+        console.log(arguments);
         var self = this,
             m = self.mdl,
+            h = self.vars.hotelList,
             k = m.keys,
             quartos = '',
             tmp, i, j;
@@ -416,10 +436,15 @@ export class HomeComponent implements AfterViewInit {
             self.cookie('saida', m.saida.val);
             self.cookie('room', JSON.stringify(m.room));
         }
-        self.vars.hotelList.HotelListResponse = null;
-        self.vars.hotelList.HotelListResponseStr = 'Loading...';
-        self.vars.hotelList.state = 1;
-        m.busca.lastVal = m.busca.val;
+        if (h.hasMorePages)
+            h.page++;
+        else {
+            h.HotelListResponse = null;
+            h.HotelListResponseStr = 'Loading...';
+            h.state = 1;
+            m.busca.lastVal = m.busca.val;
+        }
+        tmp = (h.hasMorePages ? ('&page=' + h.page + '&searchId=' + h.searchId) : '');
         self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
                 'cid=' + k.cid +
                 '&apiKey=' + k.api +
@@ -427,19 +452,25 @@ export class HomeComponent implements AfterViewInit {
                 '&checkin=' + m.entrada.val +
                 '&checkout=' + m.saida.val +
                 '&regionId=' + m.busca.regionId +
-                quartos)
+                quartos + tmp)
             .subscribe(hotelList => {
-                var h = self.vars.hotelList,
-                    tgtComP = 0.13,
+                var tgtComP = 0.13,
                     storeComP = 0.15,
                     gpShare = 0.5,
                     msg = 'Erro!',
                     valueAdds,
-                    i, j, k, tmp1, tmp2;
+                    i, j, k, tmp;
+                if (h.page) {
+                    tmp = hotelList;
+                    tmp = tmp.HotelListResponse;
+                    h.HotelListResponse.concat(tmp.HotelList.HotelSummary);
+                    h.hasMorePages = tmp.moreResultsAvailable;
+                    return;
+                }
                 try {
                     h.HotelListResponseStr = '';
-                    h.HotelListResponse = hotelList,
-                        msg = h.HotelListResponse.messagem;
+                    h.HotelListResponse = hotelList;
+                    msg = h.HotelListResponse.messagem;
                 } catch (e) {
                     h.HotelListResponseStr = '';
                     h.HotelListResponse = null;
@@ -452,6 +483,8 @@ export class HomeComponent implements AfterViewInit {
                     }
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse.HotelList;
                     h.properties = h.HotelListResponse['@activePropertyCount'];
+                    h.searchId = h.HotelListResponse.customerSessionId;
+                    h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse['HotelSummary'];
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
@@ -468,7 +501,7 @@ export class HomeComponent implements AfterViewInit {
                                 valueAdds.ValueAdd = [valueAdds.ValueAdd];
                             for (j = 0; j < valueAdds.ValueAdd.length; j++) {
                                 k = valueAdds.ValueAdd[j];
-                                if (k['@id'] in self.valueAdds.ids) { 
+                                if (k['@id'] in self.valueAdds.ids) {
                                     if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
                                         self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
                                     else
@@ -484,11 +517,8 @@ export class HomeComponent implements AfterViewInit {
                     h.HotelListResponse = null;
                 }
                 h.state = 2;
-                console.log(self);
-                console.log(h);
             }, err => {
-                var h = self.vars.hotelList,
-                    erro = err ? err.error && err.error.text : '{messagem: Erro!}';
+                var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
                 try {
                     h.HotelListResponseStr = erro;
                     h.HotelListResponse = JSON.parse(erro);

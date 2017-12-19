@@ -150,6 +150,9 @@
 											</span>
 										</div>
 									</div>
+									<div class="location">
+										<span [textContent]="item.locationDescription"></span>
+									</div>
 									<div class="amenidades">
 										<ul *ngIf="show.valueAdds[i].slice(1).join('').length">
 											<li [hidden]="!desc || !k" *ngFor="let desc of show.valueAdds[i]; let k = index;">
@@ -160,16 +163,13 @@
 										</ul>
 										<span *ngIf="show.remainAdds[i].length" [textContent]="(show.remainAdds[i].length + show.valueAdds[i].slice(1).sort().indexOf(undefined) + 1) + ' comodidade' + ((show.valueAdds[i].slice(1).sort().indexOf(undefined) + 1 + show.remainAdds[i].length) > 1 ? 's' : '')" [attr.data-tooltip]="show.remainAdds[i].join(' &#013; ')"></span>
 									</div>
-									<div class="room-desc" [attr.data-tooltip]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">
-										<img [attr.src]="vars.icons.base + vars.icons.room" alt="">
-									</div>
 								</div>
 								<div class="right">
-									<div class="rateTrip" *ngIf="item.tripAdvisorRating > 0">
+									<div class="rateTrip" class="fgc c1" [hidden]="!item.tripAdvisorRating">
 										<span class="label" [textContent]="item.tripAdvisorLabel"></span>
 										<span class="rate" [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
 									</div>
-									<div class="lastRooms" *ngIf="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment > 0 && item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment < 2147483646">
+									<div class="lastRooms" [hidden]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 0 || item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment >= 2147483646">
 										<span>
 											{{ item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 1 ? 'último quarto' : 'últimos ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment + ' quartos'}}
 										</span>
@@ -178,6 +178,9 @@
 							</div>
 							<div class="bot wrap">
 								<div class="left">
+									<div class="room-desc" (mouseenter)="$event.target.className = 'room-desc' + ($event.target.children[0].offsetWidth < $event.target.children[0].scrollWidth ? ' hover' : '');" (mouseleave)="$event.target.className = 'room-desc';" [attr.data-tooltip-dyn]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">	
+										<span class="label" [textContent]="item.RoomRateDetailsList.RoomRateDetails.roomDescription"></span>
+									</div>
 								</div>
 								<div class="right">
 									<div class="preco fgc c1">

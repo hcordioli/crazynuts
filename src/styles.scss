@@ -200,12 +200,15 @@ body {
     margin: 0 auto;
 }
 
+[data-tooltip-dyn].hover,
 [data-tooltip] {
     position: relative;
     z-index: 1;
     cursor: pointer;
 }
 
+[data-tooltip-dyn]:before,
+[data-tooltip-dyn]:after,
 [data-tooltip]:before,
 [data-tooltip]:after {
     visibility: hidden;
@@ -213,6 +216,7 @@ body {
     pointer-events: none;
 }
 
+[data-tooltip-dyn]:before,
 [data-tooltip]:before {
     position: absolute;
     bottom: 150%;
@@ -232,6 +236,11 @@ body {
     white-space: pre-wrap;
 }
 
+[data-tooltip-dyn]:before {
+    content: attr(data-tooltip-dyn);
+}
+
+[data-tooltip-dyn]:after,
 [data-tooltip]:after {
     position: absolute;
     bottom: 150%;
@@ -247,6 +256,8 @@ body {
     line-height: 0;
 }
 
+[data-tooltip-dyn].hover:before,
+[data-tooltip-dyn].hover:after,
 [data-tooltip]:hover:before,
 [data-tooltip]:hover:after {
     visibility: visible;

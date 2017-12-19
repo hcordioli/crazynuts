@@ -136,7 +136,7 @@
 							</span>
 							</span>
 							<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
-								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img" alt="">
+								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img.replace('_t.', '_s.')" alt="">
 							</div>
 						</div>
 						<div class="info wrap">

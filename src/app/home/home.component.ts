@@ -496,6 +496,20 @@ export class HomeComponent implements AfterViewInit {
                         self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
                         self.show.remainAdds[i] = [];
                         valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
+                        tmp = h.HotelListResponse[i].tripAdvisorRating;
+                        if(tmp && tmp >= 3.5) {
+                        	if(tmp <= 3.9)
+                        		tmp = 'Bom!';
+                        	else if(tmp <= 4.2)
+                        		tmp = 'Muito Bom!';
+                        	else if(tmp <= 4.4)
+                        		tmp = 'Incrível!';
+                        	else if(tmp <= 4.6)
+								tmp = 'Fantástico!';
+							else if(tmp <= 5)
+								tmp = 'Excepcional!';
+							h.HotelListResponse[i].tripAdvisorLabel = tmp;
+                        }
                         if (valueAdds) {
                             if (!Array.isArray(valueAdds.ValueAdd))
                                 valueAdds.ValueAdd = [valueAdds.ValueAdd];

@@ -24,7 +24,7 @@
 					<form class="wrap" (ngSubmit)="onSubmit(false)" novalidate>
 						<div class="search">
 							<label>
-								<ng2-completer (input)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (blur)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [clearUnselected]="true" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+								<ng2-completer (input)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" [selectOnFocus]="true" (blur)="mdl.busca.val = (mdl.busca.regionId ? mdl.busca.val : '');mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 								<span class="icon"></span>
 							</label>
 						</div>
@@ -133,7 +133,7 @@
 								<span class="fgc c1">
 									Café da manhã
 									<span class="fgc c2">incluído</span>
-								</span>
+							</span>
 							</span>
 							<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
 								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img" alt="">
@@ -166,7 +166,11 @@
 								</div>
 								<div class="right">
 									<div class="rateTrip" *ngIf="item.tripAdvisorRating > 0">
-										<span [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
+										<span class="label" [textContent]="item.tripAdvisorLabel"></span>
+										<span class="rate" [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
+									</div>
+									<div class="lastRooms" *ngIf="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment > 0 && item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment < 2147483646">
+										<span [textContent]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment"></span>
 									</div>
 								</div>
 							</div>
@@ -178,13 +182,9 @@
 										<div class="aincluir">
 											A incluir taxas e impostos
 										</div>
-										<div class="apartir">
-											<span>A partir de</span>
-											<span class="old-val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
-										</div>
 										<div class="cheio">
 											<span class="media">Média / Noite</span>
-											<span class="val" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+											<span class="val" [attr.data-tooltip]="['Markup: ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup,'Hotax%: ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent,'HotaxC: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommission,'Store%: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommissionPercent,'StoreC: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommission].join(' &#013; ')" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
 										</div>
 									</div>
 									<div class="details">

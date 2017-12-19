@@ -170,7 +170,9 @@
 										<span class="rate" [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
 									</div>
 									<div class="lastRooms" *ngIf="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment > 0 && item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment < 2147483646">
-										<span [textContent]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment"></span>
+										<span>
+											{{ item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 1 ? 'último quarto' : 'últimos ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment + ' quartos'}}
+										</span>
 									</div>
 								</div>
 							</div>
@@ -184,7 +186,7 @@
 										</div>
 										<div class="cheio">
 											<span class="media">Média / Noite</span>
-											<span class="val" [attr.data-tooltip]="['storeCommissionPercent: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommissionPercent,'storeCommission: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommission].join(' &#013; ')" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+											<span class="val" [attr.data-tooltip]="['storeCommission%: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommissionPercent,'storeCommission: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommission].join(' &#013; ')" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
 										</div>
 									</div>
 									<div class="details">

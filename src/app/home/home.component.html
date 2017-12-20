@@ -118,6 +118,20 @@
 		</div>
 	</div>
 	<ng-template #content>
+		<style>
+		@font-face {
+			font-family: 'icomoon';
+			src: url('assets/font/icons.eot');
+			src: url('assets/font/icons.eot?#iefix') format('embedded-opentype'),
+			url('assets/font/icons.woff') format('woff'),
+			url('assets/font/icons.ttf') format('truetype'),
+			url('assets/font/icons.svg#icons') format('svg');
+			font-weight: normal;
+			font-style: normal;
+		}
+
+		</style>
+		<style></style>
 		<div class="wrap">
 			<div class="filtro">
 				<div ngui-sticky sticky-after=".sticky-ref">
@@ -158,8 +172,12 @@
 											<li [hidden]="!desc || !k" *ngFor="let desc of show.valueAdds[i]; let k = index;">
 												<span [attr.data-tooltip]="desc">
 													<i *ngIf="valueAdds.icons[k].indexOf('fa-') === 0" [attr.class]="'fa ' + valueAdds.icons[k]"></i>
-													<span *ngIf="valueAdds.icons[k].indexOf('x') === 0" [innerHTML]="decodeHTML('&' + '#' + valueAdds.icons[k] + ';')"></span>
-													<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[k] + '.png'" alt=""> -->
+													<span style="font-family: icomoon;" *ngIf="valueAdds.icons[k].indexOf('x') === 0" [innerHTML]="decodeHTML('&' + '#' + valueAdds.icons[k] + ';')"></span>
+												<span *ngIf="valueAdds.icons[k].indexOf('parking') === 0" class="fa-stack" style="font-size: 0.8rem;">
+													<i class="fa fa-square fa-stack-2x"></i>
+													<strong class="fa-stack-1x fa-inverse icon-text">P</strong>
+												</span>
+												<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[k] + '.png'" alt=""> -->
 												</span>
 											</li>
 										</ul>
@@ -180,7 +198,7 @@
 							</div>
 							<div class="bot wrap">
 								<div class="left">
-									<div class="room-desc" (mouseenter)="$event.target.className = 'room-desc' + ($event.target.children[0].offsetWidth < $event.target.children[0].scrollWidth ? ' hover' : '');" (mouseleave)="$event.target.className = 'room-desc';" [attr.data-tooltip-dyn]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">	
+									<div class="room-desc" (mouseenter)="$event.target.className = 'room-desc' + ($event.target.children[0].offsetWidth < $event.target.children[0].scrollWidth ? ' hover' : '');" (mouseleave)="$event.target.className = 'room-desc';" [attr.data-tooltip-dyn]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">
 										<span class="label" [textContent]="item.RoomRateDetailsList.RoomRateDetails.roomDescription"></span>
 									</div>
 								</div>

@@ -445,8 +445,10 @@ export class HomeComponent implements AfterViewInit {
         clearTimeout(self.onScrollTimer);
         self.onScrollTimer = setTimeout(function() {
             var d = ev.target,
-                el = d.querySelector('.app-main');
-            if (d.documentElement.scrollTop === (d.body.scrollHeight - (el ? el.offsetHeight : d.body.scrollHeight * 0.1))) {
+                el = d.querySelector('.app-main'),
+                h = (d.body.scrollHeight - (el ? el.offsetHeight : d.body.scrollHeight * 0.1));
+            h *= 0.75;
+            if ((d.documentElement.scrollTop) >= h) {
                 if (self.vars.hotelList.hasMorePages)
                     self.onSubmit(true);
             }
@@ -470,6 +472,7 @@ export class HomeComponent implements AfterViewInit {
         txt.innerHTML = html;
         return txt.value;
     }
+    public infinityScrolling = true;
     public onSubmit(emulated) {
         console.log(arguments);
         var self = this,
@@ -507,9 +510,10 @@ export class HomeComponent implements AfterViewInit {
             self.cookie('saida', m.saida.val);
             self.cookie('room', JSON.stringify(m.room));
         }
-        if (h.hasMorePages)
+        if (h.hasMorePages) {
             h.page++;
-        else {
+            self.infinityScrolling = true;
+        } else {
             h.HotelListResponse = null;
             h.HotelListResponseStr = 'Loading...';
             h.state = 1;
@@ -541,6 +545,7 @@ export class HomeComponent implements AfterViewInit {
                         return;
                     i = h.HotelListResponse.length;
                     h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
+                    self.infinityScrolling = false;
                     h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
                     for (; i < h.HotelListResponse.length; i++) {
                         self.show.cardImg.push(0);

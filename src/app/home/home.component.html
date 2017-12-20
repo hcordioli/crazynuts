@@ -157,7 +157,9 @@
 										<ul *ngIf="show.valueAdds[i].slice(1).join('').length">
 											<li [hidden]="!desc || !k" *ngFor="let desc of show.valueAdds[i]; let k = index;">
 												<span [attr.data-tooltip]="desc">
-													<img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[k] + '.png'" alt="">
+													<i *ngIf="valueAdds.icons[k].indexOf('fa-') === 0" [attr.class]="'fa ' + valueAdds.icons[k]"></i>
+													<span *ngIf="valueAdds.icons[k].indexOf('x') === 0" [innerHTML]="decodeHTML('&' + '#' + valueAdds.icons[k] + ';')"></span>
+													<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[k] + '.png'" alt=""> -->
 												</span>
 											</li>
 										</ul>

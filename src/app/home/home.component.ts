@@ -478,7 +478,7 @@ export class HomeComponent implements AfterViewInit {
         txt.innerHTML = html;
         return txt.value;
     }
-    public infinityScrolling = true;
+    public infinityScrolling = false;
     public onSubmit(emulated) {
         console.log(arguments);
         var self = this,

@@ -446,9 +446,15 @@ export class HomeComponent implements AfterViewInit {
         self.onScrollTimer = setTimeout(function() {
             var d = ev.target,
                 el = d.querySelector('.app-main'),
-                h = (d.body.scrollHeight - (el ? el.offsetHeight : d.body.scrollHeight * 0.1));
+                dH = Math.max(
+                    d.body.scrollHeight, d.documentElement.scrollHeight,
+                    d.body.offsetHeight, d.documentElement.offsetHeight,
+                    d.body.clientHeight, d.documentElement.clientHeight
+                ),
+                h = dH - (el ? el.offsetHeight : 0),
+                s = d.body.scrollTop || d.documentElement.scrollTop;
             h *= 0.75;
-            if ((d.documentElement.scrollTop) >= h && !self.infinityScrolling) {
+            if (s >= h && !self.infinityScrolling) {
                 if (self.vars.hotelList.hasMorePages)
                     self.onSubmit(true);
             }

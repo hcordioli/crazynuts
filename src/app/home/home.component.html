@@ -134,16 +134,66 @@
 		<style></style>
 		<div class="wrap">
 			<div class="filtro">
-				<div ngui-sticky sticky-after=".sticky-ref">
+				<!-- <div ngui-sticky sticky-after=".sticky-ref"> -->
+				<div class="wrap">
 					FILTRO(s)
 				</div>
 			</div>
 			<div class="cards">
+				<div ngui-sticky sticky-after=".sticky-ref">
+					<div class="wrap">
+						<ul>
+							<li>
+								<a href="javascript:;">
+									<span>Sugestões</span>
+								</a>
+							</li>
+							<li>
+								<a href="javascript:;">
+									<span>Mais Populares</span>
+								</a>
+							</li>
+							<li>
+								<span>
+									Preço
+									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('preco', false)">
+										<i class="fa fa-sort-desc"></i>
+									</a>
+									<a href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('preco', true)">
+										<i class="fa fa-sort-asc"></i>
+									</a>
+								</span>
+							</li>
+							<li>
+								<span>
+									Avaliação
+									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('preco', false)">
+										<i class="fa fa-sort-desc"></i>
+									</a>
+									<a href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('preco', true)">
+										<i class="fa fa-sort-asc"></i>
+									</a>
+								</span>
+							</li>
+							<li>
+								<a href="javascript:;">
+									<img src="http://placehold.it/80x25" alt="Ver no mapa">
+								</a>
+							</li>
+							<li>
+								<a href="javascript:;" class="btn">
+									<span></span>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
 				<ul>
 					<li [attr.class]="'wrap ' + (['', 'line-red', 'line-blue'][i % 3]) + ' cardN' + i" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
 						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1">
 							<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
-								<img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt="">
+								<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt=""> -->
+								<i [attr.class]="'fa ' + valueAdds.icons[0]"></i>
 								<span class="fgc c1">
 									Café da manhã
 									<span class="fgc c2">incluído</span>
@@ -157,15 +207,17 @@
 							<div class="top wrap">
 								<div class="left">
 									<span class="nome" [textContent]="item.name"></span>
-									<div class="rateStar">
-										<div class="stars">
-											<span [attr.class]="(item.hotelRating % 1 !== 0 && j + 1 > item.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:item.hotelRating; let j = index;">
-												☆
-											</span>
+									<div class="ndwrap wrap">
+										<div class="rateStar">
+											<div class="stars">
+												<span [attr.class]="(item.hotelRating % 1 !== 0 && j + 1 > item.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:item.hotelRating; let j = index;">
+													☆
+												</span>
+											</div>
 										</div>
-									</div>
-									<div class="location">
-										<span [textContent]="item.locationDescription"></span>
+										<div class="location" (mouseenter)="$event.target.className = 'location' + ($event.target.children[0].offsetWidth < $event.target.children[0].scrollWidth ? ' hover' : '');" (mouseleave)="$event.target.className = 'location';" [attr.data-tooltip-dyn]="item.locationDescription">
+											<span class="label" [textContent]="item.locationDescription"></span>
+										</div>
 									</div>
 									<div class="amenidades">
 										<ul *ngIf="show.valueAdds[i].slice(1).join('').length">
@@ -173,7 +225,7 @@
 												<span [attr.data-tooltip]="desc">
 													<i *ngIf="valueAdds.icons[k].indexOf('fa-') === 0" [attr.class]="'fa ' + valueAdds.icons[k]"></i>
 													<span style="font-family: icomoon;" *ngIf="valueAdds.icons[k].indexOf('x') === 0" [innerHTML]="decodeHTML('&' + '#' + valueAdds.icons[k] + ';')"></span>
-												<span *ngIf="valueAdds.icons[k].indexOf('parking') === 0" class="fa-stack" style="font-size: 0.8rem;">
+												<span *ngIf="valueAdds.icons[k].indexOf('parking') === 0" class="fa-stack" style="font-size: 0.6rem;">
 													<i class="fa fa-square fa-stack-2x"></i>
 													<strong class="fa-stack-1x fa-inverse icon-text">P</strong>
 												</span>
@@ -185,11 +237,11 @@
 									</div>
 								</div>
 								<div class="right">
-									<div class="rateTrip" class="fgc c1" [hidden]="!item.tripAdvisorRating">
+									<div class="rateTrip fgc c1" [hidden]="!item.tripAdvisorRating">
 										<span class="label" [textContent]="item.tripAdvisorLabel"></span>
 										<span class="rate" [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
 									</div>
-									<div class="lastRooms" [hidden]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 0 || item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment >= 2147483646">
+									<div class="lastRooms fgc c2" [hidden]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 0 || item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment >= 2147483646">
 										<span>
 											{{ item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 1 ? 'último quarto' : 'últimos ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment + ' quartos'}}
 										</span>
@@ -212,15 +264,16 @@
 											<span class="val" [attr.data-tooltip]="['storeCommission%: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommissionPercent,'storeCommission: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommission].join(' &#013; ')" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
 										</div>
 									</div>
-									<div class="details">
+									<div class="details wrap">
 										<div class="selecionar">
 											<a href="javascript:;" class="btn bgc c1">
 												<span>Selecionar</span>
 											</a>
 										</div>
 										<div class="tarifa">
-											<span class="refundable" [textContent]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable ? 'Tarifa não reembolsável' : 'Cancelamento GRÁTIS'"></span>
-											<span class="iof">Sem IOF</span>
+											<span class="non-refundable" *ngIf="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable">Tarifa não reembolsável</span>
+											<span class="refundable" *ngIf="!item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.nonRefundable">Cancelamento GRÁTIS</span>
+											<span class="iof">sem IOF</span>
 										</div>
 									</div>
 								</div>

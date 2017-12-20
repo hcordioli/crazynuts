@@ -46,6 +46,12 @@ export class HomeComponent implements AfterViewInit {
             alt: 'HOTAX',
             url: 'assets/img/logo.svg'
         },
+        sort: {
+            price: {
+            	desc: false,
+            	asc: false
+            }
+        },
         icons: {
             base: 'assets/img/icons/',
             people: 'room-people.png',
@@ -211,7 +217,7 @@ export class HomeComponent implements AfterViewInit {
 
         },
         icons: [
-            'cafe',
+            'fa-coffee',
             'fa-cutlery',
             'fa-wifi',
             'parking', //parking

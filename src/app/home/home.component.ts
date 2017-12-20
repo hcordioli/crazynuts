@@ -216,7 +216,6 @@ export class HomeComponent implements AfterViewInit {
             'fa-wifi',
             'parking', //parking
             'fa-bell-o',
-            'fa-bell-o',
             'fa-bus',
             'xe013',
             'fa-ticket',

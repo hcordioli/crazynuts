@@ -448,7 +448,7 @@ export class HomeComponent implements AfterViewInit {
                 el = d.querySelector('.app-main'),
                 h = (d.body.scrollHeight - (el ? el.offsetHeight : d.body.scrollHeight * 0.1));
             h *= 0.75;
-            if ((d.documentElement.scrollTop) >= h) {
+            if ((d.documentElement.scrollTop) >= h && !self.infinityScrolling) {
                 if (self.vars.hotelList.hasMorePages)
                     self.onSubmit(true);
             }

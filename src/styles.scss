@@ -236,6 +236,10 @@ body {
     white-space: pre-wrap;
 }
 
+.wideTip[data-tooltip]:before {
+    width: 180px;
+}
+
 [data-tooltip-dyn]:before {
     content: attr(data-tooltip-dyn);
 }

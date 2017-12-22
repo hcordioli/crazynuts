@@ -524,6 +524,7 @@ export class HomeComponent implements AfterViewInit {
         }
         if (h.hasMorePages) {
             h.page++;
+            h.state = 2;
             self.infinityScrolling = true;
         } else {
             h.HotelListResponse = null;

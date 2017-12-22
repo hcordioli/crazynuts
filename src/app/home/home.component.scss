@@ -751,6 +751,10 @@ body {
 					width: 100%;
 					&.ngui-sticky-unstuck {
 						position: relative !important;
+						top: auto !important;
+						left: auto !important;
+						width: 100% !important;
+						bottom: auto !important;
 					}
 				&>.wrap {
 					background-color: #fff;
@@ -771,7 +775,7 @@ body {
 			}
 			&>ul {
 				display: block;
-				padding-top: 0.4rem;
+				padding-top: 4rem;
 				&>li {
 					display: block;
 					width: 100%;

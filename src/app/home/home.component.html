@@ -1,5 +1,5 @@
 <div class="app-home">
-	<div [attr.class]="(vars.hotelList.state ? 'search' : '')">
+	<div [attr.class]="(vars.hotelList.state > 0 ? 'search' : '')">
 		<div>
 			<div class="wrap main">
 				<div class="head wrap">
@@ -188,7 +188,7 @@
 						</ul>
 					</div>
 				</div>
-				<ul>
+				<ul *ngIf="vars.hotelList.HotelListResponse">
 					<li [attr.class]="'wrap ' + (['', 'line-red', 'line-blue'][i % 3]) + ' cardN' + i" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
 						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1">
 							<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">

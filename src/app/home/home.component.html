@@ -143,17 +143,17 @@
 				<div class="stickie" ngui-sticky sticky-after=".sub .txt">
 					<div class="wrap">
 						<ul class="sort">
-							<li>
+							<li class="item">
 								<a href="javascript:;">
 									<span>Sugestões</span>
 								</a>
 							</li>
-							<li>
+							<li class="item">
 								<a href="javascript:;">
 									<span>Mais Populares</span>
 								</a>
 							</li>
-							<li>
+							<li class="item">
 								<span>
 									Preço
 									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('preco', false)">
@@ -164,7 +164,7 @@
 									</a>
 								</span>
 							</li>
-							<li>
+							<li class="item">
 								<span>
 									Avaliação
 									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('preco', false)">
@@ -175,12 +175,12 @@
 									</a>
 								</span>
 							</li>
-							<li>
+							<li class="maps">
 								<a href="javascript:;">
 									<img src="http://placehold.it/80x25" alt="Ver no mapa">
 								</a>
 							</li>
-							<li>
+							<li class="compare">
 								<a href="javascript:;" class="btn">
 									<span></span>
 								</a>

@@ -780,11 +780,14 @@ body {
 							&:first-child:before {
 								display: none;
 							}
-							& * {
-								text-decoration: none;
-								color: #aaa;
-								cursor: pointer;
-								display: inline-block !important;
+							&.item {
+								&>*,
+								& a {
+									text-decoration: none;
+									color: #aaa;
+									cursor: pointer;
+									display: inline-block !important;
+								}
 							}
 						}
 					}

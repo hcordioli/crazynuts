@@ -637,7 +637,7 @@ body {
 					top: 0;
 					left: 50%;
 					width: inherit;
-					z-index: 2;
+					z-index: 3;
 					background-color: #fff;
 					padding-top: 1rem;
 					padding-bottom: 0.1rem;
@@ -729,7 +729,7 @@ body {
 				top: -12rem;
 				left: 0;
 				padding-top: 12rem;
-				z-index: 1;
+				z-index: 2;
 				&>div {
 					min-height: 12rem;
 					margin-top: 0;
@@ -747,7 +747,7 @@ body {
 			.stickie {
 				position: relative;
 				float: left;
-				z-index: 2;
+				z-index: 3;
 				padding: 0.6rem;
 				font-weight: 600;
 				width: 100%;

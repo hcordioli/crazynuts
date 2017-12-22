@@ -1,4 +1,5 @@
 import { Component, AfterViewInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { Http } from "@angular/http";
@@ -236,7 +237,7 @@ export class HomeComponent implements AfterViewInit {
             'fa-check'
         ]
     }
-    constructor(private http: Http, private httpC: HttpClient, private completerService: CompleterService) {
+    constructor(private _sanitizer: DomSanitizer, private http: Http, private httpC: HttpClient, private completerService: CompleterService) {
         var self = this,
             roomCok;
         self.customData = new CustomData(self.http);
@@ -478,6 +479,10 @@ export class HomeComponent implements AfterViewInit {
         self.daterange.start = value.start;
         self.daterange.end = value.end;
         self.daterange.label = '';
+    }
+    public cardShadow(hex) {
+        hex = hex || '#fff';
+        return this._sanitizer.bypassSecurityTrustStyle('box-shadow: 4px 4px 18px 0px ' + hex);
     }
     public decodeHTML(html) {
         var txt = document.createElement("textarea");

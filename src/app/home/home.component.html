@@ -189,8 +189,8 @@
 					</div>
 				</div>
 				<ul *ngIf="vars.hotelList.HotelListResponse">
-					<li [attr.class]="'wrap ' + (['', 'line-red', 'line-blue'][i % 3]) + ' cardN' + i" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
-						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1">
+					<li [attr.style]="cardShadow(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color)" [attr.class]="'wrap ' + ' cardN' + i + ' '" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
+						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1" [attr.data-test]="(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color ? ('box-shadow: 0px 0px 16px 4px ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color + ';') : '')">
 							<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
 								<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt=""> -->
 								<i [attr.class]="'fa ' + valueAdds.icons[0]"></i>
@@ -261,7 +261,7 @@
 										</div>
 										<div class="cheio">
 											<span class="media">Média / Noite</span>
-											<span class="val" [attr.data-tooltip]="['storeCommission%: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommissionPercent,'storeCommission: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommission].join(' &#013; ')" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalPrice"></span>
+											<span class="val" [attr.data-tooltip]="['storeCommission%: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommissionPercent,'storeCommission: ' +item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeCommission].join(' &#013; ')" [textContent]="'R$ ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPrice"></span>
 										</div>
 									</div>
 									<div class="details wrap">

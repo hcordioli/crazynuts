@@ -137,7 +137,7 @@ body {
 							height: 100%;
 							display: block;
 							padding: 0.5rem;
-							font-size: 1.2rem;
+							font-size: 1rem;
 							color: #aaa;
 							cursor: pointer;
 							margin-left: 0.7rem;
@@ -156,7 +156,7 @@ body {
 							display: block;
 							padding: 0.6rem;
 							vertical-align: middle;
-							font-size: 1.3rem;
+							font-size: 1rem;
 							color: #222;
 						}
 						input:focus,
@@ -177,7 +177,7 @@ body {
 						border: 1px solid #aaa;
 						display: block;
 						width: 100%;
-						font-size: 1.2rem;
+						font-size: 1rem;
 						padding: 0.5rem;
 						color: #222;
 						&:focus {
@@ -317,7 +317,6 @@ body {
 									float: left;
 									position: relative;
 									width: 50%;
-									position: relative;
 									padding-left: .7rem;
 									overflow: hidden;
 									&:before {
@@ -326,6 +325,7 @@ body {
 										display: block;
 										content: '';
 										position: absolute;
+										background-color: #fff;
 										top: 0;
 										left: 0;
 										cursor: default;
@@ -434,7 +434,7 @@ body {
 								border-radius: 4px;
 								display: block;
 								width: 100%;
-								font-size: 1.2rem;
+								font-size: 1rem;
 								padding: 0.5rem;
 								line-height: 1.2;
 								color: #aaa;
@@ -747,13 +747,22 @@ body {
 			.stickie {
 				position: relative;
 				float: left;
-				z-index: 3;
-				padding: 0.6rem;
-				font-weight: 600;
+				z-index: 2;
+				padding: 0.6rem 0.4rem;
 				width: 100%;
 				background-color: #fff;
-				transform: scale(1.1, 1.1);
-				font-size: 0.8rem;
+				&:before {
+					width: 105%;
+					height: 100%;
+					display: block;
+					content: '';
+					position: absolute;
+					top: 0;
+					left: -1rem;
+					z-index: -1;
+					cursor: default;
+					background: #fff;
+				}
 				&.ngui-sticky-unstuck {
 					position: relative !important;
 					top: auto !important;
@@ -763,6 +772,7 @@ body {
 				}
 				&>.wrap {
 					background-color: #fff;
+					border-bottom: 1px solid #aaa;
 					.sort {
 						text-align: left;
 						display: block;
@@ -784,7 +794,7 @@ body {
 								&>*,
 								& a {
 									text-decoration: none;
-									color: #aaa;
+									color: #222;
 									cursor: pointer;
 									display: inline-block !important;
 								}
@@ -800,16 +810,10 @@ body {
 					display: block;
 					width: 100%;
 					position: relative;
-					border: 2px solid #aaa;
+					border: 1px solid #aaa;
 					border-radius: 4px;
 					margin-bottom: 1rem;
-					box-shadow: 0px 0px 16px 4px rgba(0, 0, 0, 0.4);
-					&.line-red {
-						box-shadow: 0px 0px 16px 4px #C0252E;
-					}
-					&.line-blue {
-						box-shadow: 0px 0px 16px 4px #243E6F;
-					}
+					box-shadow: 4px 4px 18px 0px #fff;
 					.img {
 						float: left;
 						width: 30%;

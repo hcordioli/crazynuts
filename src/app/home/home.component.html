@@ -114,7 +114,7 @@
 			<div class="result" [hidden]="!(vars.hotelList.HotelListResponse || (vars.hotelList.HotelListResponseStr || '').length)">
 				<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
 			</div>
-			<div class="sticky-ref"></div>
+			<!-- <div class="sticky-ref"></div> -->
 		</div>
 	</div>
 	<ng-template #content>
@@ -140,7 +140,7 @@
 				</div>
 			</div>
 			<div class="cards">
-				<div ngui-sticky sticky-after=".sticky-ref">
+				<div class="stickie" ngui-sticky sticky-after=".sub .txt">
 					<div class="wrap">
 						<ul>
 							<li>
@@ -200,7 +200,7 @@
 							</span>
 							</span>
 							<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
-								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="'https://i.travelapi.com' + img.replace('_t.', '_d.')" alt="">
+								<img [attr.class]="n ? 'flipped' : ''" [attr.src]="img ? 'https://i.travelapi.com' + img.replace('_t.', '_d.') : ''" alt="">
 							</div>
 						</div>
 						<div class="info wrap">

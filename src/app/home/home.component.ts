@@ -66,6 +66,7 @@ export class HomeComponent implements AfterViewInit {
             HotelListResponseStr: '',
             state: 0,
             searchId: '',
+            regionId: '',
             hasMorePages: false,
             page: 0
         }
@@ -530,7 +531,7 @@ export class HomeComponent implements AfterViewInit {
             h.state = 1;
             m.busca.lastVal = m.busca.val;
         }
-        tmp = (h.hasMorePages ? ('&page=' + h.page + '&searchId=' + h.searchId) : '');
+        tmp = (h.regionId === m.busca.regionId && h.hasMorePages ? ('&page=' + h.page + '&searchId=' + h.searchId) : '');
         self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
                 'cid=' + k.cid +
                 '&apiKey=' + k.api +
@@ -556,6 +557,7 @@ export class HomeComponent implements AfterViewInit {
                         return;
                     i = h.HotelListResponse.length;
                     h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
+                    h.regionId = m.busca.regionId;
                     self.infinityScrolling = false;
                     h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
                     for (; i < h.HotelListResponse.length; i++) {

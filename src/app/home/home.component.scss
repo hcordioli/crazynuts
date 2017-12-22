@@ -706,7 +706,7 @@ body {
 		.sticky-ref {
 			position: fixed;
 			top: 12rem;
-			left: 0;
+			left: 100%;
 			width: 0;
 			height: 0;
 			display: block;
@@ -743,6 +743,32 @@ body {
 		.cards {
 			float: right;
 			width: 68%;
+			position: relative;
+			.stickie {
+					position: relative;
+					float: left;
+					z-index: 1;
+					width: 100%;
+					&.ngui-sticky-unstuck {
+						position: relative !important;
+					}
+				&>.wrap {
+					background-color: #fff;
+					&>ul {
+						text-align: left;
+						display: block;
+						overflow: auto;
+						min-height: 1.7rem;
+						&>li {
+							display: inline-block;
+							a {
+								text-decoration: none;
+								color: #222;
+							}
+						}
+					}
+				}
+			}
 			&>ul {
 				display: block;
 				padding-top: 0.4rem;

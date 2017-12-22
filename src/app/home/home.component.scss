@@ -745,29 +745,41 @@ body {
 			width: 68%;
 			position: relative;
 			.stickie {
-					position: relative;
-					float: left;
-					z-index: 1;
-					width: 100%;
-					&.ngui-sticky-unstuck {
-						position: relative !important;
-						top: auto !important;
-						left: auto !important;
-						width: 100% !important;
-						bottom: auto !important;
-					}
+				position: relative;
+				float: left;
+				z-index: 1;
+				width: 100%;
+				&.ngui-sticky-unstuck {
+					position: relative !important;
+					top: auto !important;
+					left: auto !important;
+					width: 100% !important;
+					bottom: auto !important;
+				}
 				&>.wrap {
 					background-color: #fff;
-					&>ul {
+					.sort {
 						text-align: left;
 						display: block;
 						overflow: auto;
-						min-height: 1.7rem;
+						min-height: 1.9rem;
 						&>li {
 							display: inline-block;
-							a {
+							&:before {
+								cursor: default;
+								content: '|';
+								display: inline-block;
+								vertical-align: middle;
+								margin-right: .5rem;
+							}
+							&:first-child:before {
+								display: none;
+							}
+							& * {
 								text-decoration: none;
-								color: #222;
+								color: #aaa;
+								cursor: pointer;
+								display: inline-block !important;
 							}
 						}
 					}

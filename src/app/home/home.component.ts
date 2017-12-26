@@ -49,12 +49,15 @@ export class HomeComponent implements AfterViewInit {
         },
         sort: {
             price: {
-            	desc: false,
-            	asc: false
+                desc: false,
+                asc: false
             }
         },
         icons: {
             base: 'assets/img/icons/',
+            compLight: 'comp-light.svg',
+            compDark: 'comp-dark.svg',
+            hot: 'hot.svg',
             people: 'room-people.png',
             room: 'room-bed.png',
             remove: 'room-remove.png'
@@ -80,7 +83,8 @@ export class HomeComponent implements AfterViewInit {
         room: 0,
         cardImg: [],
         valueAdds: [],
-        remainAdds: []
+        remainAdds: [],
+        compare: []
     }
     public mdl = {
         busca: {
@@ -93,6 +97,7 @@ export class HomeComponent implements AfterViewInit {
             },
             icon: '',
             regionId: '0',
+            lastRegion: '',
             placeholder: 'Ex: São Paulo',
             cls: ''
         },
@@ -230,7 +235,7 @@ export class HomeComponent implements AfterViewInit {
             'fa-glass',
             'xe25e',
             'fa-money',
-            'xe013',
+            'svg-spa',
             'fa-calendar-check-o',
             'fa-level-up',
             'xe013',
@@ -277,6 +282,29 @@ export class HomeComponent implements AfterViewInit {
         self.vars.el = document.getElementById('rooms');
         if (self.cookied)
             self.vars.el.className += ' touched';
+    }
+    public compareAdd(ev, cardId) {
+        if (!ev || !ev.target)
+            return;
+        var self = this,
+            cardNo = cardId | 0,
+            index = self.show.compare.indexOf(cardNo);
+        if (cardNo && index >= 0) {
+            self.show.compare.splice(index, 1);
+            return;
+        } else if (self.show.compare.length >= 5)
+            return;
+        else if (cardNo)
+            self.show.compare.push(cardNo);
+    }
+    public compareBtn(ev) {
+        if (!ev || !ev.target)
+            return;
+        var self = this;
+        if(self.show.compare.length)
+            alert(self.show.compare.join(','));
+    }
+    public sortBy(ev) {
     }
     public nextInput(ev) {
         var tgt = ev.target;
@@ -388,11 +416,14 @@ export class HomeComponent implements AfterViewInit {
         }, 0);
     }
     public onCompleterSelected(e) {
-        var title = e && e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : (e ? e.title : '');
+        var title = e && e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : (e ? e.title : ''),
+            self = this;
         if (e && e.description) {
-            this.mdl.busca.regionId = e.description || '0';
-            this.mdl.busca.icon = e.image;
-            this.mdl.busca.val = title;
+            self.mdl.busca.lastRegion = self.mdl.busca.regionId;
+            self.mdl.busca.regionId = e.description || '0';
+            self.mdl.busca.icon = e.image;
+            self.mdl.busca.val = title;
+            self.mdl.busca.lastVal = title;
         }
     }
     public onKey(e) {
@@ -491,7 +522,6 @@ export class HomeComponent implements AfterViewInit {
     }
     public infinityScrolling = false;
     public onSubmit(emulated) {
-        console.log(arguments);
         var self = this,
             m = self.mdl,
             h = self.vars.hotelList,

@@ -24,7 +24,7 @@
 					<form class="wrap" (ngSubmit)="onSubmit(false)" novalidate>
 						<div class="search">
 							<label>
-								<ng2-completer (input)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" [selectOnFocus]="true" (blur)="mdl.busca.val = (mdl.busca.regionId ? mdl.busca.val : '');mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+								<ng2-completer (input)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" [selectOnFocus]="true" (blur)="mdl.busca.val = (mdl.busca.val.length >= mdl.busca.lastVal.length ? mdl.busca.val : (mdl.busca.val ? mdl.busca.lastVal : '')); mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 								<span class="icon"></span>
 							</label>
 						</div>
@@ -181,15 +181,18 @@
 								</a>
 							</li>
 							<li class="compare">
-								<a href="javascript:;" class="btn">
-									<span></span>
+								<a href="javascript:;" class="btn bgc c1" (click)="compareBtn($event);">
+									<span class="icon">
+										<img [attr.src]="vars.icons.base + vars.icons.compLight" alt="">
+									</span>
+									<span class="text">Comparar</span>
 								</a>
 							</li>
 						</ul>
 					</div>
 				</div>
 				<ul *ngIf="vars.hotelList.HotelListResponse">
-					<li [attr.style]="cardShadow(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color)" [attr.class]="'wrap ' + ' cardN' + i + ' '" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
+					<li [attr.style]="cardShadow(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color)" [attr.class]="'wrap ' + 'cardN' + i + ' '" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
 						<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1" [attr.data-test]="(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color ? ('box-shadow: 0px 0px 16px 4px ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color + ';') : '')">
 							<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
 								<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt=""> -->
@@ -225,11 +228,13 @@
 												<span [attr.data-tooltip]="desc">
 													<i *ngIf="valueAdds.icons[k].indexOf('fa-') === 0" [attr.class]="'fa ' + valueAdds.icons[k]"></i>
 													<span style="font-family: icomoon;" *ngIf="valueAdds.icons[k].indexOf('x') === 0" [innerHTML]="decodeHTML('&' + '#' + valueAdds.icons[k] + ';')"></span>
-												<span *ngIf="valueAdds.icons[k].indexOf('parking') === 0" class="fa-stack" style="font-size: 0.6rem;">
-													<i class="fa fa-square fa-stack-2x"></i>
-													<strong class="fa-stack-1x fa-inverse icon-text">P</strong>
-												</span>
-												<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[k] + '.png'" alt=""> -->
+													<span *ngIf="valueAdds.icons[k].indexOf('parking') === 0" class="fa-stack" style="font-size: 0.6rem;">
+														<i class="fa fa-square fa-stack-2x"></i>
+														<strong class="fa-stack-1x fa-inverse icon-text">P</strong>
+													</span>
+													<span class="svg" *ngIf="valueAdds.icons[k].indexOf('svg-') === 0">
+														<img [attr.src]="vars.icons.base + valueAdds.icons[k] + '.svg'" alt="">
+													</span>
 												</span>
 											</li>
 										</ul>
@@ -242,7 +247,10 @@
 										<span class="rate" [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
 									</div>
 									<div class="lastRooms fgc c2" [hidden]="item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 0 || item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment >= 2147483646">
-										<span>
+										<span class="icon">
+											<img [attr.src]="vars.icons.base + vars.icons.hot" alt="">
+										</span>
+										<span class="text">
 											{{ item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 1 ? 'último quarto' : 'últimos ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment + ' quartos'}}
 										</span>
 									</div>
@@ -252,6 +260,13 @@
 								<div class="left">
 									<div class="room-desc" (mouseenter)="$event.target.className = 'room-desc' + ($event.target.children[0].offsetWidth < $event.target.children[0].scrollWidth ? ' hover' : '');" (mouseleave)="$event.target.className = 'room-desc';" [attr.data-tooltip-dyn]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">
 										<span class="label" [textContent]="item.RoomRateDetailsList.RoomRateDetails.roomDescription"></span>
+									</div>
+									<div class="compBtn">
+										<a href="javascript:;" (click)="compareAdd($event, item.hotelId)">
+											<span>
+												<img [attr.src]="vars.icons.base + vars.icons.compDark" alt="">
+											</span>
+										</a>
 									</div>
 								</div>
 								<div class="right">

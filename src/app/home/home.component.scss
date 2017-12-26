@@ -799,6 +799,28 @@ body {
 									display: inline-block !important;
 								}
 							}
+							&.compare {
+								a {
+									text-decoration: none;
+									display: inline-block;
+									padding: 0.4rem;
+									vertical-align: middle;
+									.icon {
+										display: inline-block;
+										width: 2rem;
+										vertical-align: middle;
+										img {
+											display: block;
+											width: 100%;
+											height: auto;
+										}
+									}
+									.text {
+										display: inline-block;
+										color: #fff;
+									}
+								}
+							}
 						}
 					}
 				}
@@ -825,7 +847,7 @@ body {
 							top: 0.5rem;
 							left: 0;
 							z-index: 1;
-							background: rgba(255, 255, 255, 0.5);
+							background: rgba(255, 255, 255, 0.75);
 							padding-right: 0.3rem;
 							&>img,
 							&>span {
@@ -937,8 +959,18 @@ body {
 			}
 			.lastRooms {
 				padding-top: 0.1rem;
-				font-size: 0.8rem;
-				span {}
+				.icon {
+					display: inline-block;
+					width: 1rem;
+					img {
+						display: block;
+						width: 100%;
+						height: auto;
+					}
+				}
+				.text {
+					font-size: 0.8rem;
+				}
 			}
 			.location,
 			.room-desc {
@@ -1061,11 +1093,16 @@ body {
 						position: relative;
 						display: inline-block;
 						font-size: 0.9rem;
-						&>img {
+						& img {
 							display: block;
 							height: auto;
 							width: 100%;
 						}
+					}
+					& .svg {
+						width: 1.3rem;
+						display: block;
+						height: 1rem;
 					}
 				}
 			}
@@ -1112,6 +1149,10 @@ body {
 						padding-bottom: 0.2rem;
 					}
 				}
+			}
+			& .compBtn span {
+				width: 2.5rem;
+				display: block;
 			}
 		}
 	}

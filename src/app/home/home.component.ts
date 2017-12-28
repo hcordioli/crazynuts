@@ -590,8 +590,8 @@ export class HomeComponent implements AfterViewInit {
         self.daterange.label = '';
     }
     public cardShadow(hex) {
-        hex = hex || '#fff';
-        return this._sanitizer.bypassSecurityTrustStyle('box-shadow: 4px 4px 18px 0px ' + hex);
+        hex = (hex || 'fff').replace(/^\#/gi, '');
+        return this._sanitizer.bypassSecurityTrustStyle('box-shadow: 4px 4px 18px 0px #' + hex);
     }
     public decodeHTML(html) {
         var txt = document.createElement("textarea");

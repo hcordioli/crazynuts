@@ -659,16 +659,15 @@ export class HomeComponent implements AfterViewInit {
             tmp = '&' + appendStr;
         }
         tmp += ((h.regionId === m.busca.regionId && h.hasMorePages) || appendStr ? ('&page=' + h.page + '&searchId=' + h.searchId) : '');
-        self.hotelsUrl += tmp;
         h.regionId = m.busca.regionId;
-        self.httpC.get(self.hotelsUrl).subscribe(hotelList => {
+        self.httpC.get(self.hotelsUrl + tmp).subscribe(hotelList => {
             var tgtComP = 0.13,
                 storeComP = 0.15,
                 gpShare = 0.5,
                 msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;
-            if (h.hasMorePages) {
+            if (!appendStr && h.hasMorePages) {
                 try {
                     tmp = hotelList;
                 } catch (e) {

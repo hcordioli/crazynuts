@@ -342,7 +342,7 @@ export class HomeComponent implements AfterViewInit {
     ngAfterViewInit() {
         var self = this,
             fn = [self.rangepicker.datePicker.clickDate,
-                self.rangepicker.datePicker.outsideClick
+            self.rangepicker.datePicker.outsideClick
             ];
         self.vars.el = document.getElementById('rooms');
         if (self.cookied)
@@ -376,7 +376,7 @@ export class HomeComponent implements AfterViewInit {
             self.vars.sort[str].asc = true;
             self.vars.sort[str].desc = true;
             self.vars.sort[str][ord] = true;
-            self.onSubmit(true, 'sort=price&sortOrder=' + ord);
+            self.onSubmit(true, 'sort=price&sortorder=' + ord);
         }
     }
     public filterBy(field, str) {
@@ -392,7 +392,7 @@ export class HomeComponent implements AfterViewInit {
         if (tgt)
             tgt.focus();
     }
-    public cookie = function(prop, val ? , eternal ? ) {
+    public cookie = function(prop, val?, eternal?) {
         var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
         if (val !== undefined)
             document.cookie = prop + '=' + val + (eternal ? '; expires=' + new Date('01/01/2038').toUTCString() : '') + '; path=/;';
@@ -507,7 +507,7 @@ export class HomeComponent implements AfterViewInit {
     public onKey(e) {
         var el;
         if (e.key === 'Escape') {
-            el = < HTMLElement > document.querySelector('#pickMe .daterangepicker');
+            el = <HTMLElement>document.querySelector('#pickMe .daterangepicker');
             if (this.open.rooms)
                 this.open.rooms = false;
             else if (el && el.style.display !== 'none')

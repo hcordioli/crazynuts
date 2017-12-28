@@ -137,13 +137,24 @@
 				<div ngui-sticky sticky-after=".sub .txt">
 					<div class="wrap">
 						<h3>Filtrar resultados</h3>
+						<div class="filtros">
+							<h4>Filtros Ativos</h4>
+							<ul *ngFor="let filtro of vars.filtros">
+								<li>
+									<a href="javascript:;">
+										<span [textContent]="filtro.nome">
+										</span>
+									</a>
+								</li>
+							</ul>
+						</div>
 						<div class="hotelname">
 							<label>
 								<span>Nome do hotel</span>
 								<input type="text" name="hotelname" [(ngModel)]="vars.filter.hotelname">
 							</label>
-							<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname)" class="btn">
-								<span>Go</span>
+							<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname)" class="btn bgc c1">
+								<span>OK</span>
 							</a>
 						</div>
 					</div>
@@ -187,7 +198,11 @@
 							</li>
 							<li class="maps">
 								<a href="javascript:;">
-									<img src="http://placehold.it/80x25" alt="Ver no mapa">
+									<i class="fa fa-map-marker fgc c2" aria-hidden="true"></i>
+									<span class="text">
+										Ver no mapa
+									</span>
+									<img [attr.src]="vars.icons.base + vars.icons.map" alt="Ver no mapa">
 								</a>
 							</li>
 							<li class="compare">

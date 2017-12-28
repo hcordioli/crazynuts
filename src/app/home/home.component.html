@@ -149,9 +149,9 @@
 							</ul>
 						</div>
 						<div class="hotelname">
-							<label>
+							<label (keyup.Enter)="filterBy('hotelname', vars.filter.hotelname)">
 								<span>Nome do hotel</span>
-								<input type="text" name="hotelname" [(ngModel)]="vars.filter.hotelname">
+								<input type="text" name="hotelname" [(ngModel)]="vars.filter.hotelname" (ngModelChange)="!vars.filter.hotelname.length ? filterBy('hotelname', '') : void(0);">
 							</label>
 							<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname)" class="btn bgc c1">
 								<span>OK</span>

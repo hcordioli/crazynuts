@@ -382,7 +382,11 @@ export class HomeComponent implements AfterViewInit {
     public filterBy(field, str) {
         var self = this,
             append = 'filterfield=' + field + '&filtervalue=' + str;
-        self.onSubmit(true, append);
+        if(field === 'hotelname' && !str) {
+            self.onSubmit(true, 'page=0');
+        } else {
+            self.onSubmit(true, append);
+        }
     }
     public nextInput(ev) {
         var tgt = ev.target;
@@ -734,7 +738,7 @@ export class HomeComponent implements AfterViewInit {
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse;
                     h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
                     h.searchId = h.HotelListResponse.customerSessionId;
-                    h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
+                    h.hasMorePages = appendStr ? false : h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];

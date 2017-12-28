@@ -41,11 +41,15 @@ export class HomeComponent implements AfterViewInit {
         },
         parentEl: '#pickMe'
     };
+    public hotelsUrl = '';
     public vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
             alt: 'HOTAX',
             url: 'assets/img/logo.svg'
+        },
+        filter: {
+            hotelname: ''
         },
         sort: {
             price: {
@@ -65,9 +69,10 @@ export class HomeComponent implements AfterViewInit {
         el: null,
         name: 0,
         hotelList: {
+            HotelListResponseArr: [],
             HotelListResponse: null,
-            properties: 0,
             HotelListResponseStr: '',
+            properties: 0,
             state: 0,
             searchId: '',
             regionId: '',
@@ -301,10 +306,23 @@ export class HomeComponent implements AfterViewInit {
         if (!ev || !ev.target)
             return;
         var self = this;
-        if(self.show.compare.length)
+        if (self.show.compare.length)
             alert(self.show.compare.join(','));
     }
-    public sortBy(ev) {
+    public sortBy(str, bool) {
+        var self = this,
+            ord = bool ? 'asc' : 'desc';
+        if (self.vars.sort[str] && ord in self.vars.sort[str]) {
+            self.vars.sort[str].asc = true;
+            self.vars.sort[str].desc = true;
+            self.vars.sort[str][ord] = true;
+            self.onSubmit(true, 'sort=price&sortOrder=' + ord);
+        }
+    }
+    public filterBy(field, str) {
+        var self = this,
+            append = 'filterfield=' + field + '&filtervalue=' + str;
+        self.onSubmit(true, append);
     }
     public nextInput(ev) {
         var tgt = ev.target;
@@ -494,7 +512,7 @@ export class HomeComponent implements AfterViewInit {
             h *= 0.75;
             if (s >= h && !self.infinityScrolling) {
                 if (self.vars.hotelList.hasMorePages)
-                    self.onSubmit(true);
+                    self.onSubmit(true, '');
             }
         }, 400);
     }
@@ -521,86 +539,153 @@ export class HomeComponent implements AfterViewInit {
         return txt.value;
     }
     public infinityScrolling = false;
-    public onSubmit(emulated) {
+    public onSubmit(emulated, appendStr) {
         var self = this,
             m = self.mdl,
             h = self.vars.hotelList,
             k = m.keys,
             quartos = '',
             tmp, i, j;
-        for (i = 0; i < m.room.people.list.length; i++) {
-            tmp = m.room.people.list[i];
-            quartos += '&room' + (i + 1) + '=' + tmp.more18;
-            if (tmp.less18.total)
-                for (j = 0; j < tmp.less18.list.length; j++)
-                    quartos += ',' + tmp.less18.list[j].age
-        }
-        if (self.open.keys) {
-            if (!k.api || !k.cid || !k.secret) {
-                alert('Favor inserir token');
+        if (!appendStr) {
+            for (i = 0; i < m.room.people.list.length; i++) {
+                tmp = m.room.people.list[i];
+                quartos += '&room' + (i + 1) + '=' + tmp.more18;
+                if (tmp.less18.total)
+                    for (j = 0; j < tmp.less18.list.length; j++)
+                        quartos += ',' + tmp.less18.list[j].age
+            }
+            if (self.open.keys) {
+                if (!k.api || !k.cid || !k.secret) {
+                    alert('Favor inserir token');
+                    return;
+                } else {
+                    self.cookie('cid', k.cid, true);
+                    self.cookie('api', k.api, true);
+                    self.cookie('secret', k.secret, true);
+                    self.open.keys = false;
+                }
+            }
+            if (!m.busca.val || m.busca.regionId === '0' || !m.entrada.val || !m.saida.val) {
+                alert('Favor preencher todos os campos');
                 return;
             } else {
-                self.cookie('cid', k.cid, true);
-                self.cookie('api', k.api, true);
-                self.cookie('secret', k.secret, true);
-                self.open.keys = false;
+                self.cookie('busca-val', m.busca.val);
+                self.cookie('busca-img', m.busca.icon);
+                self.cookie('busca-id', m.busca.regionId);
+                self.cookie('entrada', m.entrada.val);
+                self.cookie('saida', m.saida.val);
+                self.cookie('room', JSON.stringify(m.room));
             }
-        }
-        if (!m.busca.val || m.busca.regionId === '0' || !m.entrada.val || !m.saida.val) {
-            alert('Favor preencher todos os campos');
-            return;
-        } else {
-            self.cookie('busca-val', m.busca.val);
-            self.cookie('busca-img', m.busca.icon);
-            self.cookie('busca-id', m.busca.regionId);
-            self.cookie('entrada', m.entrada.val);
-            self.cookie('saida', m.saida.val);
-            self.cookie('room', JSON.stringify(m.room));
-        }
-        if (h.hasMorePages) {
-            h.page++;
-            h.state = 2;
-            self.infinityScrolling = true;
-        } else {
-            h.HotelListResponse = null;
-            h.HotelListResponseStr = 'Loading...';
-            h.state = 1;
-            m.busca.lastVal = m.busca.val;
-        }
-        tmp = (h.regionId === m.busca.regionId && h.hasMorePages ? ('&page=' + h.page + '&searchId=' + h.searchId) : '');
-        self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
+            if (h.hasMorePages) {
+                h.page++;
+                h.state = 2;
+                self.infinityScrolling = true;
+            } else {
+                h.HotelListResponse = null;
+                h.HotelListResponseStr = 'Loading...';
+                h.state = 1;
+                m.busca.lastVal = m.busca.val;
+            }
+            self.hotelsUrl = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
                 'cid=' + k.cid +
                 '&apiKey=' + k.api +
                 '&secret=' + k.secret +
                 '&checkin=' + m.entrada.val +
                 '&checkout=' + m.saida.val +
                 '&regionId=' + m.busca.regionId +
-                quartos + tmp)
-            .subscribe(hotelList => {
-                var tgtComP = 0.13,
-                    storeComP = 0.15,
-                    gpShare = 0.5,
-                    msg = 'Erro!',
-                    valueAdds,
-                    i, j, k, tmp;
-                if (h.hasMorePages) {
-                    try {
-                        tmp = hotelList;
-                    } catch (e) {
-                        tmp = null;
+                quartos;
+            tmp = '';
+        } else {
+            tmp = '&' + appendStr;
+        }
+        tmp += ((h.regionId === m.busca.regionId && h.hasMorePages) || appendStr ? ('&page=' + h.page + '&searchId=' + h.searchId) : '');
+        self.hotelsUrl += tmp;
+        h.regionId = m.busca.regionId;
+        self.httpC.get(self.hotelsUrl).subscribe(hotelList => {
+            var tgtComP = 0.13,
+                storeComP = 0.15,
+                gpShare = 0.5,
+                msg = 'Erro!',
+                valueAdds,
+                i, j, k, tmp;
+            if (h.hasMorePages) {
+                try {
+                    tmp = hotelList;
+                } catch (e) {
+                    tmp = null;
+                }
+                if (!tmp)
+                    return;
+                i = h.HotelListResponse.length;
+                h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
+                h.regionId = m.busca.regionId;
+                self.infinityScrolling = false;
+                h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
+                for (; i < h.HotelListResponse.length; i++) {
+                    self.show.cardImg.push(0);
+                    self.show.valueAdds.push(new Array(self.valueAdds.icons.length));
+                    self.show.remainAdds[i] = [];
+                    h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
+                    valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
+                    tmp = h.HotelListResponse[i].tripAdvisorRating;
+                    if (tmp && tmp >= 3.5) {
+                        if (tmp <= 3.9)
+                            tmp = 'Bom!';
+                        else if (tmp <= 4.2)
+                            tmp = 'Muito Bom!';
+                        else if (tmp <= 4.4)
+                            tmp = 'Incrível!';
+                        else if (tmp <= 4.6)
+                            tmp = 'Fantástico!';
+                        else if (tmp <= 5)
+                            tmp = 'Excepcional!';
+                        h.HotelListResponse[i].tripAdvisorLabel = tmp;
                     }
-                    if (!tmp)
+                    if (valueAdds) {
+                        if (!Array.isArray(valueAdds.ValueAdd))
+                            valueAdds.ValueAdd = [valueAdds.ValueAdd];
+                        for (j = 0; j < valueAdds.ValueAdd.length; j++) {
+                            k = valueAdds.ValueAdd[j];
+                            if (k['@id'] in self.valueAdds.ids) {
+                                if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
+                                    self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
+                                else
+                                    self.show.remainAdds[i].push(k.description);
+                            } else {
+                                self.show.remainAdds[i].push(k.description);
+                            }
+                        }
+                    }
+                }
+            } else {
+                try {
+                    h.HotelListResponseStr = '';
+                    h.HotelListResponse = hotelList;
+                    msg = h.HotelListResponse.messagem;
+                } catch (e) {
+                    h.HotelListResponseStr = '';
+                    h.HotelListResponse = null;
+                }
+                if (h.HotelListResponse.HotelListResponse && h.HotelListResponse.HotelListResponse.HotelList['@size']) {
+                    if (h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
+                        h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;
+                        h.HotelListResponse = null;
                         return;
-                    i = h.HotelListResponse.length;
-                    h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
-                    h.regionId = m.busca.regionId;
-                    self.infinityScrolling = false;
-                    h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
-                    for (; i < h.HotelListResponse.length; i++) {
-                        self.show.cardImg.push(0);
-                        self.show.valueAdds.push(new Array(self.valueAdds.icons.length));
-                        self.show.remainAdds[i] = [];
+                    }
+                    h.HotelListResponse = h.HotelListResponse.HotelListResponse;
+                    h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
+                    h.searchId = h.HotelListResponse.customerSessionId;
+                    h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
+                    h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
+                    if (!Array.isArray(h.HotelListResponse))
+                        h.HotelListResponse = [h.HotelListResponse];
+                    self.show.cardImg = new Array(h.HotelListResponse.length);
+                    self.show.valueAdds = new Array(h.HotelListResponse.length);
+                    for (i = 0; i < h.HotelListResponse.length; i++) {
                         h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
+                        self.show.cardImg[i] = 0;
+                        self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
+                        self.show.remainAdds[i] = [];
                         valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
                         tmp = h.HotelListResponse[i].tripAdvisorRating;
                         if (tmp && tmp >= 3.5) {
@@ -633,82 +718,22 @@ export class HomeComponent implements AfterViewInit {
                         }
                     }
                 } else {
-                    try {
-                        h.HotelListResponseStr = '';
-                        h.HotelListResponse = hotelList;
-                        msg = h.HotelListResponse.messagem;
-                    } catch (e) {
-                        h.HotelListResponseStr = '';
-                        h.HotelListResponse = null;
-                    }
-                    if (h.HotelListResponse.HotelListResponse && h.HotelListResponse.HotelListResponse.HotelList['@size']) {
-                        if (h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
-                            h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;
-                            h.HotelListResponse = null;
-                            return;
-                        }
-                        h.HotelListResponse = h.HotelListResponse.HotelListResponse;
-                        h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
-                        h.searchId = h.HotelListResponse.customerSessionId;
-                        h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
-                        h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
-                        if (!Array.isArray(h.HotelListResponse))
-                            h.HotelListResponse = [h.HotelListResponse];
-                        self.show.cardImg = new Array(h.HotelListResponse.length);
-                        self.show.valueAdds = new Array(h.HotelListResponse.length);
-                        for (i = 0; i < h.HotelListResponse.length; i++) {
-                            h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
-                            self.show.cardImg[i] = 0;
-                            self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
-                            self.show.remainAdds[i] = [];
-                            valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
-                            tmp = h.HotelListResponse[i].tripAdvisorRating;
-                            if (tmp && tmp >= 3.5) {
-                                if (tmp <= 3.9)
-                                    tmp = 'Bom!';
-                                else if (tmp <= 4.2)
-                                    tmp = 'Muito Bom!';
-                                else if (tmp <= 4.4)
-                                    tmp = 'Incrível!';
-                                else if (tmp <= 4.6)
-                                    tmp = 'Fantástico!';
-                                else if (tmp <= 5)
-                                    tmp = 'Excepcional!';
-                                h.HotelListResponse[i].tripAdvisorLabel = tmp;
-                            }
-                            if (valueAdds) {
-                                if (!Array.isArray(valueAdds.ValueAdd))
-                                    valueAdds.ValueAdd = [valueAdds.ValueAdd];
-                                for (j = 0; j < valueAdds.ValueAdd.length; j++) {
-                                    k = valueAdds.ValueAdd[j];
-                                    if (k['@id'] in self.valueAdds.ids) {
-                                        if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
-                                            self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
-                                        else
-                                            self.show.remainAdds[i].push(k.description);
-                                    } else {
-                                        self.show.remainAdds[i].push(k.description);
-                                    }
-                                }
-                            }
-                        }
-                    } else {
-                        h.HotelListResponseStr = msg;
-                        h.HotelListResponse = null;
-                    }
-                }
-                h.state = 2;
-            }, err => {
-                var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
-                try {
-                    h.HotelListResponseStr = erro;
-                    h.HotelListResponse = JSON.parse(erro);
-                } catch (e) {
-                    h.HotelListResponseStr = 'Erro!';
+                    h.HotelListResponseStr = msg;
                     h.HotelListResponse = null;
                 }
-                h.state = 3;
-            });
+            }
+            h.state = 2;
+        }, err => {
+            var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
+            try {
+                h.HotelListResponseStr = erro;
+                h.HotelListResponse = JSON.parse(erro);
+            } catch (e) {
+                h.HotelListResponseStr = 'Erro!';
+                h.HotelListResponse = null;
+            }
+            h.state = 3;
+        });
         return;
     }
 }

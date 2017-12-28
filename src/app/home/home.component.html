@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<div class="body">
-					<form class="wrap" (ngSubmit)="onSubmit(false)" novalidate>
+					<form class="wrap" (ngSubmit)="onSubmit(false, '')" novalidate>
 						<div class="search">
 							<label>
 								<ng2-completer (input)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" (focus)="mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" [selectOnFocus]="true" (blur)="mdl.busca.val = (mdl.busca.val.length >= mdl.busca.lastVal.length ? mdl.busca.val : (mdl.busca.val ? mdl.busca.lastVal : '')); mdl.busca.cls = (mdl.busca.val || '').length < 3 ? 'lessthanthree' : ''" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
@@ -134,9 +134,19 @@
 		<style></style>
 		<div class="wrap">
 			<div class="filtro">
-				<!-- <div ngui-sticky sticky-after=".sticky-ref"> -->
-				<div class="wrap">
-					FILTRO(s)
+				<div ngui-sticky sticky-after=".sub .txt">
+					<div class="wrap">
+						<h3>Filtrar resultados</h3>
+						<div class="hotelname">
+							<label>
+								<span>Nome do hotel</span>
+								<input type="text" name="hotelname" [(ngModel)]="vars.filter.hotelname">
+							</label>
+							<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname)" class="btn">
+								<span>Go</span>
+							</a>
+						</div>
+					</div>
 				</div>
 			</div>
 			<div class="cards">
@@ -156,10 +166,10 @@
 							<li class="item">
 								<span>
 									Preço
-									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('preco', false)">
+									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('price', false)">
 										<i class="fa fa-sort-desc"></i>
 									</a>
-									<a href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('preco', true)">
+									<a href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('price', true)">
 										<i class="fa fa-sort-asc"></i>
 									</a>
 								</span>

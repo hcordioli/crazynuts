@@ -121,9 +121,6 @@ export class HomeComponent implements AfterViewInit {
         icons: {
             base: 'assets/img/icons/',
             map: 'map.png',
-
-            compLight: 'comp-light.svg',
-            compDark: 'comp-dark.svg',
             hot: 'hot.svg',
             people: 'room-people.png',
             room: 'room-bed.png',

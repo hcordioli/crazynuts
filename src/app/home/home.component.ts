@@ -520,7 +520,13 @@ export class HomeComponent implements AfterViewInit {
             self.mdl.busca.regionId = e.description || '0';
             self.mdl.busca.icon = e.image;
             self.mdl.busca.val = title;
-            self.mdl.busca.lastVal = (self.mdl.busca.lastVal !== title) ? title : '';
+            if(self.mdl.busca.lastVal !== title) {
+                self.mdl.busca.lastVal = title;
+                if(self.vars.hotelList.hasMorePages)
+                    self.vars.hotelList.hasMorePages = false;
+            } else {
+                self.mdl.busca.lastVal = '';
+            }
         }
     }
     public onKey(e) {

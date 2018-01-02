@@ -342,7 +342,7 @@ export class HomeComponent implements AfterViewInit {
     ngAfterViewInit() {
         var self = this,
             fn = [self.rangepicker.datePicker.clickDate,
-            self.rangepicker.datePicker.outsideClick
+                self.rangepicker.datePicker.outsideClick
             ];
         self.vars.el = document.getElementById('rooms');
         if (self.cookied)
@@ -382,7 +382,7 @@ export class HomeComponent implements AfterViewInit {
     public filterBy(field, str) {
         var self = this,
             append = 'filterfield=' + field + '&filtervalue=' + str;
-        if(field === 'hotelname' && !str) {
+        if (field === 'hotelname' && !str) {
             self.onSubmit(true, 'page=0');
         } else {
             self.onSubmit(true, append);
@@ -396,7 +396,7 @@ export class HomeComponent implements AfterViewInit {
         if (tgt)
             tgt.focus();
     }
-    public cookie = function(prop, val?, eternal?) {
+    public cookie = function(prop, val ? , eternal ? ) {
         var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
         if (val !== undefined)
             document.cookie = prop + '=' + val + (eternal ? '; expires=' + new Date('01/01/2038').toUTCString() : '') + '; path=/;';
@@ -497,6 +497,21 @@ export class HomeComponent implements AfterViewInit {
             r.disabled = p.total >= p.limit;
         }, 0);
     }
+    public onCompleterInput(e) {
+        var self = this;
+        self.mdl.busca.cls = (self.mdl.busca.val || '').length < 3 ? 'lessthanthree' : '';
+    }
+    public onCompleterFocus(e) {
+        var self = this;
+        self.mdl.busca.cls = (self.mdl.busca.val || '').length < 3 ? 'lessthanthree' : '';
+    }
+    public onCompleterBlur(e) {
+        var self = this;
+        setTimeout(function() {
+            self.mdl.busca.val = (self.mdl.busca.val.length >= 3 && self.mdl.busca.val.length >= self.mdl.busca.lastVal.length ? self.mdl.busca.val : (self.mdl.busca.val ? self.mdl.busca.lastVal : ''));
+            self.mdl.busca.cls = (self.mdl.busca.val || '').length < 3 ? 'lessthanthree' : '';
+        }, 100);
+    }
     public onCompleterSelected(e) {
         var title = e && e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : (e ? e.title : ''),
             self = this;
@@ -505,13 +520,13 @@ export class HomeComponent implements AfterViewInit {
             self.mdl.busca.regionId = e.description || '0';
             self.mdl.busca.icon = e.image;
             self.mdl.busca.val = title;
-            self.mdl.busca.lastVal = title;
+            self.mdl.busca.lastVal = (self.mdl.busca.lastVal !== title) ? title : '';
         }
     }
     public onKey(e) {
         var el;
         if (e.key === 'Escape') {
-            el = <HTMLElement>document.querySelector('#pickMe .daterangepicker');
+            el = < HTMLElement > document.querySelector('#pickMe .daterangepicker');
             if (this.open.rooms)
                 this.open.rooms = false;
             else if (el && el.style.display !== 'none')

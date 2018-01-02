@@ -782,7 +782,8 @@ body {
 						text-align: left;
 						display: block;
 						overflow: auto;
-						min-height: 1.9rem;
+						height: 3.3rem;
+						white-space: nowrap;
 						&>li {
 							display: inline-block;
 							&:before {

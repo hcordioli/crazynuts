@@ -508,7 +508,7 @@ export class HomeComponent implements AfterViewInit {
     public onCompleterBlur(e) {
         var self = this;
         setTimeout(function() {
-            self.mdl.busca.val = (self.mdl.busca.val.length >= 3 && self.mdl.busca.val.length >= self.mdl.busca.lastVal.length ? self.mdl.busca.val : (self.mdl.busca.val ? self.mdl.busca.lastVal : ''));
+            self.mdl.busca.val = (self.mdl.busca.val !== self.mdl.busca.lastVal ? self.mdl.busca.lastVal : self.mdl.busca.val);
             self.mdl.busca.cls = (self.mdl.busca.val || '').length < 3 ? 'lessthanthree' : '';
         }, 100);
     }
@@ -525,7 +525,7 @@ export class HomeComponent implements AfterViewInit {
                 if(self.vars.hotelList.hasMorePages)
                     self.vars.hotelList.hasMorePages = false;
             } else {
-                self.mdl.busca.lastVal = '';
+                self.mdl.busca.lastVal = title;
             }
         }
     }

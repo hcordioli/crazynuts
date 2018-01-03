@@ -131,6 +131,7 @@ export class HomeComponent implements AfterViewInit {
             map: 'map.png',
             loading: 'loading.gif',
             hot: 'hot.svg',
+            sugestoes: 'hotdeals.png',
             people: 'room-people.png',
             room: 'room-bed.png',
             remove: 'room-remove.png'
@@ -399,7 +400,8 @@ export class HomeComponent implements AfterViewInit {
             append = 'filterfield=' + field + '&filtervalue=' + str;
         if (field === 'hotelname') {
             if (!str && self.vars.filter.hotelname.active) {
-                self.hotelsUrl.page = self.hotelsUrl.page.replace(/page=[0-9]*\&/, 'page=0&');
+                self.vars.hotelList.page = 0;
+                self.hotelsUrl.page = 'page=' + self.vars.hotelList.page;
                 self.hotelsUrl.filter = '';
                 self.vars.filter.hotelname.active = false;
                 self.onSubmit(false);
@@ -719,6 +721,7 @@ export class HomeComponent implements AfterViewInit {
         } else {
             h.regionId = m.busca.regionId;
             self.hotelsUrl.page = 'page=0';
+            self.vars.hotelList.page = 0;
         }
         self.httpC.get((self.hotelsUrl.base +
             '&' + [

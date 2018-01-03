@@ -842,6 +842,10 @@ body {
 									display: inline-block;
 									padding: 0.4rem;
 									vertical-align: middle;
+									&.disabled {
+										background-color: #aaa;
+										color: #fff;
+									}
 									.icon {
 										display: inline-block;
 										width: 2rem;
@@ -1190,6 +1194,11 @@ body {
 					margin-top: 1rem;
 					display: inline-block;
 					text-decoration: none;
+					background-color: transparent;
+					&.active {
+						background-color: #ecb939;
+						color: #fff;
+					}
 					span {
 						font-weight: 600;
 					}

@@ -21,7 +21,7 @@
 					</div>
 				</div>
 				<div class="body">
-					<form class="wrap" (ngSubmit)="onSubmit(false, '')" novalidate>
+					<form class="wrap" (ngSubmit)="onSubmit(false)" novalidate>
 						<div class="search">
 							<label>
 								<ng2-completer (input)="onCompleterInput($event)" (focus)="onCompleterFocus($event)" [selectOnFocus]="true" (blur)="onCompleterBlur($event)" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="mdl.busca.init" [autoMatch]="true" [inputClass]="mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="mdl.busca.placeholder" [(ngModel)]="mdl.busca.val" [datasource]="customData" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
@@ -149,11 +149,11 @@
 							</ul>
 						</div>
 						<div class="hotelname">
-							<label (keyup.Enter)="filterBy('hotelname', vars.filter.hotelname)">
+							<label (keyup.Enter)="filterBy('hotelname', vars.filter.hotelname.val)">
 								<span>Nome do hotel</span>
-								<input type="text" name="hotelname" [(ngModel)]="vars.filter.hotelname" (ngModelChange)="!vars.filter.hotelname.length ? filterBy('hotelname', '') : void(0);">
+								<input type="text" name="hotelname" [(ngModel)]="vars.filter.hotelname.val" (ngModelChange)="hotelnameChange()">
 							</label>
-							<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname)" class="btn bgc c1">
+							<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname.val)" class="btn bgc c1">
 								<span>OK</span>
 							</a>
 						</div>
@@ -177,10 +177,10 @@
 							<li class="item">
 								<span>
 									Preço
-									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('price', false)">
+									<a title="Maior no Topo" href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('price', false)">
 										<i class="fa fa-sort-desc"></i>
 									</a>
-									<a href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('price', true)">
+									<a title="Menor no Topo" href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('price', true)">
 										<i class="fa fa-sort-asc"></i>
 									</a>
 								</span>
@@ -206,7 +206,7 @@
 								</a>
 							</li>
 							<li class="compare">
-								<a href="javascript:;" class="btn bgc c1" (click)="compareBtn($event);">
+								<a href="javascript:;" [attr.class]="'btn bgc c1' + (show.compare.length ? '' : ' disabled')" (click)="compareBtn($event);">
 <!-- 									<span class="icon">
 										<img [attr.src]="vars.icons.base + vars.icons.compLight" alt="">
 									</span> -->
@@ -287,7 +287,7 @@
 										<span class="label" [textContent]="item.RoomRateDetailsList.RoomRateDetails.roomDescription"></span>
 									</div>
 									<div class="compBtn">
-										<a href="javascript:;" (click)="compareAdd($event, item.hotelId)">
+										<a [attr.class]="(show.compare.indexOf(item.hotelId) >= 0 ? 'active' : '')" href="javascript:;" (click)="compareAdd($event, item.hotelId)">
 											<span class="fgc c1">
 												Comparar
 												<!-- <img [attr.src]="vars.icons.base + vars.icons.compDark" alt=""> -->

@@ -41,7 +41,12 @@ export class HomeComponent implements AfterViewInit {
         },
         parentEl: '#pickMe'
     };
-    public hotelsUrl = '';
+    public hotelsUrl = {
+        base: '',
+        sort: '',
+        filter: '',
+        page: ''
+    };
     public vars = {
         slogan: 'Encontre o hotel ideal para o seu cliente,<br>com a melhor comissão para você!',
         logo: {
@@ -54,7 +59,10 @@ export class HomeComponent implements AfterViewInit {
             nome: '2 estrelas'
         }],
         filter: {
-            hotelname: '',
+            hotelname: {
+                val: '',
+                active: false
+            },
             opt: {
                 maisUsados: [{
                     nome: 'Café da manhã incluído',
@@ -129,7 +137,6 @@ export class HomeComponent implements AfterViewInit {
         el: null,
         name: 0,
         hotelList: {
-            HotelListResponseArr: [],
             HotelListResponse: null,
             HotelListResponseStr: '',
             properties: 0,
@@ -376,16 +383,25 @@ export class HomeComponent implements AfterViewInit {
             self.vars.sort[str].asc = true;
             self.vars.sort[str].desc = true;
             self.vars.sort[str][ord] = true;
-            self.onSubmit(true, 'sort=price&sortorder=' + ord);
+            self.hotelsUrl.sort = 'sort=price&sortorder=' + ord;
+            self.onSubmit(true);
         }
+    }
+    public hotelnameChange() {
+        var self = this;
+        if(!self.vars.filter.hotelname.val.length)
+            self.filterBy('hotelname', '');
     }
     public filterBy(field, str) {
         var self = this,
             append = 'filterfield=' + field + '&filtervalue=' + str;
         if (field === 'hotelname' && !str) {
-            self.onSubmit(true, 'page=0');
+            self.hotelsUrl.page = self.hotelsUrl.page.replace(/page=[0-9]*\&/, 'page=0&');
+            self.hotelsUrl.filter = '';
+            self.onSubmit(true);
         } else {
-            self.onSubmit(true, append);
+            self.hotelsUrl.filter = append;
+            self.onSubmit(true);
         }
     }
     public nextInput(ev) {
@@ -520,9 +536,9 @@ export class HomeComponent implements AfterViewInit {
             self.mdl.busca.regionId = e.description || '0';
             self.mdl.busca.icon = e.image;
             self.mdl.busca.val = title;
-            if(self.mdl.busca.lastVal !== title) {
+            if (self.mdl.busca.lastVal !== title) {
                 self.mdl.busca.lastVal = title;
-                if(self.vars.hotelList.hasMorePages)
+                if (self.vars.hotelList.hasMorePages)
                     self.vars.hotelList.hasMorePages = false;
             } else {
                 self.mdl.busca.lastVal = title;
@@ -597,7 +613,7 @@ export class HomeComponent implements AfterViewInit {
             h *= 0.75;
             if (s >= h && !self.infinityScrolling) {
                 if (self.vars.hotelList.hasMorePages)
-                    self.onSubmit(true, '');
+                    self.onSubmit(true);
             }
         }, 400);
     }
@@ -624,14 +640,14 @@ export class HomeComponent implements AfterViewInit {
         return txt.value;
     }
     public infinityScrolling = false;
-    public onSubmit(emulated, appendStr) {
+    public onSubmit(emulated) {
         var self = this,
             m = self.mdl,
             h = self.vars.hotelList,
             k = m.keys,
             quartos = '',
             tmp, i, j;
-        if (!appendStr) {
+        if (!self.hotelsUrl.base) {
             for (i = 0; i < m.room.people.list.length; i++) {
                 tmp = m.room.people.list[i];
                 quartos += '&room' + (i + 1) + '=' + tmp.more18;
@@ -661,17 +677,11 @@ export class HomeComponent implements AfterViewInit {
                 self.cookie('saida', m.saida.val);
                 self.cookie('room', JSON.stringify(m.room));
             }
-            if (h.hasMorePages) {
-                h.page++;
-                h.state = 2;
-                self.infinityScrolling = true;
-            } else {
-                h.HotelListResponse = null;
-                h.HotelListResponseStr = 'Loading...';
-                h.state = 1;
-                m.busca.lastVal = m.busca.val;
-            }
-            self.hotelsUrl = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
+            h.HotelListResponse = null;
+            h.HotelListResponseStr = 'Loading...';
+            h.state = 1;
+            m.busca.lastVal = m.busca.val;
+            self.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
                 'cid=' + k.cid +
                 '&apiKey=' + k.api +
                 '&secret=' + k.secret +
@@ -679,20 +689,28 @@ export class HomeComponent implements AfterViewInit {
                 '&checkout=' + m.saida.val +
                 '&regionId=' + m.busca.regionId +
                 quartos;
-            tmp = '';
         } else {
-            tmp = '&' + appendStr;
+            if (h.hasMorePages) {
+                h.page++;
+                h.state = 2;
+                self.infinityScrolling = true;
+            }
         }
-        tmp += ((h.regionId === m.busca.regionId && h.hasMorePages) || appendStr ? ('&page=' + h.page + '&searchId=' + h.searchId) : '');
-        h.regionId = m.busca.regionId;
-        self.httpC.get(self.hotelsUrl + tmp).subscribe(hotelList => {
+        if (h.regionId === m.busca.regionId) {
+            if (h.hasMorePages && h.searchId)
+                self.hotelsUrl.page = 'page=' + h.page + '&searchId=' + h.searchId;
+        } else {
+            h.regionId = m.busca.regionId;
+            self.hotelsUrl.page = 'page=0';
+        }
+        self.httpC.get(self.hotelsUrl.base + '&' + [self.hotelsUrl.page, self.hotelsUrl.sort, self.hotelsUrl.filter].join('&')).subscribe(hotelList => {
             var tgtComP = 0.13,
                 storeComP = 0.15,
                 gpShare = 0.5,
                 msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;
-            if (!appendStr && h.hasMorePages) {
+            if (!self.hotelsUrl.filter && !self.hotelsUrl.sort && h.hasMorePages) {
                 try {
                     tmp = hotelList;
                 } catch (e) {
@@ -759,7 +777,7 @@ export class HomeComponent implements AfterViewInit {
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse;
                     h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
                     h.searchId = h.HotelListResponse.customerSessionId;
-                    h.hasMorePages = appendStr ? false : h.HotelListResponse.moreResultsAvailable;
+                    h.hasMorePages = self.hotelsUrl.sort || self.hotelsUrl.filter ? false : h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];

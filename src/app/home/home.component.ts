@@ -654,6 +654,7 @@ export class HomeComponent implements AfterViewInit {
             h = self.vars.hotelList,
             k = m.keys,
             quartos = '',
+            isScroll = scrolling,
             tmp, i, j;
         if (!self.hotelsUrl.base) {
             for (i = 0; i < m.room.people.list.length; i++) {
@@ -852,7 +853,7 @@ export class HomeComponent implements AfterViewInit {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
             alert(erro);
             setTimeout(function() {
-                h.HotelListResponseStr = 'Erro: ' + erro;
+                h.HotelListResponseStr = isScroll ? '' : 'Erro: ' + erro;
             }, 1000)
             // try {
             //     h.HotelListResponseStr = erro;

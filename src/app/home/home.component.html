@@ -111,7 +111,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="result" [hidden]="!(vars.hotelList.HotelListResponse || (vars.hotelList.HotelListResponseStr || '').length)">
+			<div class="result" [hidden]="vars.hotelList.state < 1">
 				<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
 			</div>
 			<!-- <div class="sticky-ref"></div> -->
@@ -207,9 +207,6 @@
 							</li>
 							<li class="compare">
 								<a href="javascript:;" [attr.class]="'btn bgc c1' + (show.compare.length ? '' : ' disabled')" (click)="compareBtn($event);">
-<!-- 									<span class="icon">
-										<img [attr.src]="vars.icons.base + vars.icons.compLight" alt="">
-									</span> -->
 									<span class="text">Comparar</span>
 								</a>
 							</li>
@@ -253,11 +250,11 @@
 												<span [attr.data-tooltip]="desc">
 													<i *ngIf="valueAdds.icons[k].indexOf('fa-') === 0" [attr.class]="'fa ' + valueAdds.icons[k]"></i>
 													<span style="font-family: icomoon;" *ngIf="valueAdds.icons[k].indexOf('x') === 0" [innerHTML]="decodeHTML('&' + '#' + valueAdds.icons[k] + ';')"></span>
-													<span *ngIf="valueAdds.icons[k].indexOf('parking') === 0" class="fa-stack" style="font-size: 0.6rem;">
+												<span *ngIf="valueAdds.icons[k].indexOf('parking') === 0" class="fa-stack" style="font-size: 0.6rem;">
 														<i class="fa fa-square fa-stack-2x"></i>
 														<strong class="fa-stack-1x fa-inverse icon-text">P</strong>
 													</span>
-													<span class="svg" *ngIf="valueAdds.icons[k].indexOf('svg-') === 0">
+												<span class="svg" *ngIf="valueAdds.icons[k].indexOf('svg-') === 0">
 														<img [attr.src]="vars.icons.base + valueAdds.icons[k] + '.svg'" alt="">
 													</span>
 												</span>
@@ -326,14 +323,19 @@
 		</div>
 		<span [hidden]="!infinityScrolling">Loading</span>
 	</ng-template>
-	<ng-template #other_content>{{ vars.hotelList.HotelListResponseStr }}</ng-template>
+	<ng-template #other_content>
+		<span *ngIf="vars.hotelList.HotelListResponseStr" [textContent]="vars.hotelList.HotelListResponseStr"></span>
+		<span class="loading icon" *ngIf="vars.hotelList.HotelListResponseStr === null">
+			<img [attr.src]="vars.icons.base + vars.icons.loading" alt=" ">
+		</span>
+	</ng-template>
 </div>
 <!-- <td ></td>
-						<td [textContent]="td.address1"></td>
-						<td [innerHTML]="td.shortDescription"></td>
-						<td [textContent]="td.rateCurrencyCode"></td>
+						<td [textContent]="td.address1 "></td>
+						<td [innerHTML]="td.shortDescription "></td>
+						<td [textContent]="td.rateCurrencyCode "></td>
 						<td>{{ td ? 'SIM' : 'NÃO' }}</td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.roomDescription"></td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup"></td>
+						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.roomDescription "></td>
+						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup "></td>
 						<td ></td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent"></td> -->
+						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent "></td> -->

@@ -129,6 +129,7 @@ export class HomeComponent implements AfterViewInit {
         icons: {
             base: 'assets/img/icons/',
             map: 'map.png',
+            loading: 'loading.gif',
             hot: 'hot.svg',
             people: 'room-people.png',
             room: 'room-bed.png',
@@ -384,24 +385,29 @@ export class HomeComponent implements AfterViewInit {
             self.vars.sort[str].desc = true;
             self.vars.sort[str][ord] = true;
             self.hotelsUrl.sort = 'sort=price&sortorder=' + ord;
-            self.onSubmit(true);
+            self.onSubmit(false);
         }
     }
     public hotelnameChange() {
         var self = this;
-        if(!self.vars.filter.hotelname.val.length)
+        if (!self.vars.filter.hotelname.val.length) {
             self.filterBy('hotelname', '');
+        }
     }
     public filterBy(field, str) {
         var self = this,
             append = 'filterfield=' + field + '&filtervalue=' + str;
-        if (field === 'hotelname' && !str) {
-            self.hotelsUrl.page = self.hotelsUrl.page.replace(/page=[0-9]*\&/, 'page=0&');
-            self.hotelsUrl.filter = '';
-            self.onSubmit(true);
-        } else {
-            self.hotelsUrl.filter = append;
-            self.onSubmit(true);
+        if (field === 'hotelname') {
+            if (!str && self.vars.filter.hotelname.active) {
+                self.hotelsUrl.page = self.hotelsUrl.page.replace(/page=[0-9]*\&/, 'page=0&');
+                self.hotelsUrl.filter = '';
+                self.vars.filter.hotelname.active = false;
+                self.onSubmit(false);
+            } else if (str) {
+                self.hotelsUrl.filter = append;
+                self.vars.filter.hotelname.active = true;
+                self.onSubmit(false);
+            }
         }
     }
     public nextInput(ev) {
@@ -536,6 +542,8 @@ export class HomeComponent implements AfterViewInit {
             self.mdl.busca.regionId = e.description || '0';
             self.mdl.busca.icon = e.image;
             self.mdl.busca.val = title;
+            self.hotelsUrl.base = '';
+            self.vars.filter.hotelname.active = false;
             if (self.mdl.busca.lastVal !== title) {
                 self.mdl.busca.lastVal = title;
                 if (self.vars.hotelList.hasMorePages)
@@ -640,7 +648,7 @@ export class HomeComponent implements AfterViewInit {
         return txt.value;
     }
     public infinityScrolling = false;
-    public onSubmit(emulated) {
+    public onSubmit(scrolling) {
         var self = this,
             m = self.mdl,
             h = self.vars.hotelList,
@@ -678,7 +686,7 @@ export class HomeComponent implements AfterViewInit {
                 self.cookie('room', JSON.stringify(m.room));
             }
             h.HotelListResponse = null;
-            h.HotelListResponseStr = 'Loading...';
+            h.HotelListResponseStr = null;
             h.state = 1;
             m.busca.lastVal = m.busca.val;
             self.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
@@ -690,27 +698,42 @@ export class HomeComponent implements AfterViewInit {
                 '&regionId=' + m.busca.regionId +
                 quartos;
         } else {
-            if (h.hasMorePages) {
-                h.page++;
-                h.state = 2;
-                self.infinityScrolling = true;
+            h.state = 1;
+            if (!scrolling) {
+                h.HotelListResponse = null;
+                h.HotelListResponseStr = null;
+            } else {
+                if (h.hasMorePages) {
+                    h.page++;
+                    h.state = 2;
+                    self.infinityScrolling = true;
+                }
             }
         }
         if (h.regionId === m.busca.regionId) {
-            if (h.hasMorePages && h.searchId)
-                self.hotelsUrl.page = 'page=' + h.page + '&searchId=' + h.searchId;
+            if (h.searchId && self.hotelsUrl.base.indexOf('searchId=') < 0)
+                self.hotelsUrl.base += '&searchId=' + h.searchId;
+            if (h.hasMorePages && h.searchId && scrolling)
+                self.hotelsUrl.page = 'page=' + h.page;
         } else {
             h.regionId = m.busca.regionId;
             self.hotelsUrl.page = 'page=0';
         }
-        self.httpC.get(self.hotelsUrl.base + '&' + [self.hotelsUrl.page, self.hotelsUrl.sort, self.hotelsUrl.filter].join('&')).subscribe(hotelList => {
+        self.httpC.get((self.hotelsUrl.base +
+            '&' + [
+                self.hotelsUrl.page,
+                self.hotelsUrl.sort,
+                (self.vars.filter.hotelname.active ?
+                    self.hotelsUrl.filter : ''
+                )
+            ].join('&')).replace(/\&+/gi, '&').replace(/\&*$/gi, '')).subscribe(hotelList => {
             var tgtComP = 0.13,
                 storeComP = 0.15,
                 gpShare = 0.5,
                 msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;
-            if (!self.hotelsUrl.filter && !self.hotelsUrl.sort && h.hasMorePages) {
+            if (scrolling && h.hasMorePages) {
                 try {
                     tmp = hotelList;
                 } catch (e) {
@@ -777,7 +800,7 @@ export class HomeComponent implements AfterViewInit {
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse;
                     h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
                     h.searchId = h.HotelListResponse.customerSessionId;
-                    h.hasMorePages = self.hotelsUrl.sort || self.hotelsUrl.filter ? false : h.HotelListResponse.moreResultsAvailable;
+                    h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
                     if (!Array.isArray(h.HotelListResponse))
                         h.HotelListResponse = [h.HotelListResponse];
@@ -827,14 +850,18 @@ export class HomeComponent implements AfterViewInit {
             h.state = 2;
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
-            try {
-                h.HotelListResponseStr = erro;
-                h.HotelListResponse = JSON.parse(erro);
-            } catch (e) {
-                h.HotelListResponseStr = 'Erro!';
-                h.HotelListResponse = null;
-            }
-            h.state = 3;
+            alert(erro);
+            setTimeout(function() {
+                h.HotelListResponseStr = 'Erro: ' + erro;
+            }, 1000)
+            // try {
+            //     h.HotelListResponseStr = erro;
+            //     h.HotelListResponse = JSON.parse(erro);
+            // } catch (e) {
+            //     h.HotelListResponseStr = 'Erro!';
+            //     h.HotelListResponse = null;
+            // }
+            // h.state = 3;
         });
         return;
     }

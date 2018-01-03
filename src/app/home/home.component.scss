@@ -707,6 +707,16 @@ body {
 					}
 				}
 			}
+			.icon.loading {
+				display: block;
+				margin: 0 auto;
+				width: 2rem;
+				img {
+					display: block;
+					width: 100%;
+					height: auto;
+				}
+			}
 		}
 		.sticky-ref {
 			position: fixed;

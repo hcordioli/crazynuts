@@ -124,6 +124,10 @@ export class HomeComponent implements AfterViewInit {
             price: {
                 desc: false,
                 asc: false
+            },
+            rating: {
+                desc: false,
+                asc: false
             }
         },
         icons: {
@@ -382,8 +386,8 @@ export class HomeComponent implements AfterViewInit {
         var self = this,
             ord = bool ? 'asc' : 'desc';
         if (self.vars.sort[str] && ord in self.vars.sort[str]) {
-            self.vars.sort[str].asc = true;
-            self.vars.sort[str].desc = true;
+            self.vars.sort[str].asc = false;
+            self.vars.sort[str].desc = false;
             self.vars.sort[str][ord] = true;
             self.hotelsUrl.sort = 'sort=price&sortorder=' + ord;
             self.onSubmit(false);

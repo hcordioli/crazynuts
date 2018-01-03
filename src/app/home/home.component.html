@@ -166,7 +166,9 @@
 						<ul class="sort">
 							<li class="item">
 								<a href="javascript:;">
-									<span>Sugestões</span>
+									<span class="hotdeals icon">
+										<img [attr.src]="vars.icons.base + vars.icons.sugestoes" alt="Sugestões">
+									</span>
 								</a>
 							</li>
 							<li class="item">
@@ -175,7 +177,7 @@
 								</a>
 							</li>
 							<li class="item">
-								<span>
+								<span (click)="sortBy('price', (vars.sort.price.asc ? vars.sort.price.desc : vars.sort.price.asc))">
 									Preço
 									<a title="Maior no Topo" href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('price', false)">
 										<i class="fa fa-sort-desc"></i>
@@ -188,10 +190,10 @@
 							<li class="item">
 								<span>
 									Avaliação
-									<a href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('preco', false)">
+									<a href="javascript:;" [attr.class]="vars.sort.rating.desc ? 'active' : ''" (click)="sortBy('preco', false)">
 										<i class="fa fa-sort-desc"></i>
 									</a>
-									<a href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('preco', true)">
+									<a href="javascript:;" [attr.class]="vars.sort.rating.asc ? 'active' : ''" (click)="sortBy('preco', true)">
 										<i class="fa fa-sort-asc"></i>
 									</a>
 								</span>

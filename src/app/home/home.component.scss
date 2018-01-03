@@ -792,10 +792,13 @@ body {
 						text-align: left;
 						display: block;
 						overflow: auto;
-						height: 3.3rem;
+						min-height: 3rem;
+						height: auto;
+						max-height: 4rem;
 						white-space: nowrap;
 						&>li {
 							display: inline-block;
+							vertical-align: middle;
 							&:before {
 								cursor: default;
 								content: '|';
@@ -813,6 +816,19 @@ body {
 									color: #222;
 									cursor: pointer;
 									display: inline-block !important;
+									.icon.hotdeals {
+										display: block;
+										margin: 0 auto;
+										width: 5rem;
+										img {
+											display: block;
+											width: 100%;
+											height: auto;
+										}
+									}
+									&.active {
+										color: #C0252E;
+									}
 								}
 							}
 							&.maps {

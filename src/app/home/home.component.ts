@@ -64,60 +64,69 @@ export class HomeComponent implements AfterViewInit {
                 active: false
             },
             opt: {
-                maisUsados: [{
-                    nome: 'Café da manhã incluído',
-                    selected: false
-                }, {
-                    nome: 'Piscina',
-                    selected: false
-                }, {
-                    nome: 'Wi-Fi grátis',
-                    selected: false
-                }, {
-                    nome: 'Estacionamento grátis',
-                    selected: false
-                }, {
-                    nome: 'Aceita animais de estimação',
-                    selected: false
-                }],
-                estrelas: [{
-                    nome: '5 estrelas',
-                    selected: false
-                }, {
-                    nome: '4 estrelas',
-                    selected: false
-                }, {
-                    nome: '3 estrelas',
-                    selected: false
-                }, {
-                    nome: '2 estrelas',
-                    selected: true
-                }, {
-                    nome: '1 estrela',
-                    selected: false
-                }, {
-                    nome: 'Sem classificação',
-                    selected: false
-                }],
-                tar: [{
-                    nome: '5 estrelas',
-                    selected: false
-                }, {
-                    nome: '4 estrelas',
-                    selected: false
-                }, {
-                    nome: '3 estrelas',
-                    selected: false
-                }, {
-                    nome: '2 estrelas',
-                    selected: true
-                }, {
-                    nome: '1 estrela',
-                    selected: false
-                }, {
-                    nome: 'Sem classificação',
-                    selected: false
-                }]
+                maisUsados: {
+                    title: 'Filtros mais usados',
+                    arr: [{
+                        nome: 'Café da manhã incluído',
+                        selected: false
+                    }, {
+                        nome: 'Piscina',
+                        selected: false
+                    }, {
+                        nome: 'Wi-Fi grátis',
+                        selected: false
+                    }, {
+                        nome: 'Estacionamento grátis',
+                        selected: false
+                    }, {
+                        nome: 'Aceita animais de estimação',
+                        selected: false
+                    }]
+                },
+                estrelas: {
+                    title: 'Filtros mais usados',
+                    arr: [{
+                        nome: '5 estrelas',
+                        selected: false
+                    }, {
+                        nome: '4 estrelas',
+                        selected: false
+                    }, {
+                        nome: '3 estrelas',
+                        selected: false
+                    }, {
+                        nome: '2 estrelas',
+                        selected: true
+                    }, {
+                        nome: '1 estrela',
+                        selected: false
+                    }, {
+                        nome: 'Sem classificação',
+                        selected: false
+                    }]
+                },
+                tipoTarifa: {
+                    title: 'Filtros mais usados',
+                    arr: [{
+                        nome: '5 estrelas',
+                        selected: false
+                    }, {
+                        nome: '4 estrelas',
+                        selected: false
+                    }, {
+                        nome: '3 estrelas',
+                        selected: false
+                    }, {
+                        nome: '2 estrelas',
+                        selected: true
+                    }, {
+                        nome: '1 estrela',
+                        selected: false
+                    }, {
+                        nome: 'Sem classificação',
+                        selected: false
+                    }]
+                }
             }
         },
         sort: {

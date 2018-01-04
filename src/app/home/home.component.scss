@@ -699,11 +699,11 @@ body {
 				}
 				.body {
 					.sub {
-						margin-top: 22px;
+						margin-top: 1.3rem;
 						text-align: left;
 						.txt {
-							padding-bottom: 1.5rem;
-							display: inline-block;
+							padding-bottom: 0.7rem;
+							display: block;
 						}
 					}
 					.opt .rooms.focus {
@@ -748,7 +748,7 @@ body {
 				top: -12rem;
 				left: 0;
 				padding-top: 12rem;
-				z-index: 3;
+				z-index: 2;
 				& .filtros {
 					min-height: 12rem;
 					margin-top: 0;
@@ -765,14 +765,13 @@ body {
 			width: 68%;
 			position: relative;
 			.stickie {
-				position: relative;
-				float: left;
+				position: fixed;
+				top: 11rem;
 				z-index: 2;
 				padding: 0.6rem 0rem;
-				width: 100%;
 				background-color: #fff;
 				&:before {
-					width: 105%;
+					width: 115%;
 					height: 100%;
 					display: block;
 					content: '';
@@ -782,19 +781,13 @@ body {
 					z-index: -1;
 					cursor: default;
 					background: #fff;
-				}
-				&.ngui-sticky-unstuck {
-					position: relative !important;
-					top: auto !important;
-					left: auto !important;
-					width: 100% !important;
-					bottom: auto !important;
+					border: 4rem solid #fff;
+					border-bottom: 1px solid #aaa;
 				}
 				&>.wrap {
-					background-color: #fff;
-					border-bottom: 1px solid #aaa;
 					.sort {
 						text-align: left;
+						/* display: table-row; */
 						display: block;
 						overflow: auto;
 						min-height: 3rem;

@@ -701,6 +701,10 @@ body {
 					.sub {
 						margin-top: 22px;
 						text-align: left;
+						.txt {
+							padding-bottom: 1.75rem;
+							display: inline-block;
+						}
 					}
 					.opt .rooms.focus {
 						margin-bottom: 0;
@@ -744,7 +748,7 @@ body {
 				top: -12rem;
 				left: 0;
 				padding-top: 12rem;
-				z-index: 2;
+				z-index: 3;
 				&>div {
 					min-height: 12rem;
 					margin-top: 0;

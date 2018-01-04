@@ -63,6 +63,11 @@ export class HomeComponent implements AfterViewInit {
                 val: '',
                 active: false
             },
+        	hotelprice: {
+        		val: [0, 2000],
+        		min: 0,
+        		max: 2000
+        	},
             opt: {
                 maisUsados: {
                     title: 'Filtros mais usados',
@@ -394,7 +399,12 @@ export class HomeComponent implements AfterViewInit {
     public sortBy(str, bool) {
         var self = this,
             ord = bool ? 'asc' : 'desc';
-        if (self.vars.sort[str] && ord in self.vars.sort[str]) {
+        if(self.vars.sort[str][ord] && self.hotelsUrl.sort) {
+        	self.vars.sort[str].asc = false;
+            self.vars.sort[str].desc = false;
+            self.hotelsUrl.sort = '';
+            self.onSubmit(false);
+        } else if (self.vars.sort[str] && ord in self.vars.sort[str]) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.sort[str][ord] = true;

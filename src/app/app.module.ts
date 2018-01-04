@@ -1,6 +1,6 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, NgStyle } from '@angular/common';
+import { CommonModule, NgStyle, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { Ng2CompleterModule } from "ng2-completer";
@@ -11,6 +11,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
 import { ErrComponent } from './err/err.component';
 import { RangePipe } from './range.pipe';
+import { NouisliderModule } from 'ng2-nouislider';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt, 'pt-BR');
 
 @NgModule({
     declarations: [
@@ -27,9 +31,10 @@ import { RangePipe } from './range.pipe';
         Ng2CompleterModule,
         FormsModule,
         CommonModule,
-        NguiStickyModule
+        NguiStickyModule,
+        NouisliderModule
     ],
-    providers: [],
+    providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

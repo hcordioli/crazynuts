@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewEncapsulation, ViewChild } from '@angular/core';
+import { Component, AfterViewInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { NgModel } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -24,6 +24,7 @@ import { DaterangePickerComponent } from 'ng2-daterangepicker';
 
 export class HomeComponent implements AfterViewInit {
     @ViewChild(DaterangePickerComponent) rangepicker: DaterangePickerComponent;
+    @ViewChild('rooms') rooms: ElementRef;
     public daterange: any = {};
     public options: any = {
         locale: {
@@ -154,7 +155,6 @@ export class HomeComponent implements AfterViewInit {
             room: 'room-bed.png',
             remove: 'room-remove.png'
         },
-        el: null,
         name: 0,
         hotelList: {
             HotelListResponse: null,
@@ -371,9 +371,8 @@ export class HomeComponent implements AfterViewInit {
             fn = [self.rangepicker.datePicker.clickDate,
                 self.rangepicker.datePicker.outsideClick
             ];
-        self.vars.el = document.getElementById('rooms');
         if (self.cookied)
-            self.vars.el.className += ' touched';
+            self.rooms.nativeElement.className += ' touched';
     }
     public compareAdd(ev, cardId) {
         if (!ev || !ev.target)
@@ -614,15 +613,15 @@ export class HomeComponent implements AfterViewInit {
                         self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
                 }, 0);
             }
-        } else if (self.vars.el) {
-            if (self.vars.el.contains(e.target)) {
+        } else if (self.rooms.nativeElement) {
+            if (self.rooms.nativeElement.contains(e.target)) {
                 self.open.rooms = true;
-                if (!/touched/.test(self.vars.el.className))
-                    self.vars.el.className += ' touched';
-                if (!/focus/.test(self.vars.el.className))
-                    self.vars.el.className += ' focus';
+                if (!/touched/.test(self.rooms.nativeElement.className))
+                    self.rooms.nativeElement.className += ' touched';
+                if (!/focus/.test(self.rooms.nativeElement.className))
+                    self.rooms.nativeElement.className += ' focus';
             } else {
-                self.vars.el.className = self.vars.el.className.replace(/\s*focus\s*/gi, ' ');
+                self.rooms.nativeElement.className = self.rooms.nativeElement.className.replace(/\s*focus\s*/gi, ' ');
                 self.open.rooms = false;
             }
         }
@@ -630,6 +629,75 @@ export class HomeComponent implements AfterViewInit {
     }
     public onScrollTimer;
     public onScroll(e) {
+
+
+
+
+/*var el = document.querySelector('aside > section > div'),
+            carrinhoPaddingTop = 0,
+            width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+        clearTimeout($.ev.scroll.timeout1);
+        $.ev.scroll.timeout1 = setTimeout(function() {
+            if ($.util.cls.has(document.body, 'loading'))
+                return;
+            if (width <= 768 && !$.ev.scroll.lastAba) {
+                $.ev.scroll.lastAba = $.util.getChecked($.el['internal.canalAba']);
+                if ($.ev.scroll.lastAba && !/1|2/.test($.ev.scroll.lastAba.value))
+                    $.util.setChecked('internal.canalAba', 1, 2, 1, true);
+            } else if (width > 768 && $.ev.scroll.lastAba) {
+                $.ev.scroll.lastAba.checked = true;
+                $.ev.scroll.lastAba = undefined;
+                $.ev.update.call(null);
+            }
+        }, 0);
+        if (!el)
+            return;
+        var sT = Math.max(window.pageYOffset || 0, Math.max((document.documentElement && document.documentElement.scrollTop) || 0, document.body.scrollTop || 0)),
+            oldSt = $.ev.scroll.oldSt || 0,
+            mH = document.querySelector('main'),
+            wB = sT + (window.innerHeight || document.documentElement.clientHeight),
+            eH = el.offsetHeight,
+            eT = el.offsetTop || sT + el.getBoundingClientRect().top,
+            eB = eH + eT;
+        mH = mH && mH.offsetHeight;
+        if ((sT > oldSt) && (eB < wB) && (sT > eT)) {
+            if (sT - eT < wB - eB)
+                el.style.top = sT + 'px';
+            else
+                el.style.top = (wB - eH) + 'px';
+        } else if (sT < oldSt && sT < eT) {
+            el.style.top = sT + 'px';
+        } else if ((sT < eT) && (wB < eB)) {
+            if (sT - eT > wB - eB)
+                el.style.top = sT + 'px';
+            else
+                el.style.top = (wB - eH) + 'px';
+        }
+        if (!el.style.top || (el.style.top && window.parseInt(el.style.top.replace(/\D+$/, ''), 10) < carrinhoPaddingTop))
+            el.style.top = carrinhoPaddingTop + 'px';
+        if (eB > mH)
+            el.style.top = (mH - eH) + 'px';
+        $.ev.scroll.oldSt = sT;
+        el = document.querySelector('.comboTurbine');
+        if (!window.scrollHappening && el && el.offsetParent) {
+            el = document.querySelector('.combo .abasCanais');
+            if (el && el.offsetParent) {
+                clearTimeout($.ev.scroll.timeout2);
+                $.ev.scroll.timeout2 = $.util.timeout(function(el) {
+                    if (window.scrollHappening)
+                        return;
+                    var eT = el.offsetTop || sT + el.getBoundingClientRect().top;
+                    el = document.querySelector('.cta input.submit');
+                    if (!el)
+                        return;
+                    el.style.backgroundPosition = Math.floor(Math.max(0, Math.min(((100 * sT) / eT), 100))) + '%';
+                    $.util.cls[sT >= (eT) ? 'remove' : 'add'](el, 'turbine');
+                }, 1, el);
+            }
+        }
+
+
+*/
         var self = this,
             ev = e;
         clearTimeout(self.onScrollTimer);

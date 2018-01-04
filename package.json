@@ -23,7 +23,6 @@
     "@angular/platform-browser": "^5.0.0",
     "@angular/platform-browser-dynamic": "^5.0.0",
     "@angular/router": "^5.0.0",
-    "@ngui/sticky": "^0.6.3",
     "core-js": "^2.4.1",
     "ng2-completer": "^1.6.3",
     "ng2-daterangepicker": "^2.0.12",

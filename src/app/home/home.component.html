@@ -43,7 +43,7 @@
 									<div id="pickMe" [attr.class]="'topArrow' + ((mdl.entrada.val || '').length ? ' rightAlign': '')"></div>
 								</label>
 							</div>
-							<div id="rooms" class="rooms">
+							<div #rooms class="rooms">
 								<div class="quartos" (click)="onClick($event.target)">
 									<span class="label">
 								<span class="icon-room">
@@ -133,7 +133,7 @@
 		<style></style>
 		<div class="wrap">
 			<div class="filtro">
-				<div class="filtros" ngui-sticky sticky-after=".sub .txt">
+				<div class="filtros" data-stuck>
 					<div class="wrap">
 						<h3>Filtrar resultados</h3>
 						<div class="filtro-ativo">
@@ -167,7 +167,7 @@
 				</div>
 			</div>
 			<div class="cards">
-				<div class="stickie" ngui-sticky sticky-after=".sub .txt">
+				<div class="stickie" data-stuck>
 					<div class="wrap">
 						<ul class="sort">
 							<li class="item">

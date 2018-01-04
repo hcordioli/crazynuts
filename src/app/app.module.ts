@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { Ng2CompleterModule } from "ng2-completer";
 import { Daterangepicker } from 'ng2-daterangepicker';
-import { NguiStickyModule } from '@ngui/sticky';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './home/home.component';
@@ -31,7 +30,6 @@ registerLocaleData(localePt, 'pt-BR');
         Ng2CompleterModule,
         FormsModule,
         CommonModule,
-        NguiStickyModule,
         NouisliderModule
     ],
     providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],

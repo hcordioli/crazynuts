@@ -702,7 +702,7 @@ body {
 						margin-top: 22px;
 						text-align: left;
 						.txt {
-							padding-bottom: 1.75rem;
+							padding-bottom: 1.5rem;
 							display: inline-block;
 						}
 					}
@@ -749,9 +749,11 @@ body {
 				left: 0;
 				padding-top: 12rem;
 				z-index: 3;
-				&>div {
+				& .filtros {
 					min-height: 12rem;
 					margin-top: 0;
+					padding: 1rem;
+					border: 1px solid #aaa;
 				}
 			}
 			&>.wrap {
@@ -1246,7 +1248,7 @@ body {
 				font-size: 0.75rem;
 				color: #aaa;
 			}
-			.filtros {}
+			.filtro-ativo {}
 			.hotelname {
 				label {
 					span {

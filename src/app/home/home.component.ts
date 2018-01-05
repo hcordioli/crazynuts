@@ -108,6 +108,7 @@ export class HomeComponent implements AfterViewInit {
     }
     public show = {
         room: 0,
+        masks: [],
         cardImg: [],
         valueAdds: [],
         remainAdds: [],
@@ -410,7 +411,7 @@ export class HomeComponent implements AfterViewInit {
                 mask: 1 << i,
                 arr: []
             });
-	        self.vars.filter.bit.mask |= 1 << i;
+            self.vars.filter.bit.mask |= 1 << i;
             for (j = 0; j < arr[i].arr.length; j++) {
                 self.vars.filter.bit.masks[i].arr.push({
                     str: arr[i].arr[j].str,
@@ -420,30 +421,46 @@ export class HomeComponent implements AfterViewInit {
                 self.vars.filter.bit.masks[i].mask |= self.vars.filter.bit.masks[i].mask
             }
         }
+        self.show.masks = new Array(self.vars.filter.bit.masks.length);
+        for(i = 0; i < self.show.masks.length; i++)
+        	self.show.masks[i] = true;
     }
     public filterAdd(i, j) {
-    	console.log(i, j);
-    	var self = this,
-    		bit = self.vars.filter.bit;
-    	bit.val &= bit.mask;
-    	bit.val |= bit.masks[i].mask;
-    	bit.masks[i].val |= bit.masks[i].arr[j].mask;
+        console.log(i, j);
+        var self = this,
+            bit = self.vars.filter.bit;
+        bit.val &= bit.mask;
+        bit.val |= bit.masks[i].mask;
+        bit.masks[i].val |= bit.masks[i].arr[j].mask;
     };
     public filterRm(i, j) {
-    	console.log(i, j);
+        var self = this,
+            bit = self.vars.filter.bit;
+        bit.masks[i].val &= ~(bit.masks[i].arr[j].mask);
+        bit.masks[i].arr[j].val = false;
+        if(!bit.masks[i].val)
+	        bit.val &= ~(bit.masks[i].mask);
     };
     public filterClean() {
-    	var self = this,
-    		bit = self.vars.filter.bit,
-    		i, j;
-    	for(i = 0; i < bit.masks.length; i++) {
-    		bit.masks[i].val = 0;
-    		for(j = 0; j < bit.masks[i].arr.length; j++) {
-    			bit.masks[i].arr[j].val = false;
-    		}
-    	}
-    	bit.val = 0;
+        var self = this,
+            bit = self.vars.filter.bit,
+            i, j;
+        for (i = 0; i < bit.masks.length; i++) {
+            bit.masks[i].val = 0;
+            for (j = 0; j < bit.masks[i].arr.length; j++) {
+                bit.masks[i].arr[j].val = false;
+            }
+        }
+        bit.val = 0;
     };
+    public filterOpen(i) {
+        var self = this;
+        self.show.masks[i] = !self.show.masks[i];
+    }
+    public filterOpened(i) {
+        var self = this;
+        return self.show.masks[i];
+    }
     public compareAdd(ev, cardId) {
         if (!ev || !ev.target)
             return;

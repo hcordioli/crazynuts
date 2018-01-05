@@ -79,7 +79,7 @@ body {
 				img {}
 			}
 			p {
-				font-size: 1.2rem;
+				font-size: 1.18rem;
 				font-weight: 600;
 				text-align: left;
 				padding-left: 1.1rem;
@@ -817,7 +817,7 @@ body {
 									.icon.hotdeals {
 										display: block;
 										margin: 0 auto;
-										width: 5rem;
+										width: 3.7rem;
 										img {
 											display: block;
 											width: 100%;
@@ -850,7 +850,7 @@ body {
 										bottom: 0;
 										left: 50%;
 										transform: translate(-50%, 0);
-										font-size: 0.8rem;
+										font-size: 0.83rem;
 										white-space: nowrap;
 										font-weight: 600;
 									}
@@ -1018,7 +1018,7 @@ body {
 			.rateTrip {
 				font-weight: 600;
 				line-height: 1.5;
-				font-size: 0.9rem;
+				font-size: 0.89rem;
 			}
 			.lastRooms {
 				padding-top: 0.1rem;
@@ -1032,7 +1032,7 @@ body {
 					}
 				}
 				.text {
-					font-size: 0.8rem;
+					font-size: 0.83rem;
 				}
 			}
 			.location,
@@ -1056,7 +1056,7 @@ body {
 				width: 100%;
 			}
 			.nome {
-				font-size: 1.2rem;
+				font-size: 1.18rem;
 				color: #222;
 				display: block;
 			}
@@ -1086,12 +1086,12 @@ body {
 				.aincluir {
 					display: block;
 					padding-bottom: 0.4rem;
-					font-size: 0.69rem;
+					font-size: 0.71rem;
 					color: #222;
 				}
 				.apartir {
 					padding-bottom: 0.1rem;
-					font-size: 0.69rem;
+					font-size: 0.71rem;
 					.old-val {
 						font-size: inherit;
 						text-decoration: line-through;
@@ -1107,7 +1107,7 @@ body {
 						right: 100%;
 						top: 50%;
 						padding-top: 0.1rem;
-						font-size: 0.69rem;
+						font-size: 0.71rem;
 						margin-right: 0.4rem;
 						color: #222;
 						transform: translate(0, -50%);
@@ -1143,7 +1143,7 @@ body {
 			.location {
 				display: inline-block;
 				color: #aaa;
-				font-size: 0.8rem;
+				font-size: 0.83rem;
 			}
 			.amenidades {
 				li {
@@ -1155,7 +1155,7 @@ body {
 						padding: 0 0.2rem;
 						position: relative;
 						display: inline-block;
-						font-size: 0.9rem;
+						font-size: 0.89rem;
 						& img {
 							display: block;
 							height: auto;
@@ -1184,7 +1184,7 @@ body {
 						margin: 0 0 0 0.5rem;
 						float: right;
 						border-radius: 4px;
-						font-size: 1.2rem;
+						font-size: 1.18rem;
 					}
 				}
 				.tarifa {
@@ -1194,10 +1194,9 @@ body {
 					.non-refundable,
 					.refundable {
 						padding-top: 0.1rem;
-						font-size: 0.8rem;
 						display: block;
 						font-weight: 600;
-						font-size: 0.7rem;
+						font-size: 0.71rem;
 					}
 					.refundable {
 						color: forestgreen;
@@ -1205,7 +1204,7 @@ body {
 					.iof {
 						display: block;
 						color: #222;
-						font-size: 0.69rem;
+						font-size: 0.71rem;
 						position: absolute;
 						bottom: 0;
 						right: 0;
@@ -1238,8 +1237,8 @@ body {
 			}
 			h4 {
 				text-transform: uppercase;
-				font-size: 0.8rem;
-				color: #555;
+				font-size: 0.83rem;
+				color: #243E6F;
 				font-weight: 600;
 				padding-bottom: 0.4rem;
 			}
@@ -1248,6 +1247,20 @@ body {
 				padding-bottom: 0.4rem;
 				margin-bottom: 0.4rem;
 			}
+			.filtros .wrap>.title {
+				border: 0;
+				padding: 0;
+				margin: 0;
+				& h4 {
+					float: left;
+					display: inline-block;
+				}
+				& .sanfona {
+					display: inline-block;
+					text-decoration: none;
+					float: right;
+				}
+			}
 			.filtro-ativo {
 				ul {
 					display: block;
@@ -1255,19 +1268,20 @@ body {
 					li {
 						display: inline-block;
 						background-color: #243E6F;
-						padding: 0.6rem;
-						margin: 0.1rem;
+						border-radius: 4px;
+						padding: 0.33rem;
+						margin: 0.13rem 0;
 						width: auto;
 						a {
 							display: block;
 							color: #fff;
-							font-size: 0.9rem;
+							font-size: 0.71rem;
 							text-decoration: none;
 						}
 					}
 				}
 				.filtro-limpa {
-					font-size: 0.8rem;
+					font-size: 0.83rem;
 					text-decoration: none;
 					padding: 0.4rem 0;
 				}
@@ -1319,15 +1333,86 @@ body {
 						text-align: left;
 					}
 					em {
+						font-size: 0.71rem;
 						text-align: center;
 						display: block;
 						font-style: italic;
 					}
+					.ng2-nouislider {
+						margin-left: auto;
+						margin-right: auto;
+						width: 80%;
+						margin-top: 0.6rem;
+					}
+				}
+			}
+			.hotelfilters {
+				border: 0 !important;
+				.wrap {
+					ul {
+						border-bottom: 1px solid #aaa;
+						padding-bottom: 0.4rem;
+						margin-bottom: 0.4rem;
+						&[hidden] {
+							overflow: hidden;
+							height: 0;
+							padding: 0;
+							display: block;
+						}
+						li {
+							label {
+								position: relative;
+								font-size: 0.71rem;
+								.checkIcon {
+									content: '';
+									position: absolute;
+									border: 0.4rem solid #aaa;
+									display: block;
+									height: 3rem;
+									width: 3rem;
+									&:before {
+										display: block;
+										content: '';
+										background-color: #fff;
+										width: 80%;
+										height: 80%;
+									}
+									&.checked:before {
+										background-color: #aaa;
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
-		.noUi-base .noUi-connect {
-			background-color: #243E6F;
+		.noUi-horizontal {
+			height: 0.4rem;
+			&.noUi-target {
+				border-radius: 4px;
+			}
+			.noUi-base .noUi-connect {
+				background-color: #243E6F;
+			}
+			.noUi-handle {
+				width: 0.9rem;
+				height: 1.4rem;
+				left: -17px;
+				top: -10px;
+				border-radius: 4px;
+				margin-left: 0.5rem;
+				&:before,
+				&:after {
+					left: 50%;
+					top: 50%;
+					transform: translate(-50%, -50%);
+					margin-left: -1px;
+				}
+				&:after {
+					margin-left: 2px;
+				}
+			}
 		}
 	}
 }

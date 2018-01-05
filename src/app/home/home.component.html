@@ -146,7 +146,7 @@
 											<a href="javascript:;" (click)="filterRm(i, j)">
 												<span [textContent]="item.str">
 												</span>
-												<span class="rm-filtro">&times;</span>
+												<span class="rm-filtro">X</span>
 											</a>
 										</li>
 									</ng-template>
@@ -176,8 +176,13 @@
 						</div>
 						<div class="hotelfilters">
 							<div class="wrap" *ngFor="let filtro of vars.filter.bit.masks; let i = index;">
-								<h4 [textContent]="filtro.str"></h4>
-								<ul>
+								<div class="title wrap">
+									<h4 [textContent]="filtro.str"></h4>
+									<a class="sanfona fgc c1" [attr.title]="filterOpened(i) ? 'Fechar' : 'Abrir'" href="javascript:;" (click)="filterOpen(i);">
+										<i [attr.class]="'fa fa-angle-' + (filterOpened(i) ? 'up' : 'down')"></i>
+									</a>
+								</div>
+								<ul [hidden]="!show.masks[i]">
 									<li *ngFor="let item of filtro.arr; let j = index;">
 										<label>
 											<input type="checkbox" (ngModelChange)="filterAdd(i, j)" [(ngModel)]="item.val">

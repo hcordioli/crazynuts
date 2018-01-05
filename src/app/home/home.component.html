@@ -129,6 +129,7 @@
 			font-weight: normal;
 			font-style: normal;
 		}
+
 		</style>
 		<style></style>
 		<div class="wrap">
@@ -136,31 +137,54 @@
 				<div class="filtros" data-stuck>
 					<div class="wrap">
 						<h3>Filtrar resultados</h3>
-						<div class="filtro-ativo">
+						<div class="filtro-ativo" *ngIf="vars.filter.bit.val > 0">
 							<h4>Filtros Ativos</h4>
-							<ul *ngFor="let filtro of vars.filtros">
-								<li>
-									<a href="javascript:;">
-										<span [textContent]="filtro.nome">
-										</span>
-									</a>
-								</li>
+							<ul>
+								<ng-template let-filtro ngFor [ngForOf]="vars.filter.bit.masks" let-i="index">
+									<ng-template let-item ngFor [ngForOf]="filtro.arr" let-j="index">
+										<li *ngIf="item.val">
+											<a href="javascript:;" (click)="filterRm(i, j)">
+												<span [textContent]="item.str">
+												</span>
+												<span class="rm-filtro">&times;</span>
+											</a>
+										</li>
+									</ng-template>
+								</ng-template>
 							</ul>
+							<a class="filtro-limpa fgc c1" href="javascript:;" (click)="filterClean()">
+								Limpar todos os filtros
+							</a>
 						</div>
 						<div class="hotelname">
-							<label (keyup.Enter)="filterBy('hotelname', vars.filter.hotelname.val)">
-								<span>Nome do hotel</span>
-								<input type="text" name="hotelname" [(ngModel)]="vars.filter.hotelname.val" (ngModelChange)="hotelnameChange()">
-							</label>
-							<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname.val)" class="btn bgc c1">
-								<span>OK</span>
-							</a>
+							<div class="wrap">
+								<h4>Nome do hotel</h4>
+								<label (keyup.Enter)="filterBy('hotelname', vars.filter.hotelname.val)">
+									<input type="text" placeholder="Nome do hotel" name="hotelname" [(ngModel)]="vars.filter.hotelname.val" (ngModelChange)="hotelnameChange()">
+								</label>
+								<a href="javascript:;" (click)="filterBy('hotelname', vars.filter.hotelname.val)" class="btn bgc c1">
+									<span>OK</span>
+								</a>
+							</div>
 						</div>
 						<div class="hotelprice">
 							<div class="wrap">
-								<span>Preço por noite</span>
+								<h4>Preço por noite</h4>
 								<em>Min <span [textContent]="vars.filter.hotelprice.val[0] | currency:'BRL':true:'1.0-0'"></span> a <span [textContent]="vars.filter.hotelprice.val[1] | currency:'BRL':true:'1.0-0'"></span> Max</em>
 								<nouislider [step]="1" [connect]="true" [min]="vars.filter.hotelprice.min" [max]="vars.filter.hotelprice.max" [(ngModel)]="vars.filter.hotelprice.val"></nouislider>
+							</div>
+						</div>
+						<div class="hotelfilters">
+							<div class="wrap" *ngFor="let filtro of vars.filter.bit.masks; let i = index;">
+								<h4 [textContent]="filtro.str"></h4>
+								<ul>
+									<li *ngFor="let item of filtro.arr; let j = index;">
+										<label>
+											<input type="checkbox" (ngModelChange)="filterAdd(i, j)" [(ngModel)]="item.val">
+											<span [textContent]="item.str"></span>
+										</label>
+									</li>
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -338,12 +362,3 @@
 		</span>
 	</ng-template>
 </div>
-<!-- <td ></td>
-						<td [textContent]="td.address1 "></td>
-						<td [innerHTML]="td.shortDescription "></td>
-						<td [textContent]="td.rateCurrencyCode "></td>
-						<td>{{ td ? 'SIM' : 'NÃO' }}</td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.roomDescription "></td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.markup "></td>
-						<td ></td>
-						<td [textContent]="td.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.hotaxFinalCommissionPercent "></td> -->

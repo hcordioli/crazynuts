@@ -752,7 +752,7 @@ body {
 				& .filtros {
 					min-height: 12rem;
 					margin-top: 0;
-					padding: 1rem;
+					padding: 1rem 2rem 1rem 0;
 				}
 			}
 			&>.wrap {
@@ -1232,40 +1232,98 @@ body {
 		.filtro {
 			text-align: left;
 			h3 {
-				font-size: 1rem;
+				font-size: 1.3rem;
 				color: #222;
+				padding-bottom: 0.8rem;
 			}
 			h4 {
 				text-transform: uppercase;
-				font-size: 0.75rem;
-				color: #aaa;
+				font-size: 0.8rem;
+				color: #555;
+				font-weight: 600;
+				padding-bottom: 0.4rem;
 			}
-			.filtro-ativo {}
+			.filtros .wrap>div {
+				border-bottom: 1px solid #aaa;
+				padding-bottom: 0.4rem;
+				margin-bottom: 0.4rem;
+			}
+			.filtro-ativo {
+				ul {
+					display: block;
+					padding-bottom: 0.2rem;
+					li {
+						display: inline-block;
+						background-color: #243E6F;
+						padding: 0.6rem;
+						margin: 0.1rem;
+						width: auto;
+						a {
+							display: block;
+							color: #fff;
+							font-size: 0.9rem;
+							text-decoration: none;
+						}
+					}
+				}
+				.filtro-limpa {
+					font-size: 0.8rem;
+					text-decoration: none;
+					padding: 0.4rem 0;
+				}
+			}
 			.hotelname {
 				label {
+					float: left;
+					width: 86%;
+					vertical-align: middle;
+					padding-right: 0.3rem;
+					height: 2rem;
 					span {
 						text-transform: uppercase;
 						color: #888;
 						display: block;
 					}
 					input {
-						display: inline-block;
+						border-radius: 4px;
+						border: 1px solid #aaa;
+						display: block;
+						width: 100%;
+						font-size: 1rem;
+						height: 100%;
+						padding: 0.3rem 0.6rem;
+						color: #222;
 					}
 				}
 				a.btn {
+					float: left;
+					width: 14%;
 					display: inline-block;
 					color: #fff;
 					text-decoration: none;
+					vertical-align: middle;
+					border-radius: 4px;
+					height: 2rem;
+					text-align: center;
 					span {
-						padding: 0.4rem;
+						padding: 0;
 						display: block;
 						border-radius: 4px;
+						line-height: 2;
 					}
 				}
 			}
 			.hotelprice {
-				display: block;
-				width: 80%;
+				.wrap {
+					h4 {
+						text-align: left;
+					}
+					em {
+						text-align: center;
+						display: block;
+						font-style: italic;
+					}
+				}
 			}
 		}
 		.noUi-base .noUi-connect {

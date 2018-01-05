@@ -54,85 +54,20 @@ export class HomeComponent implements AfterViewInit {
             alt: 'HOTAX',
             url: 'assets/img/logo.svg'
         },
-        filtros: [{
-            nome: 'Resort'
-        }, {
-            nome: '2 estrelas'
-        }],
         filter: {
             hotelname: {
                 val: '',
                 active: false
             },
-        	hotelprice: {
-        		val: [0, 2000],
-        		min: 0,
-        		max: 2000
-        	},
-            opt: {
-                maisUsados: {
-                    title: 'Filtros mais usados',
-                    arr: [{
-                        nome: 'Café da manhã incluído',
-                        selected: false
-                    }, {
-                        nome: 'Piscina',
-                        selected: false
-                    }, {
-                        nome: 'Wi-Fi grátis',
-                        selected: false
-                    }, {
-                        nome: 'Estacionamento grátis',
-                        selected: false
-                    }, {
-                        nome: 'Aceita animais de estimação',
-                        selected: false
-                    }]
-                },
-                estrelas: {
-                    title: 'Filtros mais usados',
-                    arr: [{
-                        nome: '5 estrelas',
-                        selected: false
-                    }, {
-                        nome: '4 estrelas',
-                        selected: false
-                    }, {
-                        nome: '3 estrelas',
-                        selected: false
-                    }, {
-                        nome: '2 estrelas',
-                        selected: true
-                    }, {
-                        nome: '1 estrela',
-                        selected: false
-                    }, {
-                        nome: 'Sem classificação',
-                        selected: false
-                    }]
-                },
-                tipoTarifa: {
-                    title: 'Filtros mais usados',
-                    arr: [{
-                        nome: '5 estrelas',
-                        selected: false
-                    }, {
-                        nome: '4 estrelas',
-                        selected: false
-                    }, {
-                        nome: '3 estrelas',
-                        selected: false
-                    }, {
-                        nome: '2 estrelas',
-                        selected: true
-                    }, {
-                        nome: '1 estrela',
-                        selected: false
-                    }, {
-                        nome: 'Sem classificação',
-                        selected: false
-                    }]
-                }
+            hotelprice: {
+                val: [0, 2000],
+                min: 0,
+                max: 2000
+            },
+            bit: {
+                val: 0,
+                mask: 0,
+                masks: []
             }
         },
         sort: {
@@ -370,10 +305,145 @@ export class HomeComponent implements AfterViewInit {
         var self = this,
             fn = [self.rangepicker.datePicker.clickDate,
                 self.rangepicker.datePicker.outsideClick
-            ];
+            ],
+            arr = [{
+                    str: 'Filtros Mais Usados',
+                    arr: [
+                        { str: 'Café da manhã incluído' },
+                        { str: 'Piscina' },
+                        { str: 'Wi-Fi grátis' },
+                        { str: 'Estacionamento grátis' },
+                        { str: 'Aceita animais de estimação' }
+                    ]
+                },
+                {
+                    str: 'Estrelas',
+                    arr: [
+                        { str: '5 estrelas' },
+                        { str: '4 estrelas' },
+                        { str: '3 estrelas' },
+                        { str: '2 estrelas' },
+                        { str: '1 estrelas' },
+                        { str: 'Sem classificação' }
+                    ]
+                },
+                {
+                    str: 'Tipo de tarifa',
+                    arr: [
+                        { str: 'Reembolsável' },
+                        { str: 'Não Reembolsável' }
+                    ]
+                },
+                {
+                    str: 'Bairro',
+                    arr: [
+                        { str: 'Moema' },
+                        { str: 'Itaim' },
+                        { str: 'Vila Olímpia' },
+                        { str: 'Vila Nova' },
+                        { str: 'Jardins' },
+                        { str: 'Pinheiros' },
+                        { str: 'Vila Madalena' }
+                    ]
+                },
+                {
+                    str: 'Ponto de Interesse',
+                    arr: [
+                        { str: 'Álcool' },
+                        { str: 'Mulheres' },
+                        { str: 'Jogo' },
+                        { str: 'Loucuras' },
+                        { str: 'Aventuras' }
+                    ]
+                },
+                {
+                    str: 'Tipo de Acomodação',
+                    arr: [
+                        { str: 'Álcool' },
+                        { str: 'Mulheres' },
+                        { str: 'Jogo' },
+                        { str: 'Loucuras' },
+                        { str: 'Aventuras' }
+                    ]
+                },
+                {
+                    str: 'Comodidades',
+                    arr: [
+                        { str: 'Piscina' },
+                        { str: 'TV' },
+                    ]
+                },
+                {
+                    str: 'Tipos de Hotel e de Viagem',
+                    arr: [
+                        { str: 'Botique' },
+                        { str: 'Campo' },
+                        { str: 'Luxo' },
+                        { str: 'Executivo' },
+                        { str: 'Jardins' }
+                    ]
+                },
+                {
+                    str: 'Acessibilidade',
+                    arr: [
+                        { str: 'Álcool' },
+                        { str: 'Mulheres' },
+                        { str: 'Jogo' },
+                        { str: 'Loucuras' },
+                        { str: 'Aventuras' }
+                    ]
+                },
+                {
+                    str: 'Refeição',
+                    arr: [
+                        { str: 'Só hospedagem' },
+                        { str: 'Café da Manhã Incluído' }
+                    ]
+                }
+            ],
+            i, j;
         if (self.cookied)
             self.rooms.nativeElement.className += ' touched';
+        for (i = 0; i < arr.length; i++) {
+            self.vars.filter.bit.masks.push({
+                str: arr[i].str,
+                mask: 1 << i,
+                arr: []
+            });
+	        self.vars.filter.bit.mask |= 1 << i;
+            for (j = 0; j < arr[i].arr.length; j++) {
+                self.vars.filter.bit.masks[i].arr.push({
+                    str: arr[i].arr[j].str,
+                    val: false,
+                    mask: 1 << j
+                });
+                self.vars.filter.bit.masks[i].mask |= self.vars.filter.bit.masks[i].mask
+            }
+        }
     }
+    public filterAdd(i, j) {
+    	console.log(i, j);
+    	var self = this,
+    		bit = self.vars.filter.bit;
+    	bit.val &= bit.mask;
+    	bit.val |= bit.masks[i].mask;
+    	bit.masks[i].val |= bit.masks[i].arr[j].mask;
+    };
+    public filterRm(i, j) {
+    	console.log(i, j);
+    };
+    public filterClean() {
+    	var self = this,
+    		bit = self.vars.filter.bit,
+    		i, j;
+    	for(i = 0; i < bit.masks.length; i++) {
+    		bit.masks[i].val = 0;
+    		for(j = 0; j < bit.masks[i].arr.length; j++) {
+    			bit.masks[i].arr[j].val = false;
+    		}
+    	}
+    	bit.val = 0;
+    };
     public compareAdd(ev, cardId) {
         if (!ev || !ev.target)
             return;
@@ -398,8 +468,8 @@ export class HomeComponent implements AfterViewInit {
     public sortBy(str, bool) {
         var self = this,
             ord = bool ? 'asc' : 'desc';
-        if(self.vars.sort[str][ord] && self.hotelsUrl.sort) {
-        	self.vars.sort[str].asc = false;
+        if (self.vars.sort[str][ord] && self.hotelsUrl.sort) {
+            self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.hotelsUrl.sort = '';
             self.onSubmit(false);
@@ -633,71 +703,71 @@ export class HomeComponent implements AfterViewInit {
 
 
 
-/*var el = document.querySelector('aside > section > div'),
-            carrinhoPaddingTop = 0,
-            width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-        clearTimeout($.ev.scroll.timeout1);
-        $.ev.scroll.timeout1 = setTimeout(function() {
-            if ($.util.cls.has(document.body, 'loading'))
-                return;
-            if (width <= 768 && !$.ev.scroll.lastAba) {
-                $.ev.scroll.lastAba = $.util.getChecked($.el['internal.canalAba']);
-                if ($.ev.scroll.lastAba && !/1|2/.test($.ev.scroll.lastAba.value))
-                    $.util.setChecked('internal.canalAba', 1, 2, 1, true);
-            } else if (width > 768 && $.ev.scroll.lastAba) {
-                $.ev.scroll.lastAba.checked = true;
-                $.ev.scroll.lastAba = undefined;
-                $.ev.update.call(null);
-            }
-        }, 0);
-        if (!el)
-            return;
-        var sT = Math.max(window.pageYOffset || 0, Math.max((document.documentElement && document.documentElement.scrollTop) || 0, document.body.scrollTop || 0)),
-            oldSt = $.ev.scroll.oldSt || 0,
-            mH = document.querySelector('main'),
-            wB = sT + (window.innerHeight || document.documentElement.clientHeight),
-            eH = el.offsetHeight,
-            eT = el.offsetTop || sT + el.getBoundingClientRect().top,
-            eB = eH + eT;
-        mH = mH && mH.offsetHeight;
-        if ((sT > oldSt) && (eB < wB) && (sT > eT)) {
-            if (sT - eT < wB - eB)
-                el.style.top = sT + 'px';
-            else
-                el.style.top = (wB - eH) + 'px';
-        } else if (sT < oldSt && sT < eT) {
-            el.style.top = sT + 'px';
-        } else if ((sT < eT) && (wB < eB)) {
-            if (sT - eT > wB - eB)
-                el.style.top = sT + 'px';
-            else
-                el.style.top = (wB - eH) + 'px';
-        }
-        if (!el.style.top || (el.style.top && window.parseInt(el.style.top.replace(/\D+$/, ''), 10) < carrinhoPaddingTop))
-            el.style.top = carrinhoPaddingTop + 'px';
-        if (eB > mH)
-            el.style.top = (mH - eH) + 'px';
-        $.ev.scroll.oldSt = sT;
-        el = document.querySelector('.comboTurbine');
-        if (!window.scrollHappening && el && el.offsetParent) {
-            el = document.querySelector('.combo .abasCanais');
-            if (el && el.offsetParent) {
-                clearTimeout($.ev.scroll.timeout2);
-                $.ev.scroll.timeout2 = $.util.timeout(function(el) {
-                    if (window.scrollHappening)
+        /*var el = document.querySelector('aside > section > div'),
+                    carrinhoPaddingTop = 0,
+                    width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+                clearTimeout($.ev.scroll.timeout1);
+                $.ev.scroll.timeout1 = setTimeout(function() {
+                    if ($.util.cls.has(document.body, 'loading'))
                         return;
-                    var eT = el.offsetTop || sT + el.getBoundingClientRect().top;
-                    el = document.querySelector('.cta input.submit');
-                    if (!el)
-                        return;
-                    el.style.backgroundPosition = Math.floor(Math.max(0, Math.min(((100 * sT) / eT), 100))) + '%';
-                    $.util.cls[sT >= (eT) ? 'remove' : 'add'](el, 'turbine');
-                }, 1, el);
-            }
-        }
+                    if (width <= 768 && !$.ev.scroll.lastAba) {
+                        $.ev.scroll.lastAba = $.util.getChecked($.el['internal.canalAba']);
+                        if ($.ev.scroll.lastAba && !/1|2/.test($.ev.scroll.lastAba.value))
+                            $.util.setChecked('internal.canalAba', 1, 2, 1, true);
+                    } else if (width > 768 && $.ev.scroll.lastAba) {
+                        $.ev.scroll.lastAba.checked = true;
+                        $.ev.scroll.lastAba = undefined;
+                        $.ev.update.call(null);
+                    }
+                }, 0);
+                if (!el)
+                    return;
+                var sT = Math.max(window.pageYOffset || 0, Math.max((document.documentElement && document.documentElement.scrollTop) || 0, document.body.scrollTop || 0)),
+                    oldSt = $.ev.scroll.oldSt || 0,
+                    mH = document.querySelector('main'),
+                    wB = sT + (window.innerHeight || document.documentElement.clientHeight),
+                    eH = el.offsetHeight,
+                    eT = el.offsetTop || sT + el.getBoundingClientRect().top,
+                    eB = eH + eT;
+                mH = mH && mH.offsetHeight;
+                if ((sT > oldSt) && (eB < wB) && (sT > eT)) {
+                    if (sT - eT < wB - eB)
+                        el.style.top = sT + 'px';
+                    else
+                        el.style.top = (wB - eH) + 'px';
+                } else if (sT < oldSt && sT < eT) {
+                    el.style.top = sT + 'px';
+                } else if ((sT < eT) && (wB < eB)) {
+                    if (sT - eT > wB - eB)
+                        el.style.top = sT + 'px';
+                    else
+                        el.style.top = (wB - eH) + 'px';
+                }
+                if (!el.style.top || (el.style.top && window.parseInt(el.style.top.replace(/\D+$/, ''), 10) < carrinhoPaddingTop))
+                    el.style.top = carrinhoPaddingTop + 'px';
+                if (eB > mH)
+                    el.style.top = (mH - eH) + 'px';
+                $.ev.scroll.oldSt = sT;
+                el = document.querySelector('.comboTurbine');
+                if (!window.scrollHappening && el && el.offsetParent) {
+                    el = document.querySelector('.combo .abasCanais');
+                    if (el && el.offsetParent) {
+                        clearTimeout($.ev.scroll.timeout2);
+                        $.ev.scroll.timeout2 = $.util.timeout(function(el) {
+                            if (window.scrollHappening)
+                                return;
+                            var eT = el.offsetTop || sT + el.getBoundingClientRect().top;
+                            el = document.querySelector('.cta input.submit');
+                            if (!el)
+                                return;
+                            el.style.backgroundPosition = Math.floor(Math.max(0, Math.min(((100 * sT) / eT), 100))) + '%';
+                            $.util.cls[sT >= (eT) ? 'remove' : 'add'](el, 'turbine');
+                        }, 1, el);
+                    }
+                }
 
 
-*/
+        */
         var self = this,
             ev = e;
         clearTimeout(self.onScrollTimer);

@@ -1,6 +1,6 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, NgStyle, registerLocaleData } from '@angular/common';
+import { CommonModule, NgStyle, NgForOf, registerLocaleData } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { Ng2CompleterModule } from "ng2-completer";

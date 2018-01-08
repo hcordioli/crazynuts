@@ -14,9 +14,10 @@ var page = require('webpage').create();
 //	q-room-1-child-1-age=11
 
 
-// var htApt = [[2,[]]];
+// var htApt = [[2,0,[]]];
+var htApt = [[2,1,[5]]];
 // var htApt = [[2,[5,2,1]],[2,[]]];
-var htApt = [[2,2,[5,7]],[3,3,[9,11,13]]];
+// var htApt = [[2,2,[5,7]],[3,3,[9,11,13]]];
 
 //data de checkin - US format
 var htCheckin = '2018-06-06';

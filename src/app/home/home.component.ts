@@ -724,6 +724,7 @@ export class HomeComponent implements AfterViewInit {
                             val: '',
                             txt: ''
                         };
+                        self.show.calendarRight = true;
                     }
                 }, 0);
             }

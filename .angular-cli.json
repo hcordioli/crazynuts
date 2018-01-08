@@ -10,7 +10,9 @@
         "outDir": "docs",
         "assets": [
             "assets",
-            "favicon.ico"
+            "favicon.ico",
+            "googlea9aa02a74714c54e.html",
+            "map.html"
         ],
         "index": "index.html",
         "main": "main.ts",

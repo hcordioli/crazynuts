@@ -719,12 +719,14 @@ export class HomeComponent implements AfterViewInit {
                     };
                     if (!start) {
                         self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
+                        self.blurDates[1] = date;
                     } else {
                         self.mdl.saida = {
                             val: '',
                             txt: ''
                         };
                         self.show.calendarRight = true;
+                        self.blurDates = [date, null];
                     }
                 }, 0);
             }
@@ -833,8 +835,11 @@ export class HomeComponent implements AfterViewInit {
             }
         }, 400);
     }
-    public consoleDate(value: any) {
-        console.log([this, value]);
+    public blurDates = [];
+    public blurDate(value: any) {
+        var self = this;
+        self.rangepicker.datePicker.setStartDate(self.blurDates[0]);
+        self.rangepicker.datePicker.setEndDate(self.blurDates[1] || self.blurDates[0]);
     }
     public selectedDate(value: any) {
         var self = this;

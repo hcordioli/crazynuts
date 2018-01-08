@@ -19,11 +19,11 @@ var page = require('webpage').create();
 var htApt = [[2,2,[5,7]],[3,3,[9,11,13]]];
 
 //data de checkin - US format
-var htCheckin = '2018-03-06';
+var htCheckin = '2018-06-06';
 //data de checkout - US format
-var htCheckout = '2018-03-13';
+var htCheckout = '2018-06-13';
 //codigo do hotel na HOTEIS
-var htHoteisCode = '140893';
+var htHoteisCode = '126913';
 //URL base para a pagina de detalhe do hotel
 var htHoteisURLbase = 'https://www.hoteis.com/';
 
@@ -56,6 +56,33 @@ function urlHoteisMount(){
 }
 
 urlHoteisMount();
+page.open(htHoteisURLbase, function(status) {
+	console.log('Passo 1');
+  	if (status !== 'success') {
 
-// Completar com chamada e tratamento da resposta
-phantom.exit();
+    	console.log('Unable to access network');
+
+  	} else {
+
+  		var returnName = page.evaluate(function(){
+  			return document.querySelector("h1").innerHTML;
+  		});
+		    
+	    var returnPrice = page.evaluate(function() {
+	    	var htPriceCurr = document.querySelector(".featured-price .pricing .price .current-price").innerHTML;
+		  	return htPriceCurr
+		});
+	    console.log("");
+	    console.log("---------------------------------");
+	    console.log("");
+		console.log(returnName);
+		console.log(returnPrice);
+		console.log("");
+		console.log(htHoteisURLbase);
+		console.log("");
+	    console.log("---------------------------------");
+	    console.log("");
+	
+	    phantom.exit();
+  }
+});

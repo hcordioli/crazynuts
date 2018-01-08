@@ -34,7 +34,7 @@ export class HomeComponent implements AfterViewInit {
         },
         alwaysShowCalendars: false,
         autoApply: false,
-        autoUpdateInput: false,
+        autoUpdateInput: true,
         showDropdowns: true,
         minDate: (new Date()),
         dateLimit: {
@@ -107,6 +107,7 @@ export class HomeComponent implements AfterViewInit {
         keys: false
     }
     public show = {
+        calendarRight: false,
         room: 0,
         masks: [],
         cardImg: [],
@@ -422,8 +423,8 @@ export class HomeComponent implements AfterViewInit {
             }
         }
         self.show.masks = new Array(self.vars.filter.bit.masks.length);
-        for(i = 0; i < self.show.masks.length; i++)
-        	self.show.masks[i] = true;
+        for (i = 0; i < self.show.masks.length; i++)
+            self.show.masks[i] = true;
     }
     public filterAdd(i, j) {
         console.log(i, j);
@@ -438,8 +439,8 @@ export class HomeComponent implements AfterViewInit {
             bit = self.vars.filter.bit;
         bit.masks[i].val &= ~(bit.masks[i].arr[j].mask);
         bit.masks[i].arr[j].val = false;
-        if(!bit.masks[i].val)
-	        bit.val &= ~(bit.masks[i].mask);
+        if (!bit.masks[i].val)
+            bit.val &= ~(bit.masks[i].mask);
     };
     public filterClean() {
         var self = this,
@@ -677,31 +678,57 @@ export class HomeComponent implements AfterViewInit {
     public onFocus(e) {
         this.onClick.apply(this, arguments)
     }
+    public onClickTimer;
     public onClick(e) {
         var self = this,
+            tgt = e.target,
             el = document.querySelector('#pickMe'),
             start = false,
             val, date;
-        if (!e || !e.target)
+        if (!e || !tgt)
             return true;
-        if (/(start|end)[-]date/.exec(e.target.className)) {
-            start = e.target.className.indexOf('start') > 0;
+        if (tgt.id === 'pickMe' || /check(in|out)/gi.exec(tgt.className))
+            tgt = e.target.parentNode.querySelector('.check' + (tgt.id || tgt.className.indexOf('in') > 0 ? 'in' : 'out') + ' > span');
+        if (/check(in|out)/gi.exec(tgt.parentNode.className)) {
+            start = tgt.parentNode.className.indexOf('in') > 0;
+            self.show.calendarRight = !start;
+            date = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');
+            if (date) {
+                clearTimeout(self.onClickTimer);
+                self.onClickTimer = setTimeout(function() {
+                    self.rangepicker.datePicker.formInputsFocused.call(self.rangepicker.datePicker, {
+                        target: date
+                    });
+                }, 0);
+            }
+        } else if (/(start|end)[-]date/.exec(tgt.className)) {
+            self.show.calendarRight = self.mdl.saida.val === '';
+            start = (tgt.className.indexOf('start') > 0 && !self.show.calendarRight) || false;
             val = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');
             val = val ? val.value : '';
             val = (val || '/').split('/');
-            if (val && val.length && val.length > 2 && (parseInt(val[1], 10) === parseInt(e.target.innerHTML, 10))) {
+            if (val && val.length && val.length > 2 && (parseInt(val[1], 10) === parseInt(tgt.innerHTML, 10))) {
                 date = val.join('/');
                 val[2] = val[2].slice(-2);
-                setTimeout(function() {
+                clearTimeout(self.onClickTimer);
+                self.onClickTimer = setTimeout(function() {
                     self.rangepicker.datePicker['set' + (start ? 'Start' : 'End') + 'Date'](date);
-                    self.mdl[start ? 'entrada' : 'saida'].val = val.join('/');
-                    self.mdl[start ? 'entrada' : 'saida'].txt = [val[1], val[0], val[2]].join('/');
-                    if (!start)
+                    self.mdl[start ? 'entrada' : 'saida'] = {
+                        val: val.join('/'),
+                        txt: [val[1], val[0], val[2]].join('/')
+                    };
+                    if (!start) {
                         self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
+                    } else {
+                        self.mdl.saida = {
+                            val: '',
+                            txt: ''
+                        };
+                    }
                 }, 0);
             }
         } else if (self.rooms.nativeElement) {
-            if (self.rooms.nativeElement.contains(e.target)) {
+            if (self.rooms.nativeElement.contains(tgt)) {
                 self.open.rooms = true;
                 if (!/touched/.test(self.rooms.nativeElement.className))
                     self.rooms.nativeElement.className += ' touched';
@@ -804,6 +831,9 @@ export class HomeComponent implements AfterViewInit {
                     self.onSubmit(true);
             }
         }, 400);
+    }
+    public consoleDate(value: any) {
+        console.log([this, value]);
     }
     public selectedDate(value: any) {
         var self = this;

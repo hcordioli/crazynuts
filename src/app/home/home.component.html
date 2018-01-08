@@ -31,7 +31,7 @@
 						<div class="opt">
 							<div class="dateRange">
 								<label class="wrap" (keydown.Tab)="nextInput($event)">
-									<input type="text" name="daterangeInput" daterangepicker [options]="options" (selected)="selectedDate($event)" />
+									<input type="text" name="daterangeInput" daterangepicker [options]="options" (hideCalendar.daterangepicker)="consoleDate($event)" (selected)="selectedDate($event)" />
 									<div [attr.class]="'checkin' + ((mdl.entrada.val || '').length ? ' touched' : '')">
 										<span class="txt" [textContent]="mdl.entrada.txt || '&nbsp;'"></span>
 										<span class="label"><span>Check-in</span></span>
@@ -40,7 +40,7 @@
 										<span class="txt" [textContent]="mdl.saida.txt || '&nbsp;'"></span>
 										<span class="label"><span>Check-out</span></span>
 									</div>
-									<div id="pickMe" [attr.class]="'topArrow' + ((mdl.entrada.val || '').length ? ' rightAlign': '')"></div>
+									<div id="pickMe" [attr.class]="'topArrow' + (show.calendarRight ? ' rightAlign': '')"></div>
 								</label>
 							</div>
 							<div #rooms class="rooms">

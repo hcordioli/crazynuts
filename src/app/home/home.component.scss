@@ -752,7 +752,7 @@ body {
 				& .filtros {
 					min-height: 12rem;
 					margin-top: 0;
-					padding: 1rem 2rem 1rem 0;
+					padding: 0 2rem 1rem 0;
 				}
 			}
 			&>.wrap {
@@ -811,7 +811,8 @@ body {
 								&>*,
 								& a {
 									text-decoration: none;
-									color: #222;
+									color: #777;
+									font-weight: 600;
 									cursor: pointer;
 									display: inline-block !important;
 									.icon.hotdeals {
@@ -1003,8 +1004,13 @@ body {
 				right: 0;
 				width: 100%;
 				.left {
-					float: left;
-					width: 47%;
+					width: 55%;
+					height: 100%;
+					left: 0.6rem;
+					top: 0;
+					display: block;
+					position: absolute;
+					z-index: 1;
 				}
 				.right {
 					float: right;
@@ -1050,6 +1056,7 @@ body {
 					overflow: hidden;
 					width: 100%;
 					display: inline-block;
+					font-size: 0.71rem;
 				}
 			}
 			.room-desc {
@@ -1213,6 +1220,10 @@ body {
 				}
 			}
 			& .compBtn {
+				position: absolute;
+				bottom: 0.6rem;
+				left: 0;
+				display: block;
 				&>a {
 					margin-top: 1rem;
 					display: inline-block;
@@ -1224,6 +1235,7 @@ body {
 					}
 					span {
 						font-weight: 600;
+						font-size: 0.71rem;
 					}
 				}
 			}
@@ -1231,8 +1243,8 @@ body {
 		.filtro {
 			text-align: left;
 			h3 {
-				font-size: 1.3rem;
-				color: #222;
+				    font-weight: 600;
+				color: #777;
 				padding-bottom: 0.8rem;
 			}
 			h4 {
@@ -1303,7 +1315,7 @@ body {
 						border: 1px solid #aaa;
 						display: block;
 						width: 100%;
-						font-size: 1rem;
+						font-size: 0.83rem;
 						height: 100%;
 						padding: 0.3rem 0.6rem;
 						color: #222;

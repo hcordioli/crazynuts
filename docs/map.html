@@ -1,47 +1,51 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<title>Google Maps Multiple Markers</title>
-	</script>
-        <script async defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5Xby6GsyIjGSxZ2-JT0M5PW1rKBAroRM&callback=initMap">
-    </script>
-</head>
-<body>
-	<div id="map" style="height: 400px; width: 500px;">
-	</div>
-	<script type="text/javascript">
-		var locations = [
-			['Washington Square Hotel', 40.73226, -73.99867, 4],
-			['East Village Hotel', 40.72827, -73.98508, 5],
-			['Sago Hotel', 40.71953, -73.99007, 3],
-			['Comfort Inn Midtown West', 40.76430, -73.99477, 2],
-			['Four Seasons Hotel New York Downtown', 40.71254, -74.00931, 1]
-		];
-
-		var map = new google.maps.Map(document.getElementById('map'), {
-			zoom: 10,
-			center: new google.maps.LatLng(40.730824, ‎-73.997330),
-			mapTypeId: google.maps.MapTypeId.ROADMAP
-		});
-
-		var infowindow = new google.maps.InfoWindow();
-
-		var marker, i;
-
-		for (i = 0; i < locations.length; i++) { 
-			marker = new google.maps.Marker({
-			position: new google.maps.LatLng(locations[i][1], locations[i][2]),
-			map: map
-		});
-
-		google.maps.event.addListener(marker, 'click', (function(marker, i) {
-			return function() {
-			infowindow.setContent(locations[i][0]);
-			infowindow.open(map, marker);
-			}
-		})(marker, i));
+	<head>
+		<style>
+			#map {
+			height: 400px;
+			width: 100%;
 		}
-	</script>
-</body>
+		</style>
+	</head>
+	<body>
+		<h3>Google Maps Multiple Markers</h3>
+		<div id="map"></div>
+		<script type="text/javascript">
+			var locations = [
+				['Washington Square Hotel', 40.73226, -73.99867, 4],
+				['East Village Hotel', 40.72827, -73.98508, 5],
+				['Sago Hotel', 40.71953, -73.99007, 3],
+				['Comfort Inn Midtown West', 40.76430, -73.99477, 2],
+				['Four Seasons Hotel New York Downtown', 40.71254, -74.00931, 1]
+			];
+
+			var map = new google.maps.Map(document.getElementById('map'), {
+				zoom: 10,
+				center: new google.maps.LatLng(40.730824, ‎-73.997330),
+				mapTypeId: google.maps.MapTypeId.ROADMAP
+			});
+
+			var infowindow = new google.maps.InfoWindow();
+
+			var marker, i;
+
+			for (i = 0; i < locations.length; i++) { 
+				marker = new google.maps.Marker({
+				position: new google.maps.LatLng(locations[i][1], locations[i][2]),
+				map: map
+				});
+
+			google.maps.event.addListener(marker, 'click', (function(marker, i) {
+				return function() {
+				infowindow.setContent(locations[i][0]);
+				infowindow.open(map, marker);
+				}
+			})(marker, i));
+			}
+		</script>
+	    <script async defer
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC5Xby6GsyIjGSxZ2-JT0M5PW1rKBAroRM&callback=initMap">
+		</script>
+	</body>
 </html>

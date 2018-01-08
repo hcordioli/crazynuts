@@ -676,10 +676,12 @@ export class HomeComponent implements AfterViewInit {
         }
     }
     public onFocus(e) {
+        console.log([this, arguments]);
         this.onClick.apply(this, arguments)
     }
     public onClickTimer;
     public onClick(e) {
+        console.log([this, arguments]);
         var self = this,
             tgt = e.target,
             el = document.querySelector('#pickMe'),
@@ -712,6 +714,12 @@ export class HomeComponent implements AfterViewInit {
                 val[2] = val[2].slice(-2);
                 clearTimeout(self.onClickTimer);
                 self.onClickTimer = setTimeout(function() {
+                    if (self.rangepicker.datePicker.startDate)
+                        self.blurDates[0] = self.rangepicker.datePicker.startDate.clone();
+                    if (start && self.rangepicker.datePicker.endDate)
+                        self.blurDates[1] = self.rangepicker.datePicker.endDate.clone();
+                    else
+                        self.blurDates[1] = null;
                     self.rangepicker.datePicker['set' + (start ? 'Start' : 'End') + 'Date'](date);
                     self.mdl[start ? 'entrada' : 'saida'] = {
                         val: val.join('/'),
@@ -719,14 +727,13 @@ export class HomeComponent implements AfterViewInit {
                     };
                     if (!start) {
                         self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
-                        self.blurDates[1] = date;
+                        self.show.calendarRight = null;
                     } else {
                         self.mdl.saida = {
                             val: '',
                             txt: ''
                         };
                         self.show.calendarRight = true;
-                        self.blurDates = [date, null];
                     }
                 }, 0);
             }
@@ -838,21 +845,35 @@ export class HomeComponent implements AfterViewInit {
     public blurDates = [];
     public blurDate(value: any) {
         var self = this;
-        self.rangepicker.datePicker.setStartDate(self.blurDates[0]);
-        self.rangepicker.datePicker.setEndDate(self.blurDates[1] || self.blurDates[0]);
+        if (self.blurDates.length >= 2 && self.show.calendarRight !== null && !self.blurDates[1]) {
+            // self.selectedDate.call(self, {
+            //     start: self.blurDates[0],
+            //     end: self.blurDates[1]
+            // });
+        }
     }
     public selectedDate(value: any) {
         var self = this;
-        self.mdl.entrada.val = value.start.format('MM/DD/YYYY');
-        self.mdl.entrada.txt = value.start.format('DD/MM/YY');
-        self.mdl.saida.val = value.end.format('MM/DD/YYYY');
-        self.mdl.saida.txt = value.end.format('DD/MM/YY');
-        self.onClick({
-            target: self.rangepicker.datePicker.element[0]
-        })
-        self.daterange.start = value.start;
-        self.daterange.end = value.end;
-        self.daterange.label = '';
+        if (value.start) {
+            self.mdl.entrada.val = value.start.format('MM/DD/YYYY');
+            self.mdl.entrada.txt = value.start.format('DD/MM/YY');
+            self.daterange.start = value.start;
+        }
+        if (value.end) {
+            self.mdl.saida.val = value.end.format('MM/DD/YYYY');
+            self.mdl.saida.txt = value.end.format('DD/MM/YY');
+            self.daterange.end = value.end;
+        } else {
+            self.mdl.saida.val = '';
+            self.mdl.saida.txt = '';
+            self.daterange.end = value.start || '';
+        }
+        if ('label' in value) {
+            self.onClick({
+                target: self.rangepicker.datePicker.element[0]
+            })
+            self.daterange.label = '';
+        }
     }
     public cardShadow(hex) {
         hex = (hex || 'fff').replace(/^\#/gi, '');

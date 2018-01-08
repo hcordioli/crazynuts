@@ -12,6 +12,8 @@ import { ErrComponent } from './err/err.component';
 import { RangePipe } from './range.pipe';
 import { NouisliderModule } from 'ng2-nouislider';
 import localePt from '@angular/common/locales/pt';
+import { DetalheComponent } from './detalhe/detalhe.component';
+import { SearchComponent } from './search/search.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -20,7 +22,9 @@ registerLocaleData(localePt, 'pt-BR');
         AppComponent,
         HomeComponent,
         ErrComponent,
-        RangePipe
+        RangePipe,
+        DetalheComponent,
+        SearchComponent
     ],
     imports: [
         BrowserModule,

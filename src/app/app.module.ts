@@ -1,29 +1,26 @@
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { Regions } from './http/regions';
 import { FormsModule } from '@angular/forms';
-import { CommonModule, NgStyle, NgForOf, registerLocaleData } from '@angular/common';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
-import { Ng2CompleterModule } from "ng2-completer";
-import { Daterangepicker } from 'ng2-daterangepicker';
-import { AppRoutingModule } from './app-routing.module';
+import { RangePipe } from './pipe/range.pipe';
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
-import { ErrComponent } from './err/err.component';
-import { RangePipe } from './range.pipe';
 import { NouisliderModule } from 'ng2-nouislider';
 import localePt from '@angular/common/locales/pt';
+import { Ng2CompleterModule } from "ng2-completer";
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { Daterangepicker } from 'ng2-daterangepicker';
+import { HttpClientModule } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
+import { BrowserModule } from '@angular/platform-browser';
 import { DetalheComponent } from './detalhe/detalhe.component';
 import { BookingComponent } from './booking/booking.component';
 import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
-import { RegionsService } from './regions.service';
+import { CommonModule, NgStyle, NgForOf, registerLocaleData } from '@angular/common';
+import { GlobalDataService } from './globaldata.service';
 
 registerLocaleData(localePt, 'pt-BR');
 
 @NgModule({
     declarations: [
         AppComponent,
-        HomeComponent,
-        ErrComponent,
         RangePipe,
         DetalheComponent,
         BookingComponent,
@@ -39,7 +36,7 @@ registerLocaleData(localePt, 'pt-BR');
         CommonModule,
         NouisliderModule
     ],
-    providers: [{ provide: LOCALE_ID, useValue: 'pt-BR', providers: [RegionsService] }],
+    providers: [GlobalDataService, { provide: LOCALE_ID, useValue: 'pt-BR' }],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

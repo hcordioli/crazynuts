@@ -1,10 +1,8 @@
 import { Subject } from 'rxjs/Subject';
-import { Injectable } from '@angular/core';
 import { Http, Response } from '@angular/http';
 import { CompleterData, CompleterItem } from 'ng2-completer';
 
-@Injectable()
-export class RegionsService extends Subject < CompleterItem[] > implements CompleterData {
+export class Regions extends Subject < CompleterItem[] > implements CompleterData {
     constructor(private http: Http) {
         super();
     }
@@ -39,11 +37,11 @@ export class RegionsService extends Subject < CompleterItem[] > implements Compl
                             (data.regionType.indexOf('Train') > -1 ? 'train' :
                                 (data.regionType.indexOf('Airport') > -1 ? 'airport' : 'default'))))));
         // data will be string if an initial value is set
-        return <CompleterItem > {
+        return ( < CompleterItem > {
             title: typeof data === 'string' ? data : data.regionNameLong,
             image: 'assets/img/icons/search-' + nome + '.png',
             description: data.regionId || data.description || 0,
             originalObject: data
-        };
+        });
     }
 }

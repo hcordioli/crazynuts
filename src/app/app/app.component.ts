@@ -2,10 +2,12 @@ import { Component, AfterViewInit, ViewEncapsulation, ViewChild, ElementRef } fr
 import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
 import { DaterangePickerComponent } from 'ng2-daterangepicker';
 import { CompleterService, RemoteData } from 'ng2-completer';
-import { RegionsService } from './../regions.service';
-import { HttpClient } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Regions } from './../http/regions';
+import Filters from './../http/filters';
 import { NgModel } from '@angular/forms';
 import { Http } from "@angular/http";
+import { cookie } from "./../utils";
 
 @Component({
     selector: 'app-app',
@@ -21,6 +23,47 @@ import { Http } from "@angular/http";
         '(window:touchend)': 'onClick($event)'
     }
 })
+export class AppComponent implements AfterViewInit {
+    constructor(private route: ActivatedRoute, private router: Router) {}
+    public sub;
+    public params;
+    public json2str(arg) {
+        return JSON.stringify(arg);
+    }
+    ngAfterViewInit() {
+
+        var self = this;
+        self.sub = self.route
+            .params
+            .subscribe(params => {
+                self.params = {
+                    id: params.id,
+                    in: params.in || '',
+                    out: params.out || '',
+                    rooms: params.rooms || ''
+                }
+            });
+
+        var self = this,
+            fn = [self.rangepicker.datePicker.clickDate,
+                self.rangepicker.datePicker.outsideClick
+            ],
+
+            i, j;
+        if (self.cookied)
+            self.rooms.nativeElement.className += ' touched';
+
+    }
+
+    ngOnDestroy() {
+        var self = this;
+        self.sub.unsubscribe();
+    }
+
+}
+
+/*
+
 export class AppComponent implements AfterViewInit {
     @ViewChild(DaterangePickerComponent) rangepicker: DaterangePickerComponent;
     @ViewChild('rooms') rooms: ElementRef;
@@ -160,140 +203,34 @@ export class AppComponent implements AfterViewInit {
             }
         }
     }
-    public customData: RegionsService;
+    public customData: Regions;
     public dataService: RemoteData;
     private cookied = false;
-    public valueAdds = {
-        ids: {
-            '2098': 0,
-            '1073742786': 0,
-            '1073742621': 0,
-            '2111': 0,
-            '2106': 1,
-            '2107': 1,
-            '1073742625': 1,
-            '1073742626': 1,
-            '2102': 1,
-            '2103': 1,
-            '2104': 1,
-            '2105': 1,
-            '2193': 1,
-            '2194': 1,
-            '2203': 1,
-            '2205': 1,
-            '2209': 1,
-            '2210': 1,
-            '2211': 1,
-            '1073742857': 1,
-            '2233': 1,
-            '2097': 2,
-            '2191': 2,
-            '2192': 2,
-            '2220': 2,
-            '1073742787': 2,
-            '2109': 3,
-            '2215': 3,
-            '2110': 3,
-            '2216': 4,
-            '2195': 4,
-            '2196': 5,
-            '2214': 5,
-            '2221': 5,
-            '1073742859': 5,
-            '1073742860': 5,
-            '1073743286': 6,
-            '1073742861': 7,
-            '2204': 7,
-            '1073742617': 7,
-            '1073743288': 7,
-            '1073742551': 8,
-            '2217': 8,
-            '2219': 8,
-            '2212': 9,
-            '2108': 10,
-            '2198': 10,
-            '2201': 10,
-            '2235': 10,
-            '2200': 11,
-            '1073742618': 11,
-            '2226': 12,
-            '2227': 12,
-            '1073743274': 12,
-            '1073743275': 12,
-            '2197': 13,
-            '2224': 13,
-            '2225': 13,
-            '2228': 14,
-            '1073743287': 14,
-            '2213': 14,
-            '2218': 14,
-            '2222': 14,
-            '2202': 14,
-            '2199': 14,
-            '1073742858': 14,
-            '2096': 14,
-            '1073742680': 14,
-            '1073742681': 14,
-            '2223': 14,
-            '1073742736': 14,
-            '1073742624': 15,
-            '2175': 15,
-            '1073742862': 15,
-            '1073742863': 15,
-            '1073742909': 15,
-            '1073742627': 15,
-            '1073742552': 15,
-            '2236': 15,
-            '2232': 15,
-            '2234': 15,
-            '2206': 15,
-            '2207': 15,
-            '2208': 15,
 
-        },
-        icons: [
-            'fa-coffee',
-            'fa-cutlery',
-            'fa-wifi',
-            'parking', //parking
-            'fa-bell-o',
-            'fa-bus',
-            'xe013',
-            'fa-ticket',
-            'fa-glass',
-            'xe25e',
-            'fa-money',
-            'svg-spa',
-            'fa-calendar-check-o',
-            'fa-level-up',
-            'xe013',
-            'fa-check'
-        ]
-    }
-    constructor(private _sanitizer: DomSanitizer, private http: Http, private httpC: HttpClient, private completerService: CompleterService) {
+    constructor(private _sanitizer: DomSanitizer, private http: Http, private completerService: CompleterService) {
         var self = this,
             roomCok;
-        self.customData = new RegionsService(self.http);
-        if (!self.cookie('cid'))
+        self.customData = new Regions(self.http);
+        if (!cookie('cid'))
             self.open.keys = true;
         else {
             self.mdl.keys = {
-                cid: self.cookie('cid'),
-                api: self.cookie('api'),
-                secret: self.cookie('secret')
+                cid: cookie('cid'),
+                api: cookie('api'),
+                secret: cookie('secret')
             }
-            if (self.cookie('busca-val')) {
+            if (cookie('busca-val')) {
                 self.mdl.busca.init = {
-                    title: self.cookie('busca-val'),
-                    image: self.cookie('busca-img'),
-                    description: self.cookie('busca-id')
+                    title: cookie('busca-val'),
+                    image: cookie('busca-img'),
+                    description: cookie('busca-id')
                 };
             }
-            self.mdl.entrada.val = self.cookie('entrada');
+            self.mdl.entrada.val = cookie('entrada');
             self.mdl.entrada.txt = self.mdl.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-            self.mdl.saida.val = self.cookie('saida');
+            self.mdl.saida.val = cookie('saida');
             self.mdl.saida.txt = self.mdl.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-            roomCok = self.cookie('room');
+            roomCok = cookie('room');
             if (roomCok) {
                 if (roomCok !== JSON.stringify(self.mdl.room)) {
                     self.mdl.room = JSON.parse(roomCok);
@@ -529,12 +466,6 @@ export class AppComponent implements AfterViewInit {
         if (tgt)
             tgt.focus();
     }
-    public cookie = function(prop, val ? , eternal ? ) {
-        var ret = prop ? document.cookie.match((new RegExp(prop.toString() + '=(.*?)(;|$)'))) : ['', false];
-        if (val !== undefined)
-            document.cookie = prop + '=' + val + (eternal ? '; expires=' + new Date('01/01/2038').toUTCString() : '') + '; path=/;';
-        return val ? val : (ret && ret.length > 1 ? ret[1] : '');
-    }
     public addRoom(index) {
         var self = this,
             r = self.mdl.room,
@@ -744,8 +675,9 @@ export class AppComponent implements AfterViewInit {
                 if (!/focus/.test(self.rooms.nativeElement.className))
                     self.rooms.nativeElement.className += ' focus';
             } else {
-                self.rooms.nativeElement.className = self.rooms.nativeElement.className.replace(/\s*focus\s*/gi, ' ');
-                self.open.rooms = false;
+                */
+// self.rooms.nativeElement.className = self.rooms.nativeElement.className.replace(/\s*focus\s*/gi, ' ');
+/*                self.open.rooms = false;
             }
         }
         return true;
@@ -753,10 +685,7 @@ export class AppComponent implements AfterViewInit {
     public onScrollTimer;
     public onScroll(e) {
 
-
-
-
-        /*var el = document.querySelector('aside > section > div'),
+var el = document.querySelector('aside > section > div'),
                     carrinhoPaddingTop = 0,
                     width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
                 clearTimeout($.ev.scroll.timeout1);
@@ -821,6 +750,7 @@ export class AppComponent implements AfterViewInit {
 
 
         */
+/*
         var self = this,
             ev = e;
         clearTimeout(self.onScrollTimer);
@@ -905,9 +835,9 @@ export class AppComponent implements AfterViewInit {
                     alert('Favor inserir token');
                     return;
                 } else {
-                    self.cookie('cid', k.cid, true);
-                    self.cookie('api', k.api, true);
-                    self.cookie('secret', k.secret, true);
+                    cookie('cid', k.cid, true);
+                    cookie('api', k.api, true);
+                    cookie('secret', k.secret, true);
                     self.open.keys = false;
                 }
             }
@@ -915,24 +845,18 @@ export class AppComponent implements AfterViewInit {
                 alert('Favor preencher todos os campos');
                 return;
             } else {
-                self.cookie('busca-val', m.busca.val);
-                self.cookie('busca-img', m.busca.icon);
-                self.cookie('busca-id', m.busca.regionId);
-                self.cookie('entrada', m.entrada.val);
-                self.cookie('saida', m.saida.val);
-                self.cookie('room', JSON.stringify(m.room));
+                cookie('busca-val', m.busca.val);
+                cookie('busca-img', m.busca.icon);
+                cookie('busca-id', m.busca.regionId);
+                cookie('entrada', m.entrada.val);
+                cookie('saida', m.saida.val);
+                cookie('room', JSON.stringify(m.room));
             }
             h.HotelListResponse = null;
             h.HotelListResponseStr = null;
             h.state = 1;
             m.busca.lastVal = m.busca.val;
-            self.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
-                'cid=' + k.cid +
-                '&apiKey=' + k.api +
-                '&secret=' + k.secret +
-                '&checkin=' + m.entrada.val +
-                '&checkout=' + m.saida.val +
-                '&regionId=' + m.busca.regionId +
+            self.hotelsUrl.base =
                 quartos;
         } else {
             h.state = 1;
@@ -957,150 +881,8 @@ export class AppComponent implements AfterViewInit {
             self.hotelsUrl.page = 'page=0';
             self.vars.hotelList.page = 0;
         }
-        self.httpC.get((self.hotelsUrl.base +
-            '&' + [
-                self.hotelsUrl.page,
-                self.hotelsUrl.sort,
-                (self.vars.filter.hotelname.active ?
-                    self.hotelsUrl.filter : ''
-                )
-            ].join('&')).replace(/\&+/gi, '&').replace(/\&*$/gi, '')).subscribe(hotelList => {
-            var tgtComP = 0.13,
-                storeComP = 0.15,
-                gpShare = 0.5,
-                msg = 'Erro!',
-                valueAdds,
-                i, j, k, tmp;
-            if (scrolling && h.hasMorePages) {
-                try {
-                    tmp = hotelList;
-                } catch (e) {
-                    tmp = null;
-                }
-                if (!tmp)
-                    return;
-                i = h.HotelListResponse.length;
-                h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
-                h.regionId = m.busca.regionId;
-                self.infinityScrolling = false;
-                h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
-                for (; i < h.HotelListResponse.length; i++) {
-                    self.show.cardImg.push(0);
-                    self.show.valueAdds.push(new Array(self.valueAdds.icons.length));
-                    self.show.remainAdds[i] = [];
-                    h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
-                    valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
-                    tmp = h.HotelListResponse[i].tripAdvisorRating;
-                    if (tmp && tmp >= 3.5) {
-                        if (tmp <= 3.9)
-                            tmp = 'Bom!';
-                        else if (tmp <= 4.2)
-                            tmp = 'Muito Bom!';
-                        else if (tmp <= 4.4)
-                            tmp = 'Incrível!';
-                        else if (tmp <= 4.6)
-                            tmp = 'Fantástico!';
-                        else if (tmp <= 5)
-                            tmp = 'Excepcional!';
-                        h.HotelListResponse[i].tripAdvisorLabel = tmp;
-                    }
-                    if (valueAdds) {
-                        if (!Array.isArray(valueAdds.ValueAdd))
-                            valueAdds.ValueAdd = [valueAdds.ValueAdd];
-                        for (j = 0; j < valueAdds.ValueAdd.length; j++) {
-                            k = valueAdds.ValueAdd[j];
-                            if (k['@id'] in self.valueAdds.ids) {
-                                if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
-                                    self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
-                                else
-                                    self.show.remainAdds[i].push(k.description);
-                            } else {
-                                self.show.remainAdds[i].push(k.description);
-                            }
-                        }
-                    }
-                }
-            } else {
-                try {
-                    h.HotelListResponseStr = '';
-                    h.HotelListResponse = hotelList;
-                    msg = h.HotelListResponse.messagem;
-                } catch (e) {
-                    h.HotelListResponseStr = '';
-                    h.HotelListResponse = null;
-                }
-                if (h.HotelListResponse.HotelListResponse && h.HotelListResponse.HotelListResponse.HotelList['@size']) {
-                    if (h.HotelListResponse.HotelListResponse.EanWsError && h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage) {
-                        h.HotelListResponseStr = h.HotelListResponse.HotelListResponse.EanWsError.presentationMessage;
-                        h.HotelListResponse = null;
-                        return;
-                    }
-                    h.HotelListResponse = h.HotelListResponse.HotelListResponse;
-                    h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
-                    h.searchId = h.HotelListResponse.customerSessionId;
-                    h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
-                    h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
-                    if (!Array.isArray(h.HotelListResponse))
-                        h.HotelListResponse = [h.HotelListResponse];
-                    self.show.cardImg = new Array(h.HotelListResponse.length);
-                    self.show.valueAdds = new Array(h.HotelListResponse.length);
-                    for (i = 0; i < h.HotelListResponse.length; i++) {
-                        h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
-                        self.show.cardImg[i] = 0;
-                        self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
-                        self.show.remainAdds[i] = [];
-                        valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
-                        tmp = h.HotelListResponse[i].tripAdvisorRating;
-                        if (tmp && tmp >= 3.5) {
-                            if (tmp <= 3.9)
-                                tmp = 'Bom!';
-                            else if (tmp <= 4.2)
-                                tmp = 'Muito Bom!';
-                            else if (tmp <= 4.4)
-                                tmp = 'Incrível!';
-                            else if (tmp <= 4.6)
-                                tmp = 'Fantástico!';
-                            else if (tmp <= 5)
-                                tmp = 'Excepcional!';
-                            h.HotelListResponse[i].tripAdvisorLabel = tmp;
-                        }
-                        if (valueAdds) {
-                            if (!Array.isArray(valueAdds.ValueAdd))
-                                valueAdds.ValueAdd = [valueAdds.ValueAdd];
-                            for (j = 0; j < valueAdds.ValueAdd.length; j++) {
-                                k = valueAdds.ValueAdd[j];
-                                if (k['@id'] in self.valueAdds.ids) {
-                                    if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
-                                        self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
-                                    else
-                                        self.show.remainAdds[i].push(k.description);
-                                } else {
-                                    self.show.remainAdds[i].push(k.description);
-                                }
-                            }
-                        }
-                    }
-                } else {
-                    h.HotelListResponseStr = msg;
-                    h.HotelListResponse = null;
-                }
-            }
-            h.state = 2;
-        }, err => {
-            var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
-            alert(erro);
-            setTimeout(function() {
-                h.HotelListResponseStr = isScroll ? '' : 'Erro: ' + erro;
-            }, 1000)
-            // try {
-            //     h.HotelListResponseStr = erro;
-            //     h.HotelListResponse = JSON.parse(erro);
-            // } catch (e) {
-            //     h.HotelListResponseStr = 'Erro!';
-            //     h.HotelListResponse = null;
-            // }
-            // h.state = 3;
-        });
+
         return;
     }
 }
+*/

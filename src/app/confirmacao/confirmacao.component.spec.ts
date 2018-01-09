@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ErrComponent } from './err.component';
+import { ConfirmacaoComponent } from './confirmacao.component';
 
-describe('ErrComponent', () => {
-  let component: ErrComponent;
-  let fixture: ComponentFixture<ErrComponent>;
+describe('ConfirmacaoComponent', () => {
+  let component: ConfirmacaoComponent;
+  let fixture: ComponentFixture<ConfirmacaoComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ ErrComponent ]
+      declarations: [ ConfirmacaoComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ErrComponent);
+    fixture = TestBed.createComponent(ConfirmacaoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

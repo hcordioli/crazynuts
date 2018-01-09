@@ -13,7 +13,9 @@ import { RangePipe } from './range.pipe';
 import { NouisliderModule } from 'ng2-nouislider';
 import localePt from '@angular/common/locales/pt';
 import { DetalheComponent } from './detalhe/detalhe.component';
-import { SearchComponent } from './search/search.component';
+import { BookingComponent } from './booking/booking.component';
+import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
+import { RegionsService } from './regions.service';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -24,7 +26,8 @@ registerLocaleData(localePt, 'pt-BR');
         ErrComponent,
         RangePipe,
         DetalheComponent,
-        SearchComponent
+        BookingComponent,
+        ConfirmacaoComponent,
     ],
     imports: [
         BrowserModule,
@@ -36,7 +39,7 @@ registerLocaleData(localePt, 'pt-BR');
         CommonModule,
         NouisliderModule
     ],
-    providers: [{ provide: LOCALE_ID, useValue: 'pt-BR' }],
+    providers: [{ provide: LOCALE_ID, useValue: 'pt-BR', providers: [RegionsService] }],
     bootstrap: [AppComponent]
 })
 export class AppModule {}

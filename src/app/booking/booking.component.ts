@@ -1,12 +1,12 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'app-err',
-  templateUrl: './err.component.html',
-  styleUrls: ['./err.component.scss'],
+  selector: 'app-booking',
+  templateUrl: './booking.component.html',
+  styleUrls: ['./booking.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class ErrComponent implements OnInit {
+export class BookingComponent implements OnInit {
 
   constructor() { }
 

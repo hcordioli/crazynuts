@@ -101,7 +101,9 @@ const data: Filter[] = [
     }
 ];
 
-export default < Filter[] > (function(data) {
+export {}
+
+/*export default < Filter[] > (function(data) {
     var i = 0;
     for (i = 0; i < data.length; i++) {
         self.vars.filter.bit.masks.push({
@@ -125,3 +127,4 @@ export default < Filter[] > (function(data) {
 
     return data;
 }(data));
+*/

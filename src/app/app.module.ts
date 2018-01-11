@@ -6,37 +6,44 @@ import { NouisliderModule } from 'ng2-nouislider';
 import localePt from '@angular/common/locales/pt';
 import { Ng2CompleterModule } from "ng2-completer";
 import { NgModule, LOCALE_ID } from '@angular/core';
+import { RootComponent } from './root/root.component';
 import { Daterangepicker } from 'ng2-daterangepicker';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
+import { GlobalService } from './global/global.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { DetalheComponent } from './detalhe/detalhe.component';
 import { BookingComponent } from './booking/booking.component';
 import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
 import { CommonModule, NgStyle, NgForOf, registerLocaleData } from '@angular/common';
-import { GlobalDataService } from './globaldata.service';
 
 registerLocaleData(localePt, 'pt-BR');
 
 @NgModule({
     declarations: [
-        AppComponent,
         RangePipe,
-        DetalheComponent,
+        AppComponent,
+        RootComponent,
         BookingComponent,
-        ConfirmacaoComponent,
+        DetalheComponent,
+        ConfirmacaoComponent
     ],
     imports: [
+        FormsModule,
+        CommonModule,
         BrowserModule,
         Daterangepicker,
         HttpClientModule,
         AppRoutingModule,
-        Ng2CompleterModule,
-        FormsModule,
-        CommonModule,
-        NouisliderModule
+        NouisliderModule,
+        Ng2CompleterModule
     ],
-    providers: [GlobalDataService, { provide: LOCALE_ID, useValue: 'pt-BR' }],
-    bootstrap: [AppComponent]
+    providers: [
+        GlobalService,
+        { provide: LOCALE_ID, useValue: 'pt-BR' }
+    ],
+    bootstrap: [
+        AppComponent
+    ]
 })
 export class AppModule {}

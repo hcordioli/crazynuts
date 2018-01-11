@@ -21,7 +21,6 @@ export class Regions extends Subject < CompleterItem[] > implements CompleterDat
     }
 
     public cancel() {
-        // Handle cancel
     }
 
     public convertToItem(data: any): CompleterItem | null {
@@ -36,7 +35,6 @@ export class Regions extends Subject < CompleterItem[] > implements CompleterDat
                         (data.regionType.indexOf('Metro') > -1 ? 'train' :
                             (data.regionType.indexOf('Train') > -1 ? 'train' :
                                 (data.regionType.indexOf('Airport') > -1 ? 'airport' : 'default'))))));
-        // data will be string if an initial value is set
         return ( < CompleterItem > {
             title: typeof data === 'string' ? data : data.regionNameLong,
             image: 'assets/img/icons/search-' + nome + '.png',

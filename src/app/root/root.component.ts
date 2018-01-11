@@ -1,29 +1,46 @@
-import { Component, AfterViewInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
-import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
-import { DaterangePickerComponent } from 'ng2-daterangepicker';
-import { CompleterService, RemoteData } from 'ng2-completer';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Regions } from './../http/regions';
-import Filters from './../http/filters';
-import { NgModel } from '@angular/forms';
-import { Http } from "@angular/http";
-import { cookie } from "./../utils";
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 @Component({
-    selector: 'app-app',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    host: {
-        '(window:scroll)': 'onScroll($event)',
-        '(document:click)': 'onClick($event)',
-        '(document:keyup)': 'onFocus($event)',
-        '(document:keydown)': 'onKey($event)',
-        '(window:mouseup)': 'onClick($event)',
-        '(window:touchend)': 'onClick($event)'
-    }
+  selector: 'app-root',
+  templateUrl: './root.component.html',
+  styleUrls: ['./root.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
-export class AppComponent implements AfterViewInit {
+export class RootComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+// import { Component, AfterViewInit, ViewEncapsulation, ViewChild, ElementRef } from '@angular/core';
+// import { DomSanitizer, SafeResourceUrl, SafeUrl } from '@angular/platform-browser';
+// import { DaterangePickerComponent } from 'ng2-daterangepicker';
+// import { CompleterService, RemoteData } from 'ng2-completer';
+// import { ActivatedRoute, Router } from '@angular/router';
+// import { Regions } from './../http/regions';
+// import Filters from './../http/filters';
+// import { NgModel } from '@angular/forms';
+// import { Http } from "@angular/http";
+// import { cookie } from "./../utils";
+
+// @Component({
+//     selector: 'app-root',
+//     templateUrl: './root.component.html',
+//     styleUrls: ['./root.component.scss'],
+//     encapsulation: ViewEncapsulation.None,
+//     host: {
+//         '(window:scroll)': 'onScroll($event)',
+//         '(document:click)': 'onClick($event)',
+//         '(document:keyup)': 'onFocus($event)',
+//         '(document:keydown)': 'onKey($event)',
+//         '(window:mouseup)': 'onClick($event)',
+//         '(window:touchend)': 'onClick($event)'
+//     }
+// })
+/*export class RootComponent implements AfterViewInit {
     constructor(private route: ActivatedRoute, private router: Router) {}
     public sub;
     public params;
@@ -60,11 +77,14 @@ export class AppComponent implements AfterViewInit {
         self.sub.unsubscribe();
     }
 
+export class RootComponent implements AfterViewInit {
+    constructor() {}
+    ngAfterViewInit() {
+        var self = this;
+    }
 }
 
-/*
-
-export class AppComponent implements AfterViewInit {
+export class RootComponent implements AfterViewInit {
     @ViewChild(DaterangePickerComponent) rangepicker: DaterangePickerComponent;
     @ViewChild('rooms') rooms: ElementRef;
     public daterange: any = {};

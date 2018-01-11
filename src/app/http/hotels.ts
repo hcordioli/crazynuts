@@ -1,21 +1,21 @@
 import { HttpClient } from '@angular/common/http';
-import { GlobalDataService } from './../globaldata.service';
-import { cookie } from './../utils';
-
-export class Calendar {
+import { GlobalService } from './../global/global.service';
+import { Utils } from './../utils/utils';
+/*
+export class Hotels {
 	private conf: any = {
 		url: 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?',
 	}
     private data: Object[]
-    constructor(private httpC: HttpClient, private gd: GlobalDataService, param ? : any) {
+    constructor(private httpC: HttpClient, private gd: GlobalService, param ? : any) {
     	param = param || {
     		cid: 
     	};
         var self = this,
             params = [
-                'cid' + cookie('cid'),
-                'apiKey' + cookie('api'),
-                'secret' + cookie('secret'),
+                'cid' + Utils.cookie('cid'),
+                'apiKey' + Utils.cookie('api'),
+                'secret' + Utils.cookie('secret'),
                 'checkin' + param.checkin,
                 'checkout' + param.checkout,
                 'regionId' + param.regionId,
@@ -37,10 +37,7 @@ export class Calendar {
                     self.hotelsUrl.filter : ''
                 )
             ].join('&')).replace(/\&+/gi, '&').replace(/\&*$/gi, '')).subscribe(hotelList => {
-            var tgtComP = 0.13,
-                storeComP = 0.15,
-                gpShare = 0.5,
-                msg = 'Erro!',
+            var msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;
             if (scrolling && h.hasMorePages) {
@@ -160,3 +157,5 @@ export class Calendar {
         return "Hello, " + this.greeting;
     }
 }
+*/
+export class Hotels {}

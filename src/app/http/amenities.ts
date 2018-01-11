@@ -1,4 +1,4 @@
-export class Amenities {
+/*export class Amenities {
     private data = {
         //for(var k in o) console.log([k, o.hasOwnProperty(k)])
         icons: [
@@ -311,3 +311,5 @@ export class Amenities {
     // 	</span>
 
 }
+*/
+export class Amenities {}

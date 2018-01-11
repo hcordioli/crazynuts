@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    selector: 'app-app',
+    template: '<div class="app-main"><app-root></app-root></div>'
 })
 export class AppComponent {
-    title = 'HOTAX';
 }

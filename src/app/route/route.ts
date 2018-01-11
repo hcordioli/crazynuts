@@ -1,16 +1,16 @@
-import { AppComponent } from './../app/app.component';
 import { Routes } from '@angular/router';
+import { RootComponent } from './../root/root.component';
 import { DetalheComponent } from './../detalhe/detalhe.component';
-import { date2str } from './../utils';
+import { Utils } from './../utils/utils';
 
-const today: string = date2str('');
-const tomorrow: string = date2str('', new Date((new Date()).getTime() + (864e5)))
+const today: string = Utils.date2str('');
+const tomorrow: string = Utils.date2str('', new Date((new Date()).getTime() + (864e5)))
 
-export default <Routes> [{
+export const Route:Routes = [{
     path: '',
     children: [{
         path: '',
-        component: AppComponent
+        component: RootComponent
     }, {
         path: 'detalhe',
         children: [{
@@ -36,7 +36,7 @@ export default <Routes> [{
                             }]
                         }, {
                             path: '**',
-                            redirectTo: '',
+                            redirectTo: 'test',
                             pathMatch: 'full'
                         }]
                     }, {
@@ -44,10 +44,6 @@ export default <Routes> [{
                         redirectTo: 'room1',
                         pathMatch: 'full'
                     }]
-                }, {
-                    path: '**',
-                    redirectTo: today + '/' + 'room1',
-                    pathMatch: 'full'
                 }]
             }, {
                 path: '**',
@@ -57,10 +53,10 @@ export default <Routes> [{
         }]
     }, {
         path: 'booking',
-        component: AppComponent
+        component: RootComponent
     }, {
         path: 'confirmacao',
-        component: AppComponent
+        component: RootComponent
     }, {
         path: 'home',
         redirectTo: '/'
@@ -74,7 +70,7 @@ export default <Routes> [{
                     path: ':rooms',
                     children: [{
                         path: '',
-                        component: AppComponent,
+                        component: RootComponent,
                         pathMatch: 'full',
                         children: [{
                             path: '**',
@@ -83,7 +79,7 @@ export default <Routes> [{
                         }]
                     }, {
                         path: '**',
-                        redirectTo: '',
+                        redirectTo: 'testa',
                         pathMatch: 'full'
                     }]
                 }, {
@@ -104,5 +100,5 @@ export default <Routes> [{
     }]
 }, {
     path: '**',
-    component: AppComponent
+    component: RootComponent
 }];

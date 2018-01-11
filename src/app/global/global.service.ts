@@ -5,6 +5,6 @@ interface Obj {
 }
 
 @Injectable()
-export class GlobalDataService {
+export class GlobalService {
     obj: Obj = {};
 }

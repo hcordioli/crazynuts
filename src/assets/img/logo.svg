@@ -5,9 +5,12 @@
     <ellipse style="fill:#C0252E;" cx="884.54608" cy="266.88922" rx="18.3097" ry="18.595789" />
     <path style="fill:#C0252E;stroke:#C0252E;stroke-width:1px;"
        d="m 780.82382,152.42794 33.6774,-44.08334 h 63.00323 l -71.32798,92.51826 z" />
-       <text x="41%" y="91%" fill="#C0252E" font-size="30" font-weight="700" font-family="Roboto, Helvetica, Arial, sans-serif">empowering travel agents everyday</text>
+       <text class="subtxt" x="41%" y="91%" fill="#C0252E" font-size="30" font-weight="700" font-family="Roboto, Helvetica, Arial, sans-serif">empowering travel agents everyday</text>
   </g>
   <defs>
-  <style type="text/css">@import url('https://fonts.googleapis.com/css?family=Roboto:700');"</style>
+  <style type="text/css">
+    @import url('https://fonts.googleapis.com/css?family=Roboto:700');
+    @media screen and (max-width: 400px) {.subtxt{display:none;}}
+  </style>
   </defs>
 </svg>

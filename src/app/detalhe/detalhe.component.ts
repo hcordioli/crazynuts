@@ -17,15 +17,12 @@ export class DetalheComponent implements OnInit {
     }
     ngOnInit() {
         var self = this;
+        console.log('detalhe');
         self.sub = self.route
             .params
             .subscribe(params => {
-                self.params = {
-                    id: params.id,
-                    in: params.in || '',
-                    out: params.out || '',
-                    rooms: params.rooms || ''
-                }
+                console.log(params);
+                self.params = params;
             });
     }
 

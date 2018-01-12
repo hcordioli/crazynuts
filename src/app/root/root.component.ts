@@ -8,29 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   encapsulation: ViewEncapsulation.None
 })
 export class RootComponent implements OnInit {
-    constructor(private route: ActivatedRoute, private router: Router) {}
-    public sub;
-    public params;
-    public json2str(arg) {
-        return JSON.stringify(arg);
-    }
+    constructor() {}
     ngOnInit() {
-        var self = this;
-        self.sub = self.route
-            .params
-            .subscribe(params => {
-                self.params = {
-                    id: params.id,
-                    in: params.in || '',
-                    out: params.out || '',
-                    rooms: params.apt || ''
-                }
-            });
-    }
-
-    ngOnDestroy() {
-        var self = this;
-        self.sub.unsubscribe();
     }
 }
 

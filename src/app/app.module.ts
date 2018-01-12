@@ -16,6 +16,7 @@ import { DetalheComponent } from './detalhe/detalhe.component';
 import { BookingComponent } from './booking/booking.component';
 import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
 import { CommonModule, NgStyle, NgForOf, registerLocaleData } from '@angular/common';
+import { BuscaComponent } from './busca/busca.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -26,7 +27,8 @@ registerLocaleData(localePt, 'pt-BR');
         RootComponent,
         BookingComponent,
         DetalheComponent,
-        ConfirmacaoComponent
+        ConfirmacaoComponent,
+        BuscaComponent
     ],
     imports: [
         FormsModule,

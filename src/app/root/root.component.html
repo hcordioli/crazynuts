@@ -1,3 +1,8 @@
 <p>
-  root works!
+	1
+	<span [textContent]="params.id||'id'"></span>
+	<span [textContent]="params.in||'in'"></span>
+	<span [textContent]="params.out||'out'"></span>
+	<span [textContent]="params.apt||'apt'"></span>
+	<router-outlet></router-outlet>
 </p>

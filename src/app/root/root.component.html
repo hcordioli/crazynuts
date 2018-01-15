@@ -2,24 +2,9 @@
 	<div class="app-home">
 		<div [attr.class]="(vars.hotelList.state > 0 ? 'search' : '')">
 			<div>
-				<div class="wrap main">
+				<div class="main wrap">
 					<div class="head wrap">
-						<h1><img [attr.src]="vars.logo.url" [attr.alt]="vars.logo.alt"></h1>
-						<p class="fgc c1" [innerHTML]="vars.slogan"></p>
-						<div class="menu" *ngIf="vars.hotelList.state > 1">
-							<ul>
-								<li>
-									<a href="javascript:;">
-									<span>BRL</span>
-								</a>
-								</li>
-								<li>
-									<a href="javascript:;">
-									<span>Login</span>
-								</a>
-								</li>
-							</ul>
-						</div>
+						
 					</div>
 					<div class="body">
 						<form class="wrap" (ngSubmit)="onSubmit(false)" novalidate>

@@ -69,6 +69,32 @@ export class GlobalService {
                 }
             }
         },
+        filter: {
+            hotelname: {
+                val: '',
+                active: false
+            },
+            hotelprice: {
+                val: [0, 2000],
+                min: 0,
+                max: 2000
+            },
+            bit: {
+                val: 0,
+                mask: 0,
+                masks: []
+            }
+        },
+        sort: {
+            price: {
+                desc: false,
+                asc: false
+            },
+            rating: {
+                desc: false,
+                asc: false
+            }
+        },
         hotels: {},
         loading: 'assets/img/loading.gif',
         loadSearch: undefined,

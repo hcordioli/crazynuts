@@ -1,14 +1,6 @@
-<div class="app-busca" [hidden]="vars.loadHotel === undefined">
-	<div *ngIf="vars.hotelList.HotelListResponse;then content else other_content"></div>
+<div class="app-busca" [hidden]="vars.loadSearch === undefined">
+	<div *ngIf="vars.loadSearch;then content else other_content"></div>
 </div>
-<p>
-	<span [textContent]="params.chld||'0'"></span>
-	<span [textContent]="params.id||'1'"></span>
-	<span [textContent]="params.in||'2'"></span>
-	<span [textContent]="params.out||'3'"></span>
-	<span [textContent]="params.apt||'4'"></span>
-	<span [textContent]="params.tst||'5'"></span>
-</p>
 <ng-template #content>
 	<style>
 	@font-face {
@@ -62,7 +54,7 @@
 					<div class="hotelprice">
 						<div class="wrap">
 							<h4>Preço por noite</h4>
-							<em>Min <span [textContent]="vars.filter.hotelprice.val[0] | currency:'BRL':true:'1.0-0'"></span> a <span [textContent]="vars.filter.hotelprice.val[1] | currency:'BRL':true:'1.0-0'"></span> Max</em>
+							<em>Min <span [textContent]="vars.filter.hotelprice.val[0] | currency:'BRL':'code':'1.0-0'"></span> a <span [textContent]="vars.filter.hotelprice.val[1] | currency:'BRL':'code':'1.0-0'"></span> Max</em>
 							<nouislider [step]="1" [connect]="true" [min]="vars.filter.hotelprice.min" [max]="vars.filter.hotelprice.max" [(ngModel)]="vars.filter.hotelprice.val"></nouislider>
 						</div>
 					</div>
@@ -142,7 +134,7 @@
 					</ul>
 				</div>
 			</div>
-			<ul *ngIf="vars.hotelList.HotelListResponse">
+			<ul *ngIf="vars.loadHotel">
 				<li [attr.style]="cardShadow(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color)" [attr.class]="'wrap ' + 'cardN' + i + ' '" *ngFor="let item of vars.hotelList.HotelListResponse; let i = index;">
 					<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1" [attr.data-test]="(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color ? ('box-shadow: 0px 0px 16px 4px ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color + ';') : '')">
 						<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">

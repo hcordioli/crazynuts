@@ -1,8 +1,8 @@
 <div class="html-optbar">
 	<form class="wrap" (ngSubmit)="onSubmit(false)" novalidate>
 		<div class="search">
-			<label>
-				<ng2-completer (input)="onCompleterInput($event)" (focus)="onCompleterFocus($event)" [selectOnFocus]="false" (blur)="onCompleterBlur($event)" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="vars.mdl.busca.init" [autoMatch]="true" [inputClass]="vars.mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="vars.mdl.busca.placeholder" [(ngModel)]="vars.mdl.busca.val" [datasource]="regions" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+			<label *ngIf="options.startDate">
+				<ng2-completer (input)="onCompleterInput($event)" (focus)="onCompleterFocus($event)" [selectOnFocus]="false" (blur)="onCompleterBlur($event)" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="vars.mdl.busca.init" [autoMatch]="true" [inputClass]="vars.mdl.busca.cls" [autofocus]="false" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="vars.mdl.busca.placeholder" [(ngModel)]="vars.mdl.busca.val" [datasource]="regions" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 				<span class="icon"></span>
 			</label>
 		</div>
@@ -39,13 +39,11 @@
 				<div [attr.class]="'room' + (show.rooms ? ' show topArrow rightAlign' : '')">
 					<div class="header">
 						<a (click)="show.room = n" [attr.class]="'btn' + (show.room === n ? ' bgc c1 active':'')" *ngFor="let p of vars.mdl.room.people.list; let n = index;">
-											<span>
-												Quarto {{n + 1}}
-											</span>
-										</a>
+							<span>Quarto {{n + 1}}</span>
+						</a>
 						<span [hidden]="vars.mdl.room.total <= 1" class="icon-remove remove" (click)="rmRoom(show.room)">
-											<img [attr.src]="vars.icons.base + vars.icons.remove" alt="&times;">
-										</span>
+							<img [attr.src]="vars.icons.base + vars.icons.remove" alt="&times;">
+						</span>
 					</div>
 					<div class="content" #quartosWrap>
 						<div [attr.class]="'room' + (n + 1) + ' ' + (show.room > n ? 'alignL' : (show.room === n ? 'alignC' : 'alignR'))" *ngFor="let p of vars.mdl.room.people.list; let n = index;">

@@ -12,7 +12,6 @@ import { Router } from '@angular/router';
     styleUrls: ['./optbar.component.scss'],
     encapsulation: ViewEncapsulation.None,
     host: {
-        '(window:scroll)': 'onScroll($event)',
         '(document:click)': 'onClick($event)',
         '(document:keyup)': 'onFocus($event)',
         '(document:keydown)': 'onKey($event)',
@@ -24,10 +23,10 @@ export class OptbarComponent implements AfterViewInit {
     @ViewChild(DaterangePickerComponent) rangepicker: DaterangePickerComponent;
     @ViewChild('rooms') rooms: ElementRef;
     public urlSubmit = {
-    	id: '',
-    	in: '',
-    	out: '',
-    	apt: ''
+        id: '',
+        in: '',
+        out: '',
+        apt: ''
     };
     public daterange: any = {};
     public options: any = {
@@ -37,7 +36,7 @@ export class OptbarComponent implements AfterViewInit {
             daysOfWeek: ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'],
         },
         alwaysShowCalendars: false,
-        autoApply: false,
+        autoApply: true,
         autoUpdateInput: true,
         showDropdowns: true,
         minDate: (new Date()),
@@ -87,9 +86,23 @@ export class OptbarComponent implements AfterViewInit {
                 }
             }
         }
+        if (Utils.cookie('entrada'))
+            self.options.startDate = new Date(Utils.cookie('entrada'));
+        else
+            self.options.startDate = new Date();
+        if (Utils.cookie('saida'))
+            self.options.endDate = new Date(Utils.cookie('saida'));
     }
 
-    ngAfterViewInit() {}
+    ngAfterViewInit() {
+        var self = this;
+        if(self.rangepicker.datePicker.startDate)
+            self.urlSubmit.in = Utils.date2str('', self.rangepicker.datePicker.startDate._d);
+        if(self.rangepicker.datePicker.endDate)
+            self.urlSubmit.out = Utils.date2str('', self.rangepicker.datePicker.endDate._d);
+        if (self.cookied)
+            self.rooms.nativeElement.className += ' touched';
+    }
 
     public addRoom(index) {
         var self = this,
@@ -211,7 +224,8 @@ export class OptbarComponent implements AfterViewInit {
             self.vars.mdl.busca.regionId = e.description || '0';
             self.vars.mdl.busca.icon = e.image;
             self.vars.mdl.busca.val = title;
-            self.vars.hotelsUrl.base = '';
+            if(self.vars.hotelsUrl)
+                self.vars.hotelsUrl.base = '';
             if (self.vars.filter) {
                 self.vars.filter.hotelname.active = false;
             }
@@ -331,17 +345,16 @@ export class OptbarComponent implements AfterViewInit {
     }
     public selectedDate(value: any) {
         var self = this;
-        console.log(value);	
         if (value.start) {
             self.vars.mdl.entrada.val = value.start.format('MM/DD/YYYY');
             self.vars.mdl.entrada.txt = value.start.format('DD/MM/YY');
-			self.urlSubmit.in = Utils.date2str('', value.start._d);
+            self.urlSubmit.in = Utils.date2str('', value.start._d);
             self.daterange.start = value.start;
         }
         if (value.end) {
             self.vars.mdl.saida.val = value.end.format('MM/DD/YYYY');
             self.vars.mdl.saida.txt = value.end.format('DD/MM/YY');
-			self.urlSubmit.out = Utils.date2str('', value.end._d);
+            self.urlSubmit.out = Utils.date2str('', value.end._d);
             self.daterange.end = value.end;
         } else {
             self.vars.mdl.saida.val = '';
@@ -370,7 +383,6 @@ export class OptbarComponent implements AfterViewInit {
                     for (j = 0; j < tmp.less18.list.length; j++)
                         quartos += ',' + tmp.less18.list[j].age
             }
-            quartos = quartos.replace(/^[_]/, '');
             if (self.show.keys) {
                 if (!k.api || !k.cid || !k.secret) {
                     alert('Favor inserir token');
@@ -406,11 +418,12 @@ export class OptbarComponent implements AfterViewInit {
         self.vars.hotelsUrl.page = 'page=0';
         self.vars.hotelList.page = 0;
         self.urlSubmit.id = m.busca.regionId;
+        self.urlSubmit.apt = quartos;
         tmp = [
-        	self.urlSubmit.id,
-        	self.urlSubmit.in,
-        	self.urlSubmit.out,
-        	quartos
+            self.urlSubmit.id,
+            self.urlSubmit.in || Utils.date2str(''),
+            self.urlSubmit.out || Utils.date2str(''),
+            quartos
         ].join('/');
         self.router.navigate(['/' + tmp]);
     }

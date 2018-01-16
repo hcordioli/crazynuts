@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewEncapsulation, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { GlobalService } from './../global/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { Utils } from './../utils/utils';
     styleUrls: ['./busca.component.scss'],
     encapsulation: ViewEncapsulation.None
 })
-export class BuscaComponent implements AfterViewInit {
+export class BuscaComponent implements OnInit {
 
     public sub;
     public params;
@@ -143,14 +143,12 @@ export class BuscaComponent implements AfterViewInit {
             'fa-check'
         ]
     }
-    constructor(private gd: GlobalService, private cd: ChangeDetectorRef, private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router, private httpC: HttpClient) {
+    constructor(private gd: GlobalService, private _sanitizer: DomSanitizer, private route: ActivatedRoute, private router: Router, private httpC: HttpClient) {
         var self = this,
             arr = [],
             i, j;
         self.vars = gd.vars;
         self.httpC = httpC;
-        self.vars.loadSearch = false;
-        self.vars.hotelList.HotelListResponseStr = null;
         arr = [{
                 str: 'Filtros Mais Usados',
                 arr: [
@@ -246,6 +244,8 @@ export class BuscaComponent implements AfterViewInit {
                 ]
             }
         ];
+        self.vars.loadSearch = false;
+        self.vars.hotelList.HotelListResponseStr = null;
         for (i = 0; i < arr.length; i++) {
             self.vars.filter.bit.masks.push({
                 str: arr[i].str,
@@ -266,7 +266,7 @@ export class BuscaComponent implements AfterViewInit {
         for (i = 0; i < self.show.masks.length; i++)
             self.show.masks[i] = true;
     }
-    ngAfterViewInit() {
+    ngOnInit() {
         var self = this;
         self.sub = self.route
             .params
@@ -287,7 +287,6 @@ export class BuscaComponent implements AfterViewInit {
                     arr.push((self.params.in | 0));
                     arr.push((params.out | 0) || self.params.in);
                     arr.push(params.apt || '_1=2');
-                    self.vars.mdl.busca
                     if (!(self.params.out | 0))
                         self.router.navigate([arr.join('/')]);
                     else
@@ -321,7 +320,6 @@ export class BuscaComponent implements AfterViewInit {
                 )
             ].join('&')).replace(/\&+/gi, '&').replace(/\&*$/gi, '')).subscribe(hotelList => {
             setTimeout(function() {
-                self.cd.detectChanges();
                 self.vars.loadSearch = true;
             }, 0);
             var tgtComP = 0.13,
@@ -444,12 +442,20 @@ export class BuscaComponent implements AfterViewInit {
                     h.HotelListResponse = null;
                 }
             }
-            h.state = 2;
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
             alert(erro);
             setTimeout(function() {
-                h.HotelListResponseStr = isScroll ? '' : 'Erro: ' + erro;
+                erro = isScroll ? '' : 'Erro: ' + erro;
+                h.HotelListResponseStr = erro;
+                setTimeout(function() {
+                    var arr = [];
+                    arr.push(self.params.id);
+                    arr.push((self.params.in | 0));
+                    arr.push((self.params.out | 0) || self.params.in);
+                    arr.push(self.params.apt || '_1=2');
+                    self.router.navigate([arr.join('/')]);
+                }, 0);
             }, 1000)
             // try {
             //     h.HotelListResponseStr = erro;
@@ -458,7 +464,6 @@ export class BuscaComponent implements AfterViewInit {
             //     h.HotelListResponseStr = 'Erro!';
             //     h.HotelListResponse = null;
             // }
-            // h.state = 3;
         });
     }
     public onScrollTimer;

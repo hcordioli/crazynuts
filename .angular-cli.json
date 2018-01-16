@@ -22,7 +22,8 @@
         "testTsconfig": "tsconfig.spec.json",
         "prefix": "app",
         "styles": [
-            "styles.scss"
+            "styles.scss",
+            "nouislider.min.css"
         ],
         "scripts": [],
         "environmentSource": "environments/environment.ts",

@@ -37,7 +37,7 @@ export class Regions extends Subject < CompleterItem[] > implements CompleterDat
                                 (data.regionType.indexOf('Airport') > -1 ? 'airport' : 'default'))))));
         return ( < CompleterItem > {
             title: typeof data === 'string' ? data : data.regionNameLong,
-            image: 'assets/img/icons/search-' + nome + '.png',
+            image: 'assets/img/icons/region/' + nome + '.png',
             description: data.regionId || data.description || 0,
             originalObject: data
         });

@@ -17,8 +17,9 @@ import { BookingComponent } from './booking/booking.component';
 import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
 import { CommonModule, NgStyle, NgForOf, registerLocaleData } from '@angular/common';
 import { BuscaComponent } from './busca/busca.component';
-import { Html } from './html.title/html.title.component';
 import { TitleComponent } from './html/title/title.component';
+import { HtmlComponent } from './html/html.component';
+import { OptbarComponent } from './html/optbar/optbar.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -31,8 +32,9 @@ registerLocaleData(localePt, 'pt-BR');
         DetalheComponent,
         ConfirmacaoComponent,
         BuscaComponent,
-        Html.TitleComponent,
         TitleComponent,
+        HtmlComponent,
+        OptbarComponent,
     ],
     imports: [
         FormsModule,

@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { GlobalService } from './../global/global.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -8,7 +9,10 @@ import { ActivatedRoute, Router } from '@angular/router';
   encapsulation: ViewEncapsulation.None
 })
 export class RootComponent implements OnInit {
-    constructor() {}
+    public vars: any;
+    constructor(private gd: GlobalService) {
+        this.vars = gd.vars;
+    }
     ngOnInit() {
     }
 }

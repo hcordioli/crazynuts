@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GlobalService } from './../global/global.service';
 
 @Component({
     selector: 'app-busca',
@@ -9,11 +10,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class BuscaComponent implements OnInit {
 
-    constructor(private route: ActivatedRoute, private router: Router) {}
     public sub;
     public params;
+    public vars: any;
     public json2str(arg) {
         return JSON.stringify(arg);
+    }
+    constructor(private gd: GlobalService, private route: ActivatedRoute, private router: Router) {
+        var self = this;
+        self.vars = gd.vars;
     }
     ngOnInit() {
         var self = this;

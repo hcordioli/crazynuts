@@ -1,0 +1,585 @@
+.room.topArrow,
+.completer-dropdown {
+	position: relative;
+	margin-top: 22px;
+	&:before,
+	&:after {
+		content: '';
+		display: block;
+		position: absolute;
+		left: 1rem;
+		top: -16px;
+		width: 0;
+		height: 0;
+	}
+	&:before {
+		border: 0 solid transparent;
+		border-width: 0 16px 16px 16px;
+		border-bottom-color: #aaa;
+	}
+	&:after {
+		border: 0 solid transparent;
+		border-width: 0 15px 15px 15px;
+		border-bottom-color: #fff;
+		margin-top: 2px;
+		margin-left: 1px;
+	}
+	&.rightAlign:before,
+	&.rightAlign:after {
+		left: auto;
+		right: 1rem;
+	}
+	&.rightAlign:after {
+		margin-left: 0;
+		margin-right: 1px;
+	}
+}
+form {
+	position: relative;
+	z-index: 2;
+	&>div {
+		&.search,
+		&.opt,
+		&.opt>div {
+			float: left;
+			position: relative;
+			width: 50%;
+		}
+		&.eanKeys {
+			display: block;
+			clear: both;
+			padding-top: 2rem;
+		}
+		.submit {
+			position: relative;
+			padding-left: .7rem;
+		}
+		.rooms {
+			position: relative;
+			padding-left: .7rem;
+			&:before {
+				width: .7rem;
+				height: 100%;
+				display: block;
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				cursor: default;
+			}
+		}
+		.dateRange label {
+			position: relative;
+			display: block;
+			z-index: 1;
+			& input:focus~div .txt,
+			{
+				border-color: #243E6F;
+			}
+			.label {
+				position: absolute;
+				top: 0;
+				left: 0;
+				z-index: 1;
+				width: 90%;
+				height: 100%;
+				display: block;
+				padding: 0.5rem;
+				font-size: 1rem;
+				color: #aaa;
+				cursor: pointer;
+				margin-left: 0.7rem;
+				span {
+					vertical-align: middle;
+					display: inline-block;
+					white-space: nowrap;
+				}
+			}
+			.txt {
+				width: 100%;
+				height: 100%;
+				border: 1px solid #aaa;
+				border-radius: 4px;
+				background-color: #fff;
+				display: block;
+				padding: 0.6rem;
+				vertical-align: middle;
+				font-size: 1rem;
+				color: #222;
+			}
+			input:focus,
+			input.ng-dirty,
+			input.ng-touched,
+			&.touched,
+			& .touched {
+				span.label,
+				div .label,
+				&~.label {
+					display: none;
+				}
+			}
+		}
+
+		input {
+			border-radius: 4px;
+			border: 1px solid #aaa;
+			display: block;
+			width: 100%;
+			font-size: 1rem;
+			padding: 0.5rem;
+			color: #222;
+			&:focus {
+				border-color: #243E6F;
+			}
+		}
+
+		&.search {
+			label {
+				display: inline-block;
+				width: 100%;
+				vertical-align: top;
+			}
+			[ng-reflect-model=""]+div,
+			input.lessthanthree+div {
+				display: none;
+			}
+			.completer-holder {
+				position: absolute;
+				top: 0;
+				left: 0;
+				width: 100%;
+				z-index: 1;
+				text-align: left;
+				.completer-dropdown-holder {
+					margin-top: 22px;
+					position: relative;
+					.completer-dropdown {
+						width: 100%;
+						border: 1px solid #aaa;
+						margin: 0;
+						border-radius: 0;
+						margin-bottom: 2rem;
+						position: absolute;
+						.completer-row-wrapper {
+							.completer-row {
+								width: 100%;
+								margin: 0;
+								border-radius: 0;
+								white-space: nowrap;
+								overflow: hidden;
+								&.completer-selected-row {
+									color: #fff;
+									background-color: #243E6F;
+									width: 100%;
+								}
+								.completer-image-holder {
+									float: none;
+									display: inline-block;
+									width: auto;
+									vertical-align: middle;
+									.completer-image {
+										max-width: 1.489rem;
+										width: 100%;
+										display: block;
+										height: auto;
+										&[src="assets/img/icons/lvl1.png"] {
+											margin-left: 2rem;
+										}
+									}
+								}
+								.completer-item-text {
+									float: none;
+									display: inline-block;
+									width: auto;
+									vertical-align: middle;
+									.completer-title {
+										.completer-list-item {}
+										.completer-highlighted-word {
+											color: #fff;
+											background-color: #C0252E;
+										}
+									}
+									.completer-description {
+										display: none;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+			input {
+				padding-left: 2rem;
+				&::-webkit-input-placeholder {
+					color: #aaa;
+				}
+				&::-moz-placeholder {
+					color: #aaa;
+				}
+				&:-ms-input-placeholder {
+					color: #aaa;
+				}
+				&:-moz-placeholder {
+					color: #aaa;
+				}
+			}
+			.icon {
+				z-index: 1;
+				position: absolute;
+				font-size: 1.8rem;
+				display: inline-block;
+				width: 0.4em;
+				height: 0.4em;
+				border: 0.08em solid #aaa;
+				border-radius: 50%;
+				left: 0.4em;
+				top: 0.7rem;
+				&:before {
+					content: '';
+					display: inline-block;
+					position: absolute;
+					right: -0.25em;
+					bottom: -0.15em;
+					border-width: 0;
+					background: #aaa;
+					width: 0.3em;
+					height: 0.08em;
+					transform: rotate(45deg);
+				}
+			}
+		}
+
+		&.opt {
+			.dateRange {
+				width: 49%;
+				&>label {
+					&>input {
+						/* 									margin-left: .7rem;
+														}
+														& .checkin,
+														& .checkout {
+						 */
+						position: fixed;
+						top: -999rem;
+						left: -999rem;
+						width: 0;
+						height: 0;
+						z-index: -1;
+					}
+					&>div {
+						float: left;
+						position: relative;
+						width: 50%;
+						padding-left: .7rem;
+						overflow: hidden;
+						&:before {
+							width: .7rem;
+							height: 100%;
+							display: block;
+							content: '';
+							position: absolute;
+							background-color: #fff;
+							top: 0;
+							left: 0;
+							cursor: default;
+						}
+					}
+					#pickMe {
+						position: absolute;
+						top: 0;
+						left: 0;
+						display: block;
+						float: none;
+						width: 100%;
+						height: 100%;
+						overflow: visible;
+						z-index: -1;
+						&.topArrow {
+							margin-top: 22px;
+							& .daterangepicker {
+								&:before,
+								&:after {
+									content: '';
+									display: block;
+									position: absolute;
+									left: auto;
+									right: 66%;
+									top: -16px;
+									width: 0;
+									height: 0;
+								}
+								&:before {
+									border: 0 solid transparent;
+									border-width: 0 16px 16px 16px;
+									border-bottom-color: #aaa;
+								}
+								&:after {
+									border: 0 solid transparent;
+									border-width: 0 15px 15px 15px;
+									border-bottom-color: #fff;
+									margin-top: 2px;
+									margin-right: 1px;
+								}
+							}
+							&.rightAlign .daterangepicker {
+								&:before,
+								&:after {
+									left: auto;
+									right: 46%;
+								}
+								&:after {
+									margin-right: 1px;
+								}
+							}
+						}
+						&>.daterangepicker {
+							display: none;
+							position: absolute;
+							color: #222;
+							background: #fff;
+							border-radius: 4px;
+							width: 278px;
+							padding: 4px;
+							margin: 0;
+							top: 100% !important;
+							left: -50% !important;
+							width: 250% !important;
+							border: 1px solid #aaa;
+							& .calendar {
+								width: 49%;
+								max-width: 49%;
+								.fa-calendar.glyphicon,
+								.input-mini {
+									position: fixed;
+									top: -999rem;
+									left: -999rem;
+									width: 0;
+									height: 0;
+									z-index: -1;
+								}
+								td {
+									line-height: 1.5;
+								}
+								td.in-range {
+									background-color: #aaa;
+									color: #222;
+								}
+								td.active,
+								td.active:hover {
+									background-color: #243E6F;
+									color: #fff;
+								}
+								.month {
+									font-weight: 600;
+									padding: 0.5rem 0 1rem;
+								}
+							}
+							& .ranges {
+								display: none;
+							}
+						}
+					}
+				}
+			}
+			.rooms {
+				width: 30%;
+				cursor: pointer !important;
+				&.focus .quartos {
+					border-color: #243E6F;
+				}
+				.quartos {
+					border: 1px solid #aaa;
+					border-radius: 4px;
+					display: block;
+					width: 100%;
+					font-size: 1rem;
+					padding: 0.44rem;
+					line-height: 1.2;
+					color: #aaa;
+					text-align: left;
+					.pessoas {
+						float: right;
+						position: absolute;
+						right: 1rem;
+						background-color: #fff;
+						top: 50%;
+						transform: translate(0, -50%);
+					}
+				}
+				&.focus {
+					margin-bottom: 11rem;
+				}
+				&.touched {
+					cursor: default;
+					.quartos .label .val {
+						color: #222;
+					}
+				}
+				.room {
+					display: none;
+					position: absolute;
+					right: 0;
+					top: 100%;
+					width: 256%;
+					border: 1px solid #aaa;
+					padding: 1rem;
+					background-color: #fff;
+					z-index: 1;
+					.content {
+						overflow: hidden;
+						position: relative;
+						min-height: 11rem;
+						&>div {
+							position: absolute;
+							top: 0;
+							left: 0;
+							height: 100%;
+							width: 100%;
+							display: block;
+							transition: left .4s ease;
+							background-color: #fff;
+						}
+					}
+					.header {
+						color: #222;
+						border-bottom: 1px solid #aaa;
+						display: block;
+						padding-bottom: 0.5rem;
+						margin-bottom: 1.5rem;
+						text-align: left;
+						.btn {
+							padding: 0.5rem;
+							cursor: pointer;
+							&.active {
+								cursor: default;
+								color: #fff;
+							}
+						}
+						.remove {
+							float: right;
+							font-weight: 600;
+							font-size: 2rem;
+							cursor: pointer;
+							line-height: 0.5;
+						}
+					}
+					.campos {
+						padding-bottom: 1rem;
+						overflow: auto;
+						height: 100%;
+						display: block;
+						width: 100%;
+						label {
+							margin-right: 1rem;
+							margin-bottom: 1rem;
+						}
+						label span {
+							white-space: nowrap;
+							padding-bottom: 0.2rem;
+						}
+						.people {
+							display: block;
+							float: left;
+							width: 50%;
+							label,
+							label span,
+							label input {
+								display: block;
+							}
+						}
+						.children {
+							display: block;
+							float: left;
+							width: 50%;
+							label span {
+								white-space: nowrap;
+							}
+							label,
+							label span,
+							label input {
+								float: left;
+								width: 4.4rem;
+							}
+						}
+					}
+				}
+				.room.show {
+					display: block;
+					cursor: default !important;
+					.alignL {
+						left: -100%;
+					}
+					.alignC {
+						left: 0%;
+					}
+					.alignR {
+						left: 100%;
+					}
+				}
+				.add {
+					cursor: pointer;
+					text-decoration: none;
+					color: #fff;
+					padding: 0.5rem;
+					display: inline-block;
+					margin: 1rem 0 0;
+					float: right;
+					&[hidden] {
+						visibility: hidden;
+					}
+					&.disabled {
+						background-color: #aaa;
+					}
+					&:focus,
+					&:hover,
+					&:active {
+						opacity: .7;
+					}
+				}
+			}
+			.submit {
+				width: 21%;
+				border: 1px solid #fff;
+				input {
+					line-height: normal;
+					overflow: visible;
+					appearance: button;
+					user-select: none;
+					color: #fff;
+					border: 0;
+					text-align: center;
+					cursor: pointer;
+					border: 1px solid #243E6F;
+					&:focus,
+					&:hover,
+					&:active {
+						opacity: .7;
+					}
+				}
+			}
+		}
+		.icon-remove {
+			width: 1.4rem;
+			display: inline-block;
+			margin-top: -0.3rem;
+			img {
+				width: 100%;
+				height: auto;
+				display: block;
+			}
+			&[hidden] {
+				visibility: hidden;
+			}
+		}
+		.icon-room,
+		.icon-people {
+			width: 1rem;
+			display: inline-block;
+			img {
+				width: 100%;
+				height: auto;
+				display: block;
+			}
+		}
+	}
+}

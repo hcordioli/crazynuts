@@ -1,0 +1,28 @@
+body {
+	& .app-main {
+		height: 100%;
+	}
+	.app-home {
+		height: 100%;
+		text-align: center;
+		&>div {
+			height: 100%;
+			&:before {
+				content: '';
+				width: 0!important;
+				padding: 0 !important;
+				height: 100vh;
+				display: inline-block;
+				vertical-align: middle;
+			}
+			&>div {
+				display: inline-block;
+				vertical-align: middle;
+				padding: 0 3rem;
+				width: 99%;
+			}
+		}
+		.body {
+		}
+	}
+}

@@ -1,0 +1,35 @@
+.head {
+	padding-bottom: 2rem;
+	text-align: center;
+	margin-top: -18%;
+	position: relative;
+	&>h1,
+	&>p {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	h1 {
+		transition: width 1s ease;
+		width: 29.3rem;
+		height: 9.4rem;
+		border-right: 1px solid #aaa;
+		width: 51%;
+		float: left;
+		height: auto;
+		img {}
+	}
+	p {
+		font-size: 1.18rem;
+		font-weight: 600;
+		text-align: left;
+		padding-left: 1.1rem;
+		line-height: 1.2;
+		width: 49%;
+		float: left;
+		transform: translate(0, -50%);
+		position: absolute;
+		top: 50%;
+		left: 52%;
+		padding: 0;
+	}
+}

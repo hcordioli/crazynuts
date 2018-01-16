@@ -80,7 +80,7 @@
 			<input placeholder="eanSharedSecret" name="secret" [(ngModel)]="vars.mdl.keys.secret">
 		</div>
 	</form>
-	<div class="sub" *ngIf="vars.loadHotel">
+	<div class="sub" *ngIf="vars.loadSearch">
 		<span class="txt">{{vars.mdl.busca.lastVal}}: {{vars.hotelList.properties}} propriedade{{vars.hotelList.properties > 1 ? 's' : ''}}</span>
 	</div>
 </div>

@@ -650,7 +650,7 @@ export class BuscaComponent implements OnInit {
         var self = this,
             url = self.router.url.split('/').slice(0, 5);
         url[1] = id;
-        return document.baseURI + '/detalhe' + url.join('/');
+        return document.baseURI + 'detalhe' + url.join('/');
     }
     public sortBy(e, str, bool) {
         var self = this,

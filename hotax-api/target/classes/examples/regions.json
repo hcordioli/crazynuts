@@ -1,0 +1,66 @@
+  [
+    {
+      "regionId" : "234", 
+      "regionType" : "Province (State)",
+      "regionName" : "New York",
+      "regionNameLong" : "New York, United States of America",
+      "parentRegionId" : "201",
+      "parentRegionName" : "United States of America"
+    }, 
+    {
+      "regionId": "1208", 
+      "regionType" : "City",
+      "regionName" : "Fishers Island",
+      "regionNameLong" : "Fishers Island, New York, United States of America",
+      "parentRegionId": "234",
+      "parentRegionName" : "New York, United States of America"
+    },
+    {
+      "regionId": "1524", 
+      "regionType" : "City",
+      "regionName" : "East Hampton",
+      "regionNameLong" : "East Hampton, New York, United States of America",
+      "parentRegionId": "234",
+      "parentRegionName" : "New York, United States of America"
+    },
+    {
+      "regionId": "7391", 
+      "regionType" : "City",
+      "regionName" : "Waterloo",
+      "regionNameLong" : "Waterloo, New York, United States of America",
+      "parentRegionId": "234",
+      "parentRegionName" : "New York, United States of America"
+    },
+    {
+      "regionId": "6181516", 
+      "regionType" : "Point of Interest",
+      "regionName" : "Discovery Center",
+      "regionNameLong" : "Discovery Center, Binghamton, New York, United States of America",
+      "parentRegionId": "234",
+      "parentRegionName" : "New York, United States of America"
+    },
+     {
+      "regionId": "2297", 
+      "regionType" : "City",
+      "regionName" : "Miami",
+      "regionNameLong" : "Miami, Florida, United States of America",
+      "parentRegionId": "178286",
+      "parentRegionName" : "Miami (and vicinity), Florida, United States of America"
+    },
+     {
+      "regionId": "800070", 
+      "regionType" : "Neighborhood",
+      "regionName" : "Downtown Miami",
+      "regionNameLong" : "Downtown Miami, Miami, Florida, United States of America",
+      "parentRegionId": "2297",
+      "parentRegionName" : "Miami, Florida, United States of America"
+    },
+     {
+      "regionId": "6048102", 
+      "regionType" : "Neighborhood",
+      "regionName" : "South Miami",
+      "regionNameLong" : "South Miami, Miami, Florida, United States of America",
+      "parentRegionId": "2297",
+      "parentRegionName" : "Miami, Florida, United States of America"
+    }
+  ] 

@@ -1,0 +1,76 @@
+#%RAML 1.0 ResourceTypes 
+
+  member:
+    description: Entity representing a <<resourcePathName|!singularize>> 
+    get:
+      description: |
+        Get the <<resourcePathName|!singularize>> 
+        using id => <<resourcePathName|!singularize>>Id = {Id}
+      responses:
+        200:
+          body:
+            application/json:
+              type: <<resourcePathName|!singularize>>
+              
+        404:
+          body:
+            application/json:
+              example: |
+                {"message" : "Record not found"} 
+                               
+        500:
+          body:
+            application/json:
+              type: exceptionflow
+              example: !include examples/exceptionFlow.json
+
+    put:
+      body:
+        application/json:
+          type: <<resourcePathName|!singularize>>
+      responses:
+        500:
+          body:
+            application/json:
+              type: exceptionflow
+              example: !include examples/exceptionFlow.json
+        
+    delete:
+      responses:
+        500:
+          body:
+            application/json:
+              type: exceptionflow
+              example: !include examples/exceptionFlow.json
+
+  collection:
+    description: Collection of <<resourcePathName>>
+    get:
+      description: Get a list of <<resourcePathName>>
+      responses:
+        200:
+          body:
+            application/json:
+              type: <<resourcePathName>>
+        500:
+          body:
+            application/json:
+              type: exceptionflow
+              example: !include examples/exceptionFlow.json
+
+    post:
+      description: Add a new <<resourcePathName|!singularize>>
+      body:
+        application/json:
+      responses:
+        200:
+          body:
+            application/json:
+              example: |
+               {"message" : "The <<resourcePathName|!singularize>> has been added"}
+        500:
+          body:
+            application/json:
+              type: exceptionflow
+              example: !include examples/exceptionFlow.json
+

@@ -144,7 +144,7 @@ export class OptbarComponent implements AfterViewInit {
             i = index,
             old = p.list[i].more18,
             el;
-        val = val | 0;
+        val = (val | 0);
         if ((p.total + (val - old)) > p.limit) {
             p.list[i].more18 = old;
             el = document.getElementById(nome);
@@ -403,7 +403,7 @@ export class OptbarComponent implements AfterViewInit {
         if (!self.vars.hotelsUrl.base) {
             for (i = 0; i < m.room.people.list.length; i++) {
                 tmp = m.room.people.list[i];
-                quartos += '_' + (i + 1) + '=' + tmp.more18;
+                quartos += '_' + (i + 1) + '-' + tmp.more18;
                 if (tmp.less18.total)
                     for (j = 0; j < tmp.less18.list.length; j++)
                         quartos += ',' + tmp.less18.list[j].age
@@ -419,6 +419,10 @@ export class OptbarComponent implements AfterViewInit {
                     Utils.cookie('secret', k.secret, true);
                 }
             }
+            if (k.api && k.cid && k.secret) {
+                self.vars.hotelsUrl.keys = '&cid=' + k.cid + '&apiKey=' + k.api + '&secret=' + k.secret;
+                Utils.cookie('keys', self.vars.hotelsUrl.keys, true);
+            }
             if (!m.busca.val || m.busca.regionId === '0' || !m.entrada.val || !m.saida.val) {
                 alert('Favor preencher todos os campos');
                 return;
@@ -432,10 +436,10 @@ export class OptbarComponent implements AfterViewInit {
             }
             h.HotelListResponse = null;
             h.HotelListResponseStr = null;
-            self.vars.loadSearch = null;
+            self.vars.loadSearch = true;
             m.busca.lastVal = m.busca.val;
         } else {
-            self.vars.loadSearch = null;
+            self.vars.loadSearch = true;
             h.HotelListResponse = null;
             h.HotelListResponseStr = null;
         }
@@ -449,7 +453,7 @@ export class OptbarComponent implements AfterViewInit {
         tmp[2] += tmp[1].asc ? '2' : (tmp[1].desc ? '1' : '0');
         params.push(tmp[2]);
         params.push(!self.vars.filter.hotelname.active ? 'null' : self.vars.hotelsUrl.filter);
-        params.push(self.vars.filter.bit.mask);
+        params.push(self.vars.filter.bit.val);
         tmp = ([
             self.urlSubmit.id,
             self.urlSubmit.in || Utils.date2str(''),

@@ -1,8 +1,10 @@
-<p>
-	<span [textContent]="params.chld||'0'"></span>
-	<span [textContent]="params.id||'1'"></span>
-	<span [textContent]="params.in||'2'"></span>
-	<span [textContent]="params.out||'3'"></span>
-	<span [textContent]="params.apt||'4'"></span>
-	<span [textContent]="params.tst||'5'"></span>
-</p>
+<div class="app-detalhe" *ngIf="res">
+	<h2 [textContent]="res.hotelName"></h2>
+	<div class="rateStar">
+		<div class="stars">
+			<span [attr.class]="(res.hotelRating % 1 !== 0 && j + 1 > res.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:res.hotelRating; let j = index;">
+				☆
+			</span>
+		</div>
+	</div>
+</div>

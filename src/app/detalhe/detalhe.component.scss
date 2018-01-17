@@ -1,0 +1,18 @@
+.app-main {
+	& .detalhe {
+		& .body {
+			display: none;
+			& .search {
+				display: none;
+			}
+			& .dateRange .checkin {
+				padding-left: 0;
+				&:before {
+					display: none;
+				}
+			}
+		}
+	}
+	.app-detalhe {
+	}
+}

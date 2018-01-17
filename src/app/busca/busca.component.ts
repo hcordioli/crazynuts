@@ -148,6 +148,7 @@ export class BuscaComponent implements OnInit {
             arr = [],
             i, j;
         self.vars = gd.vars;
+        self.vars.path = 'busca';
         self.httpC = httpC;
         arr = [{
                 str: 'Filtros Mais Usados',
@@ -283,16 +284,23 @@ export class BuscaComponent implements OnInit {
                     fMask: params.fMask || '0',
                     fName: params.fName || 'null'
                 }
-                if(self.params.fName === 'null')
+                self.loading = true;
+        console.log(JSON.stringify(self.vars.filter.bit));
+                self.vars.filter.bit.val = params.fMask;
+                if (self.params.fName === 'null')
                     self.vars.filter.hotelname.active = false;
-                tmp = self.params.sort[0] | 0;
-                if(tmp)
-                    self.sortBy('price', (tmp > 1 ? 'asc' : 'desc'));
-                tmp = self.params.sort[1] | 0;
-                if(tmp)
-                    self.sortBy('rating', (tmp > 1 ? 'asc' : 'desc'));
-                if (!params.id)
+                else if (self.vars.filter.hotelname.active)
+                    self.vars.filter.hotelname.val = self.params.fName;
+                tmp = (self.params.sort[0] | 0);
+                if (tmp)
+                    self.sortBy(null, 'price', (tmp > 1 ? 'asc' : 'desc'));
+                tmp = (self.params.sort[1] | 0);
+                if (tmp)
+                    self.sortBy(null, 'rating', (tmp > 1 ? 'asc' : 'desc'));
+                if (!params.id) {
+                    console.log('/');
                     self.router.navigate(['/']);
+                }
                 else {
                     if (!(params.in | 0))
                         self.params.in = Utils.date2str('');
@@ -300,11 +308,13 @@ export class BuscaComponent implements OnInit {
                     arr.push((self.params.in | 0));
                     arr.push((params.out | 0) || self.params.in);
                     arr.push(params.apt || '_1=2');
-                    if (!(self.params.out | 0))
+                    if (!(self.params.out | 0)) {
+                        console.log(arr);
                         self.router.navigate([arr.join('/')]);
+                    }
                     else {
                         self.loading = false;
-                        if(!self.vars.hotelList.HotelListResponseStr)
+                        if (!self.vars.hotelList.HotelListResponseStr)
                             self.loadHotel();
                     }
                 }
@@ -320,8 +330,15 @@ export class BuscaComponent implements OnInit {
             h = self.vars.hotelList,
             k = m.keys,
             isScroll = self.scrolling;
-        if(self.loading)
+        console.log(self.loading);
+        if (self.loading)
             return;
+        self.vars.loadSearch = false;
+        self.vars.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
+            'regionId=' + (self.params.id || m.busca.regionId);
+        self.vars.hotelsUrl.avail = '&checkin=' + m.entrada.val +
+            '&checkout=' + m.saida.val +
+            self.params.apt.replace(/[_]+/gi, '&room').replace(/[-]+/gi, '=');
         if (h.regionId === m.busca.regionId) {
             if (h.searchId && self.vars.hotelsUrl.base.indexOf('searchId=') < 0)
                 self.vars.hotelsUrl.base += '&searchId=' + h.searchId;
@@ -332,15 +349,14 @@ export class BuscaComponent implements OnInit {
             self.vars.hotelsUrl.page = 'page=0';
             self.vars.hotelList.page = 0;
         }
-        self.vars.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
-            'cid=' + k.cid +
-            '&apiKey=' + k.api +
-            '&secret=' + k.secret +
-            '&checkin=' + m.entrada.val +
-            '&checkout=' + m.saida.val +
-            '&regionId=' + (self.params.id || m.busca.regionId) +
-            self.params.apt.replace(/[_]+/gi, '&room');
+        self.vars.hotelsUrl.keys = self.vars.hotelsUrl.keys || Utils.cookie('keys');
+        if (!self.vars.hotelsUrl.keys) {
+            alert('Favor inserir token');
+            return;
+        }
         self.httpC.get((self.vars.hotelsUrl.base +
+            self.vars.hotelsUrl.keys +
+            self.vars.hotelsUrl.avail +
             '&' + [
                 self.vars.hotelsUrl.page,
                 self.vars.hotelsUrl.sort,
@@ -351,10 +367,7 @@ export class BuscaComponent implements OnInit {
             setTimeout(function() {
                 self.vars.loadSearch = true;
             }, 0);
-            var tgtComP = 0.13,
-                storeComP = 0.15,
-                gpShare = 0.5,
-                msg = 'Erro!',
+            var msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;
             if (isScroll && h.hasMorePages) {
@@ -483,6 +496,7 @@ export class BuscaComponent implements OnInit {
                     arr.push((self.params.in | 0));
                     arr.push((self.params.out | 0) || self.params.in);
                     arr.push(self.params.apt || '_1=2');
+                    console.log(arr);
                     self.router.navigate([arr.join('/')]);
                 }, 0);
             }, 1000)
@@ -632,26 +646,26 @@ export class BuscaComponent implements OnInit {
         if (self.show.compare.length)
             alert(self.show.compare.join(','));
     }
-    public sortBy(str, bool) {
+    public hotelUrl(id) {
+        var self = this,
+            url = self.router.url.split('/').slice(0, 5);
+        url[1] = id;
+        return '/detalhe' + url.join('/');
+    }
+    public sortBy(e, str, bool) {
         var self = this,
             ord = bool ? 'asc' : 'desc';
+        if (e && e.stopPropagation)
+            e.stopPropagation()
         if (self.vars.sort[str][ord] && self.vars.hotelsUrl.sort) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.hotelsUrl.sort = '';
-            if(!self.loading) {
-                console.log(self.router.url);
-                // self.router.navigate([]);
-            }
         } else if (self.vars.sort[str] && ord in self.vars.sort[str]) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.sort[str][ord] = true;
             self.vars.hotelsUrl.sort = 'sort=price&sortorder=' + ord;
-            if(!self.loading) {
-                console.log(self.router.url);
-                // self.router.navigate([]);
-            }
         }
     }
     public hotelnameChange() {

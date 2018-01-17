@@ -96,23 +96,23 @@
 							</a>
 						</li>
 						<li class="item">
-							<span (click)="sortBy('price', (vars.sort.price.asc ? false : true))">
+							<span (click)="sortBy($event, 'price', (vars.sort.price.asc ? false : true))">
 								Preço
-								<a title="Maior no Topo" href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" (click)="sortBy('price', false)">
+								<a title="Maior no Topo" href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" [routerLink]="['', params.id, params.in, params.out, params.apt, params.page, '1' + params.sort[1], params.fMask, params.fName].join('/')">
 									<i class="fa fa-sort-desc"></i>
 								</a>
-								<a title="Menor no Topo" href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" (click)="sortBy('price', true)">
+								<a title="Menor no Topo" href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" [routerLink]="['', params.id, params.in, params.out, params.apt, params.page, '2' + params.sort[1], params.fMask, params.fName].join('/')">
 									<i class="fa fa-sort-asc"></i>
 								</a>
 							</span>
 						</li>
 						<li class="item">
-							<span>
+							<span (click)="sortBy($event, 'rating', (vars.sort.rating.asc ? false : true))">
 								Avaliação
-								<a href="javascript:;" [attr.class]="vars.sort.rating.desc ? 'active' : ''" (click)="sortBy('preco', false)">
+								<a href="javascript:;" [attr.class]="vars.sort.rating.desc ? 'active' : ''" (click)="sortBy($event, 'preco', false)">
 									<i class="fa fa-sort-desc"></i>
 								</a>
-								<a href="javascript:;" [attr.class]="vars.sort.rating.asc ? 'active' : ''" (click)="sortBy('preco', true)">
+								<a href="javascript:;" [attr.class]="vars.sort.rating.asc ? 'active' : ''" (click)="sortBy($event, 'preco', true)">
 									<i class="fa fa-sort-asc"></i>
 								</a>
 							</span>
@@ -225,7 +225,7 @@
 								</div>
 								<div class="details wrap">
 									<div class="selecionar">
-										<a href="javascript:;" class="btn bgc c1">
+										<a target="_blank" [attr.href]="hotelUrl(item.hotelId)" class="btn bgc c1">
 											<span>Selecionar</span>
 										</a>
 									</div>

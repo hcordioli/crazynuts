@@ -2,7 +2,7 @@
 	<form class="wrap" (ngSubmit)="onSubmit()" novalidate>
 		<div class="search">
 			<label *ngIf="options.startDate">
-				<ng2-completer (input)="onCompleterInput($event)" (focus)="onCompleterFocus($event)" [selectOnFocus]="true" (blur)="onCompleterBlur($event)" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="vars.mdl.busca.init" [autoMatch]="true" [inputClass]="vars.mdl.busca.cls" [autofocus]="true" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="vars.mdl.busca.placeholder" [(ngModel)]="vars.mdl.busca.val" [datasource]="regions" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+				<ng2-completer (input)="onCompleterInput($event)" (focus)="onCompleterFocus($event)" [selectOnFocus]="true" (blur)="onCompleterBlur($event)" name="busca" (selected)="onCompleterSelected($event)" [(initialValue)]="vars.mdl.busca.init" [autoMatch]="true" [inputClass]="vars.mdl.busca.cls" [autofocus]="false" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="vars.mdl.busca.placeholder" [(ngModel)]="vars.mdl.busca.val" [datasource]="regions" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
 				<span class="icon"></span>
 			</label>
 		</div>
@@ -71,7 +71,7 @@
 				</div>
 			</div>
 			<div class="submit">
-				<input class="bgc c1" type="submit" value="Busca">
+				<input class="bgc c1" type="submit" [attr.value]="vars.path === 'detalhe' ? 'Atualizar' : 'Busca'">
 			</div>
 		</div>
 		<div class="eanKeys" *ngIf="show.keys">

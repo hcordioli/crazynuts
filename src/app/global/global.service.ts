@@ -7,12 +7,17 @@ interface Obj {
 
 @Injectable()
 export class GlobalService {
-    private fns = {
-        'a': ''
-    }
+/*    private fns = {
+        get: {
+        },
+        set: {
+        }
+    }*/
     vars: Obj = {
         hotelsUrl: {
             base: '',
+            keys: '',
+            avail: '',
             filter: '',
             sort: '',
             page: ''
@@ -102,6 +107,7 @@ export class GlobalService {
         hotels: {},
         loading: 'assets/img/loading.gif',
         loadSearch: undefined,
+        path: '',
         icons: {
             base: 'assets/img/icons/',
             hot: 'card/hot.svg',

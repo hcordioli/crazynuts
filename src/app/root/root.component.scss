@@ -5,6 +5,87 @@ body {
 	.app-home {
 		height: 100%;
 		text-align: center;
+		& .search {
+			&>div {
+				vertical-align: top;
+				height: 0;
+				padding-top: 11rem;
+				position: relative;
+				&>.wrap {
+					position: fixed;
+					top: 0;
+					left: 50%;
+					width: inherit;
+					z-index: 3;
+					background-color: #fff;
+					padding-top: 1rem;
+					padding-bottom: 0.1rem;
+					transform: translate(-50%, 0);
+				}
+				.head {
+					margin: 0;
+					position: relative;
+					padding: 0;
+					margin-bottom: .8rem;
+					h1 {
+						width: 10rem;
+						border: 0;
+					}
+					p {
+						display: none;
+					}
+					.menu {
+						position: absolute;
+						right: 0;
+						top: 0;
+						height: 100%;
+						overflow: hidden;
+						display: block;
+						ul {
+							display: block;
+							cursor: default;
+							li {
+								display: inline-block;
+								a {
+									display: block;
+									text-decoration: none;
+									color: #aaa;
+									font-weight: 600;
+									cursor: default;
+									&:before {
+										cursor: default;
+										content: '|';
+										display: inline-block;
+										vertical-align: middle;
+										margin-right: .5rem;
+									}
+									span {
+										cursor: pointer;
+										vertical-align: middle;
+										display: inline-block;
+										line-height: 2;
+										margin-right: .5rem;
+									}
+								}
+							}
+						}
+					}
+				}
+				.body {
+					.sub {
+						margin-top: 1.3rem;
+						text-align: left;
+						.txt {
+							padding-bottom: 0.7rem;
+							display: block;
+						}
+					}
+					.opt .rooms.focus {
+						margin-bottom: 0;
+					}
+				}
+			}
+		}
 		&>div {
 			height: 100%;
 			&:before {
@@ -22,7 +103,27 @@ body {
 				width: 99%;
 			}
 		}
-		.body {
+		.body {}
+		.rateStar {
+			display: inline-block;
+			.stars {
+				padding: 0.5rem 0;
+				span {
+					color: #ecb939;
+					font-size: 1.15rem;
+					letter-spacing: -0.17rem;
+					position: relative;
+					&:before {
+						content: '\2605';
+						position: absolute;
+						left: 0;
+					}
+					&.half:before {
+						width: 50%;
+						overflow: hidden;
+					}
+				}
+			}
 		}
 	}
 }

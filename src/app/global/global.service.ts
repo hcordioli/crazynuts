@@ -4,8 +4,12 @@ interface Obj {
     [id: string]: any;
 }
 
+
 @Injectable()
 export class GlobalService {
+    private fns = {
+        'a': ''
+    }
     vars: Obj = {
         hotelsUrl: {
             base: '',

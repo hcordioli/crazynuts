@@ -48,7 +48,7 @@ const routes: Routes = [{
         component: DetalheComponent
     },
     {
-        matcher: OptionalRoute(':id/:in?/:out?/:apt?/:page?/:sort?/:fMask?/:fName?'),
+        matcher: OptionalRoute(':id/:in?/:out?/:apt?/:page?/:sort?/:fName?/:fMask?'),
         component: BuscaComponent
     }
 ];

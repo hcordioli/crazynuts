@@ -96,9 +96,9 @@ export class OptbarComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         var self = this;
-        if(self.rangepicker.datePicker.startDate)
+        if (self.rangepicker.datePicker.startDate)
             self.urlSubmit.in = Utils.date2str('', self.rangepicker.datePicker.startDate._d);
-        if(self.rangepicker.datePicker.endDate)
+        if (self.rangepicker.datePicker.endDate)
             self.urlSubmit.out = Utils.date2str('', self.rangepicker.datePicker.endDate._d);
         if (self.cookied)
             self.rooms.nativeElement.className += ' touched';
@@ -224,7 +224,7 @@ export class OptbarComponent implements AfterViewInit {
             self.vars.mdl.busca.regionId = e.description || '0';
             self.vars.mdl.busca.icon = e.image;
             self.vars.mdl.busca.val = title;
-            if(self.vars.hotelsUrl)
+            if (self.vars.hotelsUrl)
                 self.vars.hotelsUrl.base = '';
             if (self.vars.filter) {
                 self.vars.filter.hotelname.active = false;
@@ -253,7 +253,10 @@ export class OptbarComponent implements AfterViewInit {
         var self = this;
         self.onClick.apply(this, arguments)
     }
-    public onClickTimer;
+    public onClickO = {
+        t: < any > 0,
+        old: []
+    };
     public onClick(e) {
         var self = this,
             tgt = e.target,
@@ -262,34 +265,48 @@ export class OptbarComponent implements AfterViewInit {
             val, date;
         if (!e || !tgt)
             return true;
-        if (tgt.id === 'pickMe' || /check(in|out)/gi.exec(tgt.className))
-            tgt = e.target.parentNode.querySelector('.check' + (tgt.id || tgt.className.indexOf('in') > 0 ? 'in' : 'out') + ' > span');
+        if (tgt && tgt.parentNode && tgt.parentNode.parentNode && /check(in|out)/gi.exec(tgt.parentNode.parentNode.className))
+            tgt = tgt.parentNode;
+        if (e.target.id === 'pickMe' || /check(in|out)/gi.exec(e.target.className))
+            tgt = e.target.parentNode.querySelector('.check' + (tgt.id || /in/gi.exec(tgt.className) ? 'in' : 'out') + ' > span');
         if (/check(in|out)/gi.exec(tgt.parentNode.className)) {
-            start = tgt.parentNode.className.indexOf('in') > 0;
+            start = !!(/in/gi.exec(tgt.parentNode.className));
             self.show.calendarRight = !start;
             date = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');
             if (date) {
-                clearTimeout(self.onClickTimer);
-                self.onClickTimer = setTimeout(function() {
-                    self.rangepicker.datePicker.formInputsFocused.call(self.rangepicker.datePicker, {
-                        target: date
-                    });
+                clearTimeout(self.onClickO.t);
+                self.onClickO.t = setTimeout(function() {
+                    self.show.rooms = false;
+                    self.onClickO.old = [{
+                            txt: self.vars.mdl.entrada.txt,
+                            val: self.vars.mdl.entrada.val
+                        },
+                        {
+                            txt: self.vars.mdl.saida.txt,
+                            val: self.vars.mdl.saida.val
+                        }
+                    ];
+                    if (!start) {
+                        self.rangepicker.datePicker.formInputsFocused.call(self.rangepicker.datePicker, {
+                            target: date
+                        });
+                    }
                 }, 0);
             }
         } else if (/(start|end)[-]date/.exec(tgt.className)) {
-            self.show.calendarRight = self.vars.mdl.saida.val === '';
-            start = (tgt.className.indexOf('start') > 0 && !self.show.calendarRight) || false;
+            start = !!(/start/gi.exec(tgt.className));
+            self.show.calendarRight = !start;
             val = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');
             val = val ? val.value : '';
             val = (val || '/').split('/');
             if (val && val.length && val.length > 2 && (parseInt(val[1], 10) === parseInt(tgt.innerHTML, 10))) {
                 date = val.join('/');
                 val[2] = val[2].slice(-2);
-                clearTimeout(self.onClickTimer);
-                self.onClickTimer = setTimeout(function() {
+                clearTimeout(self.onClickO.t);
+                self.onClickO.t = setTimeout(function() {
                     if (self.rangepicker.datePicker.startDate)
                         self.blurDates[0] = self.rangepicker.datePicker.startDate.clone();
-                    if (start && self.rangepicker.datePicker.endDate)
+                    if (!start && self.rangepicker.datePicker.endDate)
                         self.blurDates[1] = self.rangepicker.datePicker.endDate.clone();
                     else
                         self.blurDates[1] = null;
@@ -299,6 +316,7 @@ export class OptbarComponent implements AfterViewInit {
                         txt: [val[1], val[0], val[2]].join('/')
                     };
                     if (!start) {
+                        self.onClickO.old = [];
                         self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
                         self.show.calendarRight = null;
                     } else {
@@ -310,6 +328,12 @@ export class OptbarComponent implements AfterViewInit {
                     }
                 }, 0);
             }
+        } else if (!self.vars.mdl.saida.txt && self.onClickO.old.length) {
+            self.vars.mdl.entrada.txt = self.onClickO.old[0].txt;
+            self.vars.mdl.entrada.val = self.onClickO.old[0].val;
+            self.vars.mdl.saida.txt = self.onClickO.old[1].txt;
+            self.vars.mdl.saida.val = self.onClickO.old[1].val;
+            self.onClickO.old = [];
         } else if (self.rooms.nativeElement) {
             if (self.rooms.nativeElement.contains(tgt)) {
                 self.show.rooms = true;
@@ -321,7 +345,7 @@ export class OptbarComponent implements AfterViewInit {
                 self.rooms.nativeElement.className = self.rooms.nativeElement.className.replace(/\s*focus\s*/gi, ' ');
                 self.show.rooms = false;
             }
-        }
+        } else {}
         return true;
     }
     public nextInput(ev) {
@@ -374,6 +398,7 @@ export class OptbarComponent implements AfterViewInit {
             h = self.vars.hotelList,
             k = m.keys,
             quartos = '',
+            params = [],
             tmp, i, j;
         if (!self.vars.hotelsUrl.base) {
             for (i = 0; i < m.room.people.list.length; i++) {
@@ -388,10 +413,10 @@ export class OptbarComponent implements AfterViewInit {
                     alert('Favor inserir token');
                     return;
                 } else {
+                    self.show.keys = false;
                     Utils.cookie('cid', k.cid, true);
                     Utils.cookie('api', k.api, true);
                     Utils.cookie('secret', k.secret, true);
-                    self.show.keys = false;
                 }
             }
             if (!m.busca.val || m.busca.regionId === '0' || !m.entrada.val || !m.saida.val) {
@@ -419,12 +444,20 @@ export class OptbarComponent implements AfterViewInit {
         self.vars.hotelList.page = 0;
         self.urlSubmit.id = m.busca.regionId;
         self.urlSubmit.apt = quartos;
-        tmp = [
+        tmp = [self.vars.sort.price, self.vars.sort.rating];
+        tmp[2] = tmp[0].asc ? '2' : (tmp[0].desc ? '1' : '0');
+        tmp[2] += tmp[1].asc ? '2' : (tmp[1].desc ? '1' : '0');
+        params.push(tmp[2]);
+        params.push(!self.vars.filter.hotelname.active ? 'null' : self.vars.hotelsUrl.filter);
+        params.push(self.vars.filter.bit.mask);
+        tmp = ([
             self.urlSubmit.id,
             self.urlSubmit.in || Utils.date2str(''),
             self.urlSubmit.out || Utils.date2str(''),
-            quartos
-        ].join('/');
+            quartos,
+            self.vars.hotelList.page
+        ]).concat(params).join('/');
+        h.HotelListResponseStr = null;
         self.router.navigate(['/' + tmp]);
     }
 }

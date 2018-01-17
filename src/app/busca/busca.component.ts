@@ -271,17 +271,26 @@ export class BuscaComponent implements OnInit {
         self.sub = self.route
             .params
             .subscribe(params => {
-                var arr = [];
+                var arr = [],
+                    tmp;
                 self.params = {
                     id: params.id,
                     in: params.in || '',
                     out: params.out || '',
                     apt: params.apt || '',
                     page: params.page || '0',
-                    sort: params.sort || '0',
+                    sort: params.sort || '00',
                     fMask: params.fMask || '0',
-                    fName: params.fName || '0'
+                    fName: params.fName || 'null'
                 }
+                if(self.params.fName === 'null')
+                    self.vars.filter.hotelname.active = false;
+                tmp = self.params.sort[0] | 0;
+                if(tmp)
+                    self.sortBy('price', (tmp > 1 ? 'asc' : 'desc'));
+                tmp = self.params.sort[1] | 0;
+                if(tmp)
+                    self.sortBy('rating', (tmp > 1 ? 'asc' : 'desc'));
                 if (!params.id)
                     self.router.navigate(['/']);
                 else {
@@ -293,20 +302,26 @@ export class BuscaComponent implements OnInit {
                     arr.push(params.apt || '_1=2');
                     if (!(self.params.out | 0))
                         self.router.navigate([arr.join('/')]);
-                    else
-                        self.loadHotel();
+                    else {
+                        self.loading = false;
+                        if(!self.vars.hotelList.HotelListResponseStr)
+                            self.loadHotel();
+                    }
                 }
             });
 
     }
 
     public scrolling = false;
+    public loading = true;
     loadHotel() {
         var self = this,
             m = self.vars.mdl,
             h = self.vars.hotelList,
             k = m.keys,
             isScroll = self.scrolling;
+        if(self.loading)
+            return;
         if (h.regionId === m.busca.regionId) {
             if (h.searchId && self.vars.hotelsUrl.base.indexOf('searchId=') < 0)
                 self.vars.hotelsUrl.base += '&searchId=' + h.searchId;
@@ -624,13 +639,19 @@ export class BuscaComponent implements OnInit {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.hotelsUrl.sort = '';
-            self.loadHotel();
+            if(!self.loading) {
+                console.log(self.router.url);
+                // self.router.navigate([]);
+            }
         } else if (self.vars.sort[str] && ord in self.vars.sort[str]) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.sort[str][ord] = true;
             self.vars.hotelsUrl.sort = 'sort=price&sortorder=' + ord;
-            self.loadHotel();
+            if(!self.loading) {
+                console.log(self.router.url);
+                // self.router.navigate([]);
+            }
         }
     }
     public hotelnameChange() {

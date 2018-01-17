@@ -1,0 +1,64 @@
+#%RAML 1.0 
+
+title: Hotax-API 
+version: v1.0
+baseUri: http://localhost:8081/{version}/
+
+protocols: [ HTTP, HTTPS ]
+mediaType: application/json
+
+documentation:
+  - title: Hotax - API 
+    content: This is the oficial Hotax - API.
+
+types: !include types.raml
+resourceTypes: !include resourceTypes.raml
+traits: !include traits.raml
+
+/regions:
+  type: collection
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            example: !include examples/regions.json 
+  post:
+    body:
+      application/json:
+    responses:
+      200:
+        body:
+          application/json:
+
+
+/hotelsavailable:
+  type: collection
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+
+
+/hotelinfo:
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+
+/hotelimages:
+  get:
+    responses:
+      200:
+        body:
+          application/json:    
+
+/roomAvailability:          
+  get:
+    responses:
+      200:
+        body:
+          application/json:    
+      

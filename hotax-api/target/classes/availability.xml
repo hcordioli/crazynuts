@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+    <flow name="NewSearch">
+        <flow-ref name="getRegionFromElastic" doc:name="getRegionFromElastic"/>
+        <http:request config-ref="HTTP_Request_ConfigurationEAN" path="rs/hotel/v3/list?{parametros}&amp;geographyId={regionId}" method="GET" doc:name="HTTP - Ean HotelList API">
+            <http:request-builder>
+                <http:uri-param paramName="parametros" value="#[flowVars.Parametro]"/>
+                <http:uri-param paramName="regionId" value="#[flowVars.regionId]"/>
+            </http:request-builder>
+        </http:request>
+        <byte-array-to-string-transformer doc:name="Byte Array to String - Http Content"/>
+        <json:object-to-json-transformer doc:name="Object to JSON - HotelList Content - HashMap"/>
+        <json:json-to-object-transformer returnClass="java.util.HashMap" doc:name="JSON to Object"/>
+        <set-variable variableName="HotelSummary" value="&quot;&quot;" doc:name="Variable - HotelSummary"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.HotelListResponse.EanWsError != null]">
+                <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+                <set-payload value="#[&quot;{\&quot;code\&quot;: \&quot;40401\&quot;, \&quot;messagem\&quot; : \&quot;N&#227;o foi encontrado nenhum hotel\&quot; }&quot;]" doc:name="Set Payload"/>
+                <expression-component doc:name="Expression - Set regionId of parentRegionId"><![CDATA[flowVars.regionId = flowVars.parentRegionId;]]></expression-component>
+                <flow-ref name="NewSearch" doc:name="NewSearch"/>
+            </when>
+            <otherwise>
+                <flow-ref name="PriceCalculator" doc:name="PriceCalculator"/>
+                <set-variable variableName="idCustomerSessionEAN" value="#[payload.HotelListResponse.customerSessionId]" doc:name="Variable - CustomerSessionEAN"/>
+                <async doc:name="Async">
+                    <expression-component doc:name="Expression - Set the HotelSummary to Save on ElasticSearch"><![CDATA[payload.HotelListResponse.HotelList.HotelSummary = flowVars.HotelSummary;
+]]></expression-component>
+                    <json:object-to-json-transformer doc:name="Object to JSON"/>
+                    <expression-transformer expression="&quot;{\&quot;value\&quot; : \&quot;&quot; + payload.replace('&quot;', '#') + &quot;\&quot;}&quot;" doc:name="Expression - Prepare the content to save"/>
+                    <http:request config-ref="HTTP_Request_Configuration" path="responses/response/{id}" method="PUT" doc:name="HTTP - ElasticSearch Put Content EAN">
+                        <http:request-builder>
+                            <http:uri-param paramName="id" value="#[flowVars.idCustomerSessionEAN]"/>
+                        </http:request-builder>
+                    </http:request>
+                </async>
+                <json:object-to-json-transformer doc:name="Object to JSON"/>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="get:/hotelsavailable:api-config">
+        <flow-ref name="getParamsVariables" doc:name="getParamsVariables"/>
+        <choice doc:name="Choice">
+            <when expression="#[message.inboundProperties.'http.query.params'.searchId != null]">
+                <flow-ref name="SearchPagination" doc:name="SearchPagination"/>
+            </when>
+            <otherwise>
+                <flow-ref name="SetParametersAvail" doc:name="SetParametersAvail"/>
+                <flow-ref name="NewSearch" doc:name="NewSearch"/>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="getRegionFromElastic">
+        <http:request config-ref="HTTP_Request_Configuration" path="regionsrank/region/{regionId}" method="GET" doc:name="HTTP - AWS ElasticSearch - Query">
+            <http:request-builder>
+                <http:uri-param paramName="regionId" value="#[flowVars.regionId]"/>
+            </http:request-builder>
+        </http:request>
+        <byte-array-to-string-transformer doc:name="Byte Array to String - Http Content"/>
+        <json:object-to-json-transformer doc:name="Object to JSON - Format Content"/>
+        <json:json-to-object-transformer returnClass="java.util.HashMap" doc:name="JSON to Object - Generate HashMap"/>
+        <set-variable variableName="parentRegionId" value="#[payload._source.parentRegionId]" doc:name="Variable - ParentRegionId"/>
+    </flow>
+    <flow name="getParamsVariables">
+        <set-variable variableName="regionId" value="#[message.inboundProperties.'http.query.params'.regionId]" doc:name="Variable - RegionId"/>
+        <set-variable variableName="Parametro" value="" doc:name="Variable - Params"/>
+        <set-variable variableName="page" value="#[if(message.inboundProperties.'http.query.params'.page != null) {Integer.parseInt(message.inboundProperties.'http.query.params'.page)} else {null}]" doc:name="Variable - Page"/>
+        <set-variable variableName="sort" value="#[message.inboundProperties.'http.query.params'.sort]" doc:name="Variable - Sort"/>
+        <set-variable variableName="sortOrder" value="#[message.inboundProperties.'http.query.params'.sortorder]" doc:name="Variable - SortOrder"/>
+        <set-variable variableName="filterField" value="#[message.inboundProperties.'http.query.params'.filterfield]" doc:name="Variable - FilterField"/>
+        <set-variable variableName="filtervalue" value="#[message.inboundProperties.'http.query.params'.filtervalue]" doc:name="Variable - FilterValue"/>
+    </flow>
+    <flow name="SearchPagination">
+        <http:request config-ref="HTTP_Request_Configuration" path="responses/response/{searchId}" method="GET" doc:name="HTTP - AWS ElasticSearch - Query">
+            <http:request-builder>
+                <http:uri-param paramName="searchId" value="#[message.inboundProperties.'http.query.params'.searchId]"/>
+            </http:request-builder>
+        </http:request>
+        <byte-array-to-string-transformer doc:name="Byte Array to String - Http Content"/>
+        <json:object-to-json-transformer doc:name="Object to JSON - Format Content"/>
+        <json:json-to-object-transformer returnClass="java.util.HashMap" doc:name="JSON to Object - Generate HashMap"/>
+        <expression-transformer expression="#[payload._source.value.replace('#', '&quot;')]" doc:name="Expression - Json Transform"/>
+        <json:json-to-object-transformer returnClass="java.util.HashMap" doc:name="JSON to Object - Generate HashMap"/>
+        <set-variable variableName="eanResponse" value="#[payload]" doc:name="Variable - eanResponse"/>
+        <expression-component doc:name="Expression - Set payLoad"><![CDATA[payload = payload.HotelListResponse.HotelList.HotelSummary]]></expression-component>
+        <flow-ref name="SetOrder" doc:name="SetOrder"/>
+        <flow-ref name="SetFilter" doc:name="SetFilter"/>
+        <expression-component doc:name="Expression - Get Page"><![CDATA[if (flowVars.filterField != null)
+	flowVars.page = 0;
+
+int ini = flowVars.page * 50;
+int fin = (flowVars.page + 1) * 50;
+
+if (payload.size() <  fin)
+	flowVars.eanResponse.HotelListResponse.HotelList.HotelSummary = payload.subList(ini, payload.size());
+else
+	flowVars.eanResponse.HotelListResponse.HotelList.HotelSummary = payload.subList(ini, fin);
+
+payload = flowVars.eanResponse;
+]]></expression-component>
+        <json:object-to-json-transformer doc:name="Object to JSON"/>
+    </flow>
+    <flow name="SetOrder">
+        <choice doc:name="Choice">
+            <when expression="#[flowVars.sort != null]">
+                <choice doc:name="Choice">
+                    <when expression="#[flowVars.sort == 'price']">
+                        <scripting:component doc:name="Groovy - Order list by price">
+                            <scripting:script engine="Groovy"><![CDATA[if (flowVars.sortOrder == 'asc')
+payload.sort{a,b -> a.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue <=> b.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue}
+else
+payload.sort{a,b -> b.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue <=> a.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue}
+]]></scripting:script>
+                        </scripting:component>
+                    </when>
+                    <otherwise>
+                        <scripting:component doc:name="Groovy - Order list">
+                            <scripting:script engine="Groovy"><![CDATA[payload.sort{a,b -> b.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeFinalCommPercentValue <=> a.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeFinalCommPercentValue ?: a.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue <=> b.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue}
+]]></scripting:script>
+                        </scripting:component>
+                    </otherwise>
+                </choice>
+            </when>
+            <otherwise>
+                <scripting:component doc:name="Groovy - Order list">
+                    <scripting:script engine="Groovy"><![CDATA[payload.sort{a,b -> b.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeFinalCommPercentValue <=> a.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.storeFinalCommPercentValue ?: a.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue <=> b.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.averageFinalPriceValue}
+]]></scripting:script>
+                </scripting:component>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="SetFilter">
+        <choice doc:name="Choice">
+            <when expression="#[flowVars.filterfield != null]">
+                <choice doc:name="Choice">
+                    <when expression="#[flowVars.filterfield == 'hotelname']">
+                        <scripting:component doc:name="Groovy - filter by hotel name">
+                            <scripting:script engine="Groovy"><![CDATA[payload = payload.findAll{ p -> p.name.toLowerCase().contains(flowVars.filtervalue.toLowerCase()) }
+]]></scripting:script>
+                        </scripting:component>
+                    </when>
+                    <otherwise>
+                        <logger message="&quot;Filter undefined&quot;" level="INFO" doc:name="Logger"/>
+                    </otherwise>
+                </choice>
+            </when>
+            <otherwise>
+                <logger message="&quot;No Filter&quot;" level="INFO" doc:name="Logger"/>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="PriceCalculator">
+        <logger message="#[System.currentTimeMillis()]" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="eanResponse" value="#[payload]" doc:name="Variable - eanResponse"/>
+        <set-payload value="#[payload.HotelListResponse.HotelList.HotelSummary]" doc:name="Set Payload - List of HotelSummary"/>
+        <request-reply doc:name="Request-Reply">
+            <vm:outbound-endpoint exchange-pattern="request-response" path="vmPrice" connector-ref="VM" doc:name="VM">
+            	<collection-splitter/>
+            </vm:outbound-endpoint>
+            
+            <vm:inbound-endpoint exchange-pattern="one-way" path="vmPriceResponse" connector-ref="VM" doc:name="VM">
+            	<collection-aggregator/>
+            </vm:inbound-endpoint>
+        </request-reply>
+        <flow-ref name="SetOrder" doc:name="SetOrder"/>
+        <expression-component doc:name="Expression"><![CDATA[flowVars.HotelSummary = payload;
+if (payload.size() < 50)
+	flowVars.eanResponse.HotelListResponse.HotelList.HotelSummary = payload.subList(0, payload.size());
+else
+	flowVars.eanResponse.HotelListResponse.HotelList.HotelSummary = payload.subList(0, 50);
+
+payload = flowVars.eanResponse;
+]]></expression-component>
+        <logger message="#[System.currentTimeMillis()]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="FlowVMPrice" processingStrategy="Asynchronous_Processing_Strategy">
+        <vm:inbound-endpoint exchange-pattern="one-way" path="vmPrice" connector-ref="VM" doc:name="VM"/>
+        <expression-component doc:name="Expression - Calculate Hotax Values"><![CDATA[double hotaxTargetCommissionPercent = 0.14;
+double storeCommissionPercent = 0.12;
+double gpShare = 0.5;
+double gpProfitOnline = 0;
+double gpTotal = Float.parseFloat(payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.ChargeableRateInfo.'@nightlyRateTotal');
+double pkgSavingsAmount = 0;
+java.text.DecimalFormat df = new java.text.DecimalFormat("#,##0.00");
+
+if (payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.ChargeableRateInfo.'@grossProfitOnline' != null) {gpProfitOnline = Float.parseFloat(payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.ChargeableRateInfo.'@grossProfitOnline')}
+double gpShareHotax = gpProfitOnline * gpShare;
+
+double eanNet = gpTotal - gpShareHotax;
+
+if (payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.'@pkgSavingsAmount' != null) {pkgSavingsAmount = Float.parseFloat(payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.'@pkgSavingsAmount')}
+
+double hotaxInitialPrice = pkgSavingsAmount + gpTotal;
+double hotaxInitialCommission = gpShareHotax + pkgSavingsAmount;
+double hotaxInitialCommissionPercent = hotaxInitialCommission / hotaxInitialPrice;
+
+double markup = 0.0;
+if (hotaxInitialCommissionPercent>=(hotaxTargetCommissionPercent + storeCommissionPercent)) {
+markup = 1;
+    			} else {
+    				markup = (hotaxTargetCommissionPercent + storeCommissionPercent - 1) * -1;
+    			}
+    			
+    			double hotaxFinalPrice = 0;
+    			if (markup >= 1) {
+    				hotaxFinalPrice = hotaxInitialPrice;
+    			} else {
+    				hotaxFinalPrice = eanNet / markup;
+    			}
+    			
+double storeCommission = hotaxFinalPrice * storeCommissionPercent;
+
+double hotaxPreComimssion = hotaxFinalPrice - eanNet - storeCommission; 
+double hotaxPreCommissionPercent = hotaxPreComimssion / hotaxFinalPrice;
+String color = "";
+double storeAditionalCommPercent = 0;
+
+if (hotaxPreCommissionPercent  >= 0.45)
+{
+    color = "7030A0";
+    storeAditionalCommPercent =  0.10;
+}
+else if (hotaxPreCommissionPercent >= 0.28)
+{
+    color = "C0252E";
+    storeAditionalCommPercent = 0.06;
+}
+else if (hotaxPreCommissionPercent >= 0.18)
+{
+    color = "243E6F";
+    storeAditionalCommPercent = 0.03;
+}
+else
+    color = "FFFFFF";
+
+
+double storeAditionalComm = hotaxFinalPrice * storeAditionalCommPercent;;
+double storeFinalComm = storeCommission + storeAditionalComm;
+double storeFinalCommPercent = storeFinalComm / hotaxFinalPrice;
+
+
+double hotaxFinalCommission = hotaxFinalPrice - eanNet - storeFinalComm;
+double hotaxFinalCommissionPercent = hotaxFinalCommission / hotaxFinalPrice;
+
+java.util.Date dtCheckin = new java.util.GregorianCalendar(sessionVars.dateCheckin.split("/")[2], sessionVars.dateCheckin.split("/")[0] - 1, sessionVars.dateCheckin.split("/")[1]).getTime();
+java.util.Date dtCheckout = new java.util.GregorianCalendar(sessionVars.dateCheckout.split("/")[2], sessionVars.dateCheckout.split("/")[0] - 1, sessionVars.dateCheckout.split("/")[1]).getTime();
+
+long diff = ((dtCheckout.getTime() - dtCheckin.getTime()) / (1000 * 60 * 60 * 24));
+
+double averageFinalPrice = hotaxFinalPrice / diff;
+
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('gpShareHotax', df.format(gpShareHotax).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('eanNet', df.format(eanNet).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxInitialPrice', df.format(hotaxInitialPrice).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxInitialCommission', df.format(hotaxInitialCommission).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxInitialCommissionPercent', df.format(hotaxInitialCommissionPercent).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxTargetCommissionPercent', df.format(hotaxTargetCommissionPercent).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeCommission', df.format(storeCommission).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeCommissionPercent', df.format(storeCommissionPercent).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('markup', df.format(markup).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxFinalPrice', df.format(hotaxFinalPrice).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxPreComimssion', df.format(hotaxPreComimssion).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxPreCommissionPercent', df.format(hotaxPreCommissionPercent).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxPreCommissionPercentValue', hotaxPreCommissionPercent);
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeAditionalCommPercent', df.format(storeAditionalCommPercent).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeAditionalCommPercentValue', storeAditionalCommPercent);
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeAditionalComm', df.format(storeAditionalComm).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeFinalComm', df.format(storeFinalComm).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeFinalCommPercent', df.format(storeFinalCommPercent).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('storeFinalCommPercentValue', storeFinalCommPercent);
+
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxFinalCommission', df.format(hotaxFinalCommission).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxFinalCommissionPercent', df.format(hotaxFinalCommissionPercent).replace(',', '#').replace('.', ',').replace('#', '.'));
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('hotaxFinalCommissionPercentValue', hotaxFinalCommissionPercent);
+
+
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('color', color);
+
+
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('averageFinalPriceValue', averageFinalPrice);
+payload.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.put('averageFinalPrice', df.format(averageFinalPrice).replace(',', '#').replace('.', ',').replace('#', '.'));
+
+]]></expression-component>
+        <logger message="#[System.currentTimeMillis()]" level="INFO" doc:name="Logger"/>
+    </flow>
+    <flow name="SetParametersAvail">
+        <flow-ref name="SetRoomParameters" doc:name="SetRoomParameters"/>
+        <flow-ref name="SetSIGParameters" doc:name="SetSIGParameters"/>
+        <flow-ref name="SetDatesParameters" doc:name="SetDatesParameters"/>
+        <expression-component doc:name="Expression - Format parans to EAN"><![CDATA[flowVars.Parametro = "apiKey=" + message.inboundProperties.'http.query.params'.apiKey + "&cid=" + message.inboundProperties.'http.query.params'.cid + "&minorRev=30&locale=pt_BR&currencyCode=BRL&arrivalDate=" + message.inboundProperties.'http.query.params'.checkin + "&departureDate=" + message.inboundProperties.'http.query.params'.checkout + flowVars.rooms + "&numberOfResults=500&rateType=MerchantPackage&sig=" + flowVars.sig;]]></expression-component>
+    </flow>
+</mule>

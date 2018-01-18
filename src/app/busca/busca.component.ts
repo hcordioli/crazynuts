@@ -482,7 +482,7 @@ export class BuscaComponent implements OnInit {
                 }
             }
             setTimeout(function() {
-                self.vars.hotelList = h.HotelListResponse;
+                self.vars.hotelList.HotelListResponse = h.HotelListResponse;
             }, 0)
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';

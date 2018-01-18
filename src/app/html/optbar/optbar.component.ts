@@ -224,11 +224,8 @@ export class OptbarComponent implements AfterViewInit {
             self.vars.mdl.busca.regionId = e.description || '0';
             self.vars.mdl.busca.icon = e.image;
             self.vars.mdl.busca.val = title;
-            if (self.vars.hotelsUrl)
-                self.vars.hotelsUrl.base = '';
-            if (self.vars.filter) {
-                self.vars.filter.hotelname.active = false;
-            }
+            self.vars.hotelsUrl.base = '';
+            self.vars.filter.hotelname.active = false;
             if (self.vars.mdl.busca.lastVal !== title) {
                 self.vars.mdl.busca.lastVal = title;
                 if (self.vars.hotelList.hasMorePages)

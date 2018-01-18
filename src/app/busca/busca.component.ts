@@ -298,8 +298,7 @@ export class BuscaComponent implements OnInit {
                     self.sortBy(null, 'rating', (tmp > 1 ? 'asc' : 'desc'));
                 if (!params.id) {
                     self.router.navigate(['/']);
-                }
-                else {
+                } else {
                     if (!(params.in | 0))
                         self.params.in = Utils.date2str('');
                     arr.push(params.id);
@@ -308,8 +307,7 @@ export class BuscaComponent implements OnInit {
                     arr.push(params.apt || '_1=2');
                     if (!(self.params.out | 0)) {
                         self.router.navigate([arr.join('/')]);
-                    }
-                    else {
+                    } else {
                         self.loading = false;
                         if (!self.vars.hotelList.HotelListResponseStr)
                             self.loadHotel();
@@ -350,6 +348,9 @@ export class BuscaComponent implements OnInit {
             alert('Favor inserir token');
             return;
         }
+        setTimeout(function() {
+            h.HotelListResponse = null;
+        }, 0)
         self.httpC.get((self.vars.hotelsUrl.base +
             self.vars.hotelsUrl.keys +
             self.vars.hotelsUrl.avail +
@@ -480,6 +481,9 @@ export class BuscaComponent implements OnInit {
                     h.HotelListResponse = null;
                 }
             }
+            setTimeout(function() {
+                self.vars.hotelList = h.HotelListResponse;
+            }, 0)
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
             alert(erro);

@@ -285,7 +285,6 @@ export class BuscaComponent implements OnInit {
                     fName: params.fName || 'null'
                 }
                 self.loading = true;
-        console.log(JSON.stringify(self.vars.filter.bit));
                 self.vars.filter.bit.val = params.fMask;
                 if (self.params.fName === 'null')
                     self.vars.filter.hotelname.active = false;
@@ -298,7 +297,6 @@ export class BuscaComponent implements OnInit {
                 if (tmp)
                     self.sortBy(null, 'rating', (tmp > 1 ? 'asc' : 'desc'));
                 if (!params.id) {
-                    console.log('/');
                     self.router.navigate(['/']);
                 }
                 else {
@@ -309,7 +307,6 @@ export class BuscaComponent implements OnInit {
                     arr.push((params.out | 0) || self.params.in);
                     arr.push(params.apt || '_1=2');
                     if (!(self.params.out | 0)) {
-                        console.log(arr);
                         self.router.navigate([arr.join('/')]);
                     }
                     else {
@@ -330,7 +327,6 @@ export class BuscaComponent implements OnInit {
             h = self.vars.hotelList,
             k = m.keys,
             isScroll = self.scrolling;
-        console.log(self.loading);
         if (self.loading)
             return;
         self.vars.loadSearch = false;
@@ -496,7 +492,6 @@ export class BuscaComponent implements OnInit {
                     arr.push((self.params.in | 0));
                     arr.push((self.params.out | 0) || self.params.in);
                     arr.push(self.params.apt || '_1=2');
-                    console.log(arr);
                     self.router.navigate([arr.join('/')]);
                 }, 0);
             }, 1000)
@@ -590,7 +585,6 @@ export class BuscaComponent implements OnInit {
     }
 
     public filterAdd(i, j) {
-        console.log(i, j);
         var self = this,
             bit = self.vars.filter.bit;
         bit.val &= bit.mask;

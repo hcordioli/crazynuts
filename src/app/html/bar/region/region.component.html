@@ -1,0 +1,6 @@
+<div class="html-bar-region">
+	<label>
+		<ng2-completer (selected)="onCompleterSelected($event)" (input)="onCompleterInput($event)" (focus)="onCompleterFocus($event)" (blur)="onCompleterBlur($event)" [selectOnFocus]="true" name="busca" [(initialValue)]="busca.init" [autoMatch]="true" [inputClass]="busca.cls" [autofocus]="false" [textSearching]="null" [textNoResults]="null" [inputName]="'busca'" [placeholder]="busca.placeholder" [(ngModel)]="busca.val" [datasource]="regions" [clearUnselected]="false" [minSearchLength]="3" [fieldTabindex]="1" [selectOnClick]="true" [openOnClick]="true" [matchClass]="'completer-highlighted-word'"></ng2-completer>
+		<span class="icon"></span>
+	</label>
+</div>

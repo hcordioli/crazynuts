@@ -1,0 +1,181 @@
+.html-bar-calendar {
+	width: 49%;
+	label {
+		position: relative;
+		display: block;
+		z-index: 1;
+		& input:focus~div .txt,
+		{
+			border-color: #243E6F;
+		}
+		.label {
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+			width: 90%;
+			height: 100%;
+			display: block;
+			padding: 0.5rem;
+			font-size: 1rem;
+			color: #aaa;
+			cursor: pointer;
+			margin-left: 0.7rem;
+			span {
+				vertical-align: middle;
+				display: inline-block;
+				white-space: nowrap;
+			}
+		}
+		.txt {
+			width: 100%;
+			height: 100%;
+			border: 1px solid #aaa;
+			border-radius: 4px;
+			background-color: #fff;
+			display: block;
+			padding: 0.6rem;
+			vertical-align: middle;
+			font-size: 1rem;
+			color: #222;
+		}
+		input:focus,
+		input.ng-dirty,
+		input.ng-touched,
+		&.touched,
+		& .touched {
+			span.label,
+			div .label,
+			&~.label {
+				display: none;
+			}
+		}
+
+		&>input {
+			/* 									margin-left: .7rem;
+														}
+														& .checkin,
+														& .checkout {
+						 */
+			position: fixed;
+			top: -999rem;
+			left: -999rem;
+			width: 0;
+			height: 0;
+			z-index: -1;
+		}
+		&>div {
+			float: left;
+			position: relative;
+			width: 50%;
+			padding-left: .7rem;
+			overflow: hidden;
+			&:before {
+				width: .7rem;
+				height: 100%;
+				display: block;
+				content: '';
+				position: absolute;
+				background-color: #fff;
+				top: 0;
+				left: 0;
+				cursor: default;
+			}
+		}
+		#pickMe {
+			position: absolute;
+			top: 0;
+			left: 0;
+			display: block;
+			float: none;
+			width: 100%;
+			height: 100%;
+			overflow: visible;
+			z-index: -1;
+			&.topArrow {
+				margin-top: 22px;
+				& .daterangepicker {
+					&:before,
+					&:after {
+						content: '';
+						display: block;
+						position: absolute;
+						left: auto;
+						right: 66%;
+						top: -16px;
+						width: 0;
+						height: 0;
+					}
+					&:before {
+						border: 0 solid transparent;
+						border-width: 0 16px 16px 16px;
+						border-bottom-color: #aaa;
+					}
+					&:after {
+						border: 0 solid transparent;
+						border-width: 0 15px 15px 15px;
+						border-bottom-color: #fff;
+						margin-top: 2px;
+						margin-right: 1px;
+					}
+				}
+				&.rightAlign .daterangepicker {
+					&:before,
+					&:after {
+						left: auto;
+						right: 46%;
+					}
+					&:after {
+						margin-right: 1px;
+					}
+				}
+			}
+			&>.daterangepicker {
+				display: none;
+				position: absolute;
+				color: #222;
+				background: #fff;
+				border-radius: 4px;
+				width: 278px;
+				padding: 4px;
+				margin: 0;
+				top: 100% !important;
+				left: -50% !important;
+				width: 250% !important;
+				border: 1px solid #aaa;
+				& .calendar {
+					width: 49%;
+					max-width: 49%;
+					.fa-calendar.glyphicon,
+					.input-mini {
+						position: fixed;
+						top: -999rem;
+						left: -999rem;
+						width: 0;
+						height: 0;
+						z-index: -1;
+					}
+					td {
+						line-height: 1.5;
+					}
+					td.in-range {
+						background-color: #aaa;
+						color: #222;
+					}
+					td.active,
+					td.active:hover {
+						background-color: #243E6F;
+						color: #fff;
+					}
+					.month {
+						font-weight: 600;
+						padding: 0.5rem 0 1rem;
+					}
+				}
+				& .ranges {
+					display: none;
+				}
+			}
+		}
+	}
+}

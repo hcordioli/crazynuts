@@ -7,13 +7,25 @@ interface Obj {
 
 @Injectable()
 export class GlobalService {
-/*    private fns = {
-        get: {
-        },
-        set: {
-        }
-    }*/
     vars: Obj = {
+        show: {
+            calendarRight: false
+        },
+        params: {},
+        u: {
+            region: {
+                val: 0,
+                txt: '',
+            },
+            date: {
+                in: '',
+                out: ''
+            },
+            room: {
+                adults: 2,
+                kids: []
+            }
+        },
         hotelsUrl: {
             base: '',
             keys: '',
@@ -21,62 +33,6 @@ export class GlobalService {
             filter: '',
             sort: '',
             page: ''
-        },
-        hotelList: {
-            HotelListResponse: null,
-            HotelListResponseStr: '',
-            properties: 0,
-            state: 0,
-            searchId: '',
-            regionId: '',
-            hasMorePages: false,
-            page: 0
-        },
-        mdl: {
-            busca: {
-                val: '',
-                lastVal: '',
-                init: {
-                    title: '',
-                    description: '',
-                    image: ''
-                },
-                icon: '',
-                regionId: '0',
-                lastRegion: '',
-                placeholder: 'Ex: São Paulo',
-                cls: ''
-            },
-            entrada: {
-                val: '',
-                txt: ''
-            },
-            saida: {
-                val: '',
-                txt: ''
-            },
-            keys: {
-                cid: '',
-                api: '',
-                secret: ''
-            },
-            room: {
-                limit: 4,
-                total: 1,
-                disabled: false,
-                people: {
-                    total: 2,
-                    limit: 8,
-                    list: [{
-                        name: 0,
-                        more18: 2,
-                        less18: {
-                            total: 0,
-                            list: []
-                        }
-                    }]
-                }
-            }
         },
         filter: {
             hotelname: {

@@ -8,4 +8,4 @@ Run `ng serve -p 80` for a dev server. Navigate to `http://localhost:80/`. The a
 
 ## Build
 
-Run `ng build --prod --no-aot --build-optimizer=false` to build the project. The build artifacts will be stored in the `docs/` directory.
+Run `ng build -prod` to build the project. The build artifacts will be stored in the `docs/` directory.

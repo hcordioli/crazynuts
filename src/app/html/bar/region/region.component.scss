@@ -1,0 +1,115 @@
+.html-bar-region {
+	label {
+		display: inline-block;
+		width: 100%;
+		vertical-align: top;
+	}
+	[ng-reflect-model=""]+div,
+	input.lessthanthree+div {
+		display: none;
+	}
+	.completer-holder {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		z-index: 1;
+		text-align: left;
+		.completer-dropdown-holder {
+			margin-top: 22px;
+			position: relative;
+			.completer-dropdown {
+				width: 100%;
+				border: 1px solid #aaa;
+				margin: 0;
+				border-radius: 0;
+				margin-bottom: 2rem;
+				position: absolute;
+				.completer-row-wrapper {
+					.completer-row {
+						width: 100%;
+						margin: 0;
+						border-radius: 0;
+						white-space: nowrap;
+						overflow: hidden;
+						&.completer-selected-row {
+							color: #fff;
+							background-color: #243E6F;
+							width: 100%;
+						}
+						.completer-image-holder {
+							float: none;
+							display: inline-block;
+							width: auto;
+							vertical-align: middle;
+							.completer-image {
+								max-width: 1.489rem;
+								width: 100%;
+								display: block;
+								height: auto;
+								&[src="assets/img/icons/lvl1.png"] {
+									margin-left: 2rem;
+								}
+							}
+						}
+						.completer-item-text {
+							float: none;
+							display: inline-block;
+							width: auto;
+							vertical-align: middle;
+							.completer-title {
+								.completer-list-item {}
+								.completer-highlighted-word {
+									color: #fff;
+									background-color: #C0252E;
+								}
+							}
+							.completer-description {
+								display: none;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	input {
+		padding-left: 2rem;
+		&::-webkit-input-placeholder {
+			color: #aaa;
+		}
+		&::-moz-placeholder {
+			color: #aaa;
+		}
+		&:-ms-input-placeholder {
+			color: #aaa;
+		}
+		&:-moz-placeholder {
+			color: #aaa;
+		}
+	}
+	.icon {
+		z-index: 1;
+		position: absolute;
+		font-size: 1.8rem;
+		display: inline-block;
+		width: 0.4em;
+		height: 0.4em;
+		border: 0.08em solid #aaa;
+		border-radius: 50%;
+		left: 0.4em;
+		top: 0.7rem;
+		&:before {
+			content: '';
+			display: inline-block;
+			position: absolute;
+			right: -0.25em;
+			bottom: -0.15em;
+			border-width: 0;
+			background: #aaa;
+			width: 0.3em;
+			height: 0.08em;
+			transform: rotate(45deg);
+		}
+	}
+}

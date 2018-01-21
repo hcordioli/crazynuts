@@ -12,7 +12,16 @@ import { Utils } from './../utils/utils';
     encapsulation: ViewEncapsulation.None
 })
 export class BuscaComponent implements OnInit {
-
+    public hotelList = {
+        HotelListResponse: <any>null,
+        HotelListResponseStr: '',
+        properties: 0,
+        state: 0,
+        searchId: '',
+        regionId: '',
+        hasMorePages: false,
+        page: 0
+    };
     public sub;
     public params;
     public vars: any;
@@ -24,9 +33,6 @@ export class BuscaComponent implements OnInit {
         valueAdds: [],
         remainAdds: []
     };
-    public json2str(arg) {
-        return JSON.stringify(arg);
-    }
     public cardShadow(hex) {
         hex = (hex || 'fff').replace(/^\#/gi, '');
         return this._sanitizer.bypassSecurityTrustStyle('box-shadow: 4px 4px 18px 0px #' + hex);
@@ -148,9 +154,9 @@ export class BuscaComponent implements OnInit {
             arr = [],
             i, j;
         self.vars = gd.vars;
-        self.vars.path = 'busca';
         self.httpC = httpC;
-        arr = [{
+        arr = [
+            {
                 str: 'Filtros Mais Usados',
                 arr: [
                     { str: 'Café da manhã incluído' },
@@ -246,7 +252,7 @@ export class BuscaComponent implements OnInit {
             }
         ];
         self.vars.loadSearch = false;
-        self.vars.hotelList.HotelListResponseStr = null;
+        self.hotelList.HotelListResponseStr = null;
         for (i = 0; i < arr.length; i++) {
             self.vars.filter.bit.masks.push({
                 str: arr[i].str,
@@ -269,60 +275,14 @@ export class BuscaComponent implements OnInit {
     }
     ngOnInit() {
         var self = this;
-        self.sub = self.route
-            .params
-            .subscribe(params => {
-                var arr = [],
-                    tmp;
-                self.params = {
-                    id: params.id,
-                    in: params.in || '',
-                    out: params.out || '',
-                    apt: params.apt || '',
-                    page: params.page || '0',
-                    sort: params.sort || '00',
-                    fMask: params.fMask || '0',
-                    fName: params.fName || 'null'
-                }
-                self.loading = true;
-                self.vars.filter.bit.val = params.fMask;
-                if (self.params.fName === 'null')
-                    self.vars.filter.hotelname.active = false;
-                else if (self.vars.filter.hotelname.active)
-                    self.vars.filter.hotelname.val = self.params.fName;
-                tmp = (self.params.sort[0] | 0);
-                if (tmp)
-                    self.sortBy(null, 'price', (tmp > 1 ? 'asc' : 'desc'));
-                tmp = (self.params.sort[1] | 0);
-                if (tmp)
-                    self.sortBy(null, 'rating', (tmp > 1 ? 'asc' : 'desc'));
-                if (!params.id) {
-                    self.router.navigate(['/']);
-                } else {
-                    if (!(params.in | 0))
-                        self.params.in = Utils.date2str('');
-                    arr.push(params.id);
-                    arr.push((self.params.in | 0));
-                    arr.push((params.out | 0) || self.params.in);
-                    arr.push(params.apt || '_1=2');
-                    if (!(self.params.out | 0)) {
-                        self.router.navigate([arr.join('/')]);
-                    } else {
-                        self.loading = false;
-                        if (!self.vars.hotelList.HotelListResponseStr)
-                            self.loadHotel();
-                    }
-                }
-            });
-
     }
 
     public scrolling = false;
     public loading = true;
     loadHotel() {
         var self = this,
-            m = self.vars.mdl,
-            h = self.vars.hotelList,
+            m = self.vars,
+            h = self.hotelList,
             k = m.keys,
             isScroll = self.scrolling;
         if (self.loading)
@@ -341,7 +301,7 @@ export class BuscaComponent implements OnInit {
         } else {
             h.regionId = m.busca.regionId;
             self.vars.hotelsUrl.page = 'page=0';
-            self.vars.hotelList.page = 0;
+            self.hotelList.page = 0;
         }
         self.vars.hotelsUrl.keys = self.vars.hotelsUrl.keys || Utils.cookie('keys');
         if (!self.vars.hotelsUrl.keys) {
@@ -375,10 +335,11 @@ export class BuscaComponent implements OnInit {
                 }
                 if (!tmp)
                     return;
-                i = h.HotelListResponse.length;
+                i = (h.HotelListResponse && h.HotelListResponse.length) || 0;
                 h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
                 h.regionId = m.busca.regionId;
                 self.infinityScrolling = false;
+                h.HotelListResponse = h.HotelListResponse || [];
                 h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
                 for (; i < h.HotelListResponse.length; i++) {
                     self.show.cardImg.push(0);
@@ -482,7 +443,7 @@ export class BuscaComponent implements OnInit {
                 }
             }
             setTimeout(function() {
-                self.vars.hotelList.HotelListResponse = h.HotelListResponse;
+                self.hotelList.HotelListResponse = h.HotelListResponse;
             }, 0)
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
@@ -503,70 +464,6 @@ export class BuscaComponent implements OnInit {
     }
     public onScrollTimer;
     public onScroll(e) {
-        /*
-            var el = document.querySelector('aside > section > div'),
-                        carrinhoPaddingTop = 0,
-                        width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
-                    clearTimeout($.ev.scroll.timeout1);
-                    $.ev.scroll.timeout1 = setTimeout(function() {
-                        if ($.util.cls.has(document.body, 'loading'))
-                            return;
-                        if (width <= 768 && !$.ev.scroll.lastAba) {
-                            $.ev.scroll.lastAba = $.util.getChecked($.el['internal.canalAba']);
-                            if ($.ev.scroll.lastAba && !/1|2/.test($.ev.scroll.lastAba.value))
-                                $.util.setChecked('internal.canalAba', 1, 2, 1, true);
-                        } else if (width > 768 && $.ev.scroll.lastAba) {
-                            $.ev.scroll.lastAba.checked = true;
-                            $.ev.scroll.lastAba = undefined;
-                            $.ev.update.call(null);
-                        }
-                    }, 0);
-                    if (!el)
-                        return;
-                    var sT = Math.max(window.pageYOffset || 0, Math.max((document.documentElement && document.documentElement.scrollTop) || 0, document.body.scrollTop || 0)),
-                        oldSt = $.ev.scroll.oldSt || 0,
-                        mH = document.querySelector('main'),
-                        wB = sT + (window.innerHeight || document.documentElement.clientHeight),
-                        eH = el.offsetHeight,
-                        eT = el.offsetTop || sT + el.getBoundingClientRect().top,
-                        eB = eH + eT;
-                    mH = mH && mH.offsetHeight;
-                    if ((sT > oldSt) && (eB < wB) && (sT > eT)) {
-                        if (sT - eT < wB - eB)
-                            el.style.top = sT + 'px';
-                        else
-                            el.style.top = (wB - eH) + 'px';
-                    } else if (sT < oldSt && sT < eT) {
-                        el.style.top = sT + 'px';
-                    } else if ((sT < eT) && (wB < eB)) {
-                        if (sT - eT > wB - eB)
-                            el.style.top = sT + 'px';
-                        else
-                            el.style.top = (wB - eH) + 'px';
-                    }
-                    if (!el.style.top || (el.style.top && window.parseInt(el.style.top.replace(/\D+$/, ''), 10) < carrinhoPaddingTop))
-                        el.style.top = carrinhoPaddingTop + 'px';
-                    if (eB > mH)
-                        el.style.top = (mH - eH) + 'px';
-                    $.ev.scroll.oldSt = sT;
-                    el = document.querySelector('.comboTurbine');
-                    if (!window.scrollHappening && el && el.offsetParent) {
-                        el = document.querySelector('.combo .abasCanais');
-                        if (el && el.offsetParent) {
-                            clearTimeout($.ev.scroll.timeout2);
-                            $.ev.scroll.timeout2 = $.util.timeout(function(el) {
-                                if (window.scrollHappening)
-                                    return;
-                                var eT = el.offsetTop || sT + el.getBoundingClientRect().top;
-                                el = document.querySelector('.cta input.submit');
-                                if (!el)
-                                    return;
-                                el.style.backgroundPosition = Math.floor(Math.max(0, Math.min(((100 * sT) / eT), 100))) + '%';
-                                $.util.cls[sT >= (eT) ? 'remove' : 'add'](el, 'turbine');
-                            }, 1, el);
-                        }
-                    }
-        */
         var self = this,
             ev = e;
         clearTimeout(self.onScrollTimer);
@@ -582,7 +479,7 @@ export class BuscaComponent implements OnInit {
                 s = d.body.scrollTop || d.documentElement.scrollTop;
             h *= 0.75;
             if (s >= h && !self.infinityScrolling) {
-                if (self.vars.hotelList.hasMorePages)
+                if (self.hotelList.hasMorePages)
                     self.loadHotel();
             }
         }, 400);
@@ -677,8 +574,8 @@ export class BuscaComponent implements OnInit {
             append = 'filterfield=' + field + '&filtervalue=' + str;
         if (field === 'hotelname') {
             if (!str && self.vars.filter.hotelname.active) {
-                self.vars.hotelList.page = 0;
-                self.vars.hotelsUrl.page = 'page=' + self.vars.hotelList.page;
+                self.hotelList.page = 0;
+                self.vars.hotelsUrl.page = 'page=' + self.hotelList.page;
                 self.vars.hotelsUrl.filter = '';
                 self.vars.filter.hotelname.active = false;
                 self.loadHotel();
@@ -689,10 +586,69 @@ export class BuscaComponent implements OnInit {
             }
         }
     }
-
-    ngOnDestroy() {
-        var self = this;
-        self.sub.unsubscribe();
-    }
-
 }
+
+/*
+    var el = document.querySelector('aside > section > div'),
+                carrinhoPaddingTop = 0,
+                width = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            clearTimeout($.ev.scroll.timeout1);
+            $.ev.scroll.timeout1 = setTimeout(function() {
+                if ($.util.cls.has(document.body, 'loading'))
+                    return;
+                if (width <= 768 && !$.ev.scroll.lastAba) {
+                    $.ev.scroll.lastAba = $.util.getChecked($.el['internal.canalAba']);
+                    if ($.ev.scroll.lastAba && !/1|2/.test($.ev.scroll.lastAba.value))
+                        $.util.setChecked('internal.canalAba', 1, 2, 1, true);
+                } else if (width > 768 && $.ev.scroll.lastAba) {
+                    $.ev.scroll.lastAba.checked = true;
+                    $.ev.scroll.lastAba = undefined;
+                    $.ev.update.call(null);
+                }
+            }, 0);
+            if (!el)
+                return;
+            var sT = Math.max(window.pageYOffset || 0, Math.max((document.documentElement && document.documentElement.scrollTop) || 0, document.body.scrollTop || 0)),
+                oldSt = $.ev.scroll.oldSt || 0,
+                mH = document.querySelector('main'),
+                wB = sT + (window.innerHeight || document.documentElement.clientHeight),
+                eH = el.offsetHeight,
+                eT = el.offsetTop || sT + el.getBoundingClientRect().top,
+                eB = eH + eT;
+            mH = mH && mH.offsetHeight;
+            if ((sT > oldSt) && (eB < wB) && (sT > eT)) {
+                if (sT - eT < wB - eB)
+                    el.style.top = sT + 'px';
+                else
+                    el.style.top = (wB - eH) + 'px';
+            } else if (sT < oldSt && sT < eT) {
+                el.style.top = sT + 'px';
+            } else if ((sT < eT) && (wB < eB)) {
+                if (sT - eT > wB - eB)
+                    el.style.top = sT + 'px';
+                else
+                    el.style.top = (wB - eH) + 'px';
+            }
+            if (!el.style.top || (el.style.top && window.parseInt(el.style.top.replace(/\D+$/, ''), 10) < carrinhoPaddingTop))
+                el.style.top = carrinhoPaddingTop + 'px';
+            if (eB > mH)
+                el.style.top = (mH - eH) + 'px';
+            $.ev.scroll.oldSt = sT;
+            el = document.querySelector('.comboTurbine');
+            if (!window.scrollHappening && el && el.offsetParent) {
+                el = document.querySelector('.combo .abasCanais');
+                if (el && el.offsetParent) {
+                    clearTimeout($.ev.scroll.timeout2);
+                    $.ev.scroll.timeout2 = $.util.timeout(function(el) {
+                        if (window.scrollHappening)
+                            return;
+                        var eT = el.offsetTop || sT + el.getBoundingClientRect().top;
+                        el = document.querySelector('.cta input.submit');
+                        if (!el)
+                            return;
+                        el.style.backgroundPosition = Math.floor(Math.max(0, Math.min(((100 * sT) / eT), 100))) + '%';
+                        $.util.cls[sT >= (eT) ? 'remove' : 'add'](el, 'turbine');
+                    }, 1, el);
+                }
+            }
+*/

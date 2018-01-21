@@ -1,0 +1,50 @@
+<div #rooms>
+	<div class="quartos" (click)="onClick($event.target)">
+		<span class="label">
+			<span class="icon-room">
+				<img [attr.src]="vars.icons.base + vars.icons.room" alt="Q">
+			</span>
+			<span class="val" [textContent]="room.total"></span>
+			<span class="pessoas">
+				<span class="icon-people">
+					<img [attr.src]="vars.icons.base + vars.icons.people" alt="P">
+				</span>
+			<span class="val" [textContent]="room.people.total"></span>
+			</span>
+		</span>
+	</div>
+	<div [attr.class]="'room' + (show >= 0 ? ' show topArrow rightAlign' : '')">
+		<div class="header">
+			Quarto
+			<a (click)="selectRoom(n)" [attr.class]="'btn' + (show === n ? ' bgc c1 active':'')" *ngFor="let p of room.people.list; let n = index;">
+				<span>{{n + 1}}</span>
+			</a>
+			<span [hidden]="room.total <= 1" class="icon-remove remove" (click)="rmRoom(show)">
+				<img [attr.src]="vars.icons.base + vars.icons.remove" alt="&times;">
+			</span>
+		</div>
+		<div class="content" #quartosWrap>
+			<div [attr.class]="'room' + (n + 1) + ' ' + (show > n ? 'alignL' : (show === n ? 'alignC' : 'alignR'))" *ngFor="let p of room.people.list; let n = index;">
+				<div class="campos wrap">
+					<div class="people">
+						<label>
+							<span>Adultos (18 anos)</span>
+							<input (focus)="selectRoom(n); quartosWrap.scrollLeft = 0;" type="number" placeholder="" min="1" max="{{room.people.limit}}" id="adults[{{p.name}}]" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event, 'adults[' + p.name + ']')">
+						</label>
+						<label>
+							<span>Crianças (0-17 anos)</span>
+							<input (focus)="selectRoom(n)" min="0" max="{{room.people.limit}}" step="1" type="number" id="children[{{p.name}}]" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event, 'children[' + p.name + ']')">
+						</label>
+					</div>
+					<div class="children wrap">
+						<label *ngFor="let pp of p.less18.list; let nn = index">
+							<span>Criança {{ nn + 1 }}</span>
+							<input (focus)="selectRoom(n)" type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
+						</label>
+					</div>
+				</div>
+			</div>
+		</div>
+		<a [hidden]="room.total >= room.limit" [attr.class]="'add bgc c1' + (room.disabled ? ' disabled' : '')" href="javascript:;" (click)="addRoom(room.total)">Adicionar Quarto</a>
+	</div>
+</div>

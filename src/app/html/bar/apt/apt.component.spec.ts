@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { OptbarComponent } from './optbar.component';
+import { AptComponent } from './apt.component';
 
-describe('OptbarComponent', () => {
-  let component: OptbarComponent;
-  let fixture: ComponentFixture<OptbarComponent>;
+describe('AptComponent', () => {
+  let component: AptComponent;
+  let fixture: ComponentFixture<AptComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ OptbarComponent ]
+      declarations: [ AptComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(OptbarComponent);
+    fixture = TestBed.createComponent(AptComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

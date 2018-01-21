@@ -1,4 +1,3 @@
-import { Regions } from './http/regions';
 import { FormsModule } from '@angular/forms';
 import { RangePipe } from './pipe/range.pipe';
 import { AppComponent } from './app.component';
@@ -18,8 +17,14 @@ import { ConfirmacaoComponent } from './confirmacao/confirmacao.component';
 import { CommonModule, NgStyle, NgForOf, registerLocaleData } from '@angular/common';
 import { BuscaComponent } from './busca/busca.component';
 import { TitleComponent } from './html/title/title.component';
-import { HtmlComponent } from './html/html.component';
-import { OptbarComponent } from './html/optbar/optbar.component';
+import { FiltrosComponent } from './filtros/filtros.component';
+import { UComponent } from './u/u.component';
+import { UGuard } from './u/u.guard';
+import { BuscaGuard } from './busca/busca.guard';
+import { BarComponent } from './html/bar/bar.component';
+import { RegionComponent } from './html/bar/region/region.component';
+import { CalendarComponent } from './html/bar/calendar/calendar.component';
+import { AptComponent } from './html/bar/apt/apt.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -33,8 +38,12 @@ registerLocaleData(localePt, 'pt-BR');
         ConfirmacaoComponent,
         BuscaComponent,
         TitleComponent,
-        HtmlComponent,
-        OptbarComponent,
+        FiltrosComponent,
+        UComponent,
+        BarComponent,
+        RegionComponent,
+        CalendarComponent,
+        AptComponent
     ],
     imports: [
         FormsModule,
@@ -48,6 +57,8 @@ registerLocaleData(localePt, 'pt-BR');
     ],
     providers: [
         GlobalService,
+        UGuard,
+        BuscaGuard,
         { provide: LOCALE_ID, useValue: 'pt-BR' }
     ],
     bootstrap: [

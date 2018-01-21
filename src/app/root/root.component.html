@@ -1,13 +1,13 @@
-<div class="app-root">
+<div class="app-root" *ngIf="!params || !params['404']">
 	<div class="app-home">
-		<div [attr.class]="vars.path + ' ' + (vars.loadSearch !== undefined ? 'search' : '')">
+		<div [attr.class]="vars.path + (vars.loadSearch !== undefined ? ' search' : '')">
 			<div>
 				<div class="main wrap">
 					<div class="head wrap">
-						<html-title></html-title>
+						<div class="html-title"></div>
 					</div>
 					<div class="body">
-						<html-optbar></html-optbar>
+						<div class="html-bar"></div>
 					</div>
 				</div>
 				<div class="result">
@@ -16,4 +16,7 @@
 			</div>
 		</div>
 	</div>
+</div>
+<div *ngIf="params && params['404']">
+	{{json2str(params)}}
 </div>

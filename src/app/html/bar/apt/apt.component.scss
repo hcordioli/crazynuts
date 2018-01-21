@@ -1,0 +1,198 @@
+.html-bar-apt {
+	width: 30% !important;
+	cursor: pointer !important;
+	position: relative;
+	padding-left: .7rem;
+	&:before {
+		width: .7rem;
+		height: 100%;
+		display: block;
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		cursor: default;
+	}
+	.icon-remove {
+		width: 1.4rem;
+		display: inline-block;
+		margin-top: -0.3rem;
+		img {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+		&[hidden] {
+			visibility: hidden;
+		}
+	}
+
+	.icon-room,
+	.icon-people {
+		width: 1rem;
+		display: inline-block;
+		img {
+			width: 100%;
+			height: auto;
+			display: block;
+		}
+	}
+	&.focus .quartos {
+		border-color: #243E6F;
+	}
+
+	.quartos {
+		border: 1px solid #aaa;
+		border-radius: 4px;
+		display: block;
+		width: 100%;
+		font-size: 1rem;
+		padding: 0.44rem;
+		line-height: 1.2;
+		color: #aaa;
+		text-align: left;
+		.pessoas {
+			float: right;
+			position: absolute;
+			right: 1rem;
+			background-color: #fff;
+			top: 50%;
+			transform: translate(0, -50%);
+		}
+	}
+
+	&.focus {
+		margin-bottom: 11rem;
+	}
+
+	&.touched {
+		cursor: default;
+		.quartos .label .val {
+			color: #222;
+		}
+	}
+
+	.room {
+		display: none;
+		position: absolute;
+		right: 0;
+		top: 100%;
+		width: 256%;
+		border: 1px solid #aaa;
+		padding: 1rem;
+		background-color: #fff;
+		z-index: 1;
+		.content {
+			overflow: hidden;
+			position: relative;
+			min-height: 11rem;
+			&>div {
+				position: absolute;
+				top: 0;
+				left: 0;
+				height: 100%;
+				width: 100%;
+				display: block;
+				transition: left .4s ease;
+				background-color: #fff;
+			}
+		}
+		.header {
+			color: #222;
+			border-bottom: 1px solid #aaa;
+			display: block;
+			padding-bottom: 0.5rem;
+			margin-bottom: 1.5rem;
+			text-align: left;
+			.btn {
+				cursor: pointer;
+				padding: 0.5rem;
+				&.active {
+					cursor: default;
+					color: #fff;
+				}
+			}
+			.remove {
+				float: right;
+				font-weight: 600;
+				font-size: 2rem;
+				cursor: pointer;
+				line-height: 0.5;
+			}
+		}
+		.campos {
+			padding-bottom: 1rem;
+			overflow: auto;
+			height: 100%;
+			display: block;
+			width: 100%;
+			label {
+				margin-right: 1rem;
+				margin-bottom: 1rem;
+			}
+			label span {
+				white-space: nowrap;
+				padding-bottom: 0.2rem;
+			}
+			.people {
+				display: block;
+				float: left;
+				width: 50%;
+				label,
+				label span,
+				label input {
+					display: block;
+				}
+			}
+			.children {
+				display: block;
+				float: left;
+				width: 50%;
+				label span {
+					white-space: nowrap;
+				}
+				label,
+				label span,
+				label input {
+					float: left;
+					width: 4.4rem;
+				}
+			}
+		}
+	}
+
+	.room.show {
+		display: block;
+		cursor: default !important;
+		.alignL {
+			left: -100%;
+		}
+		.alignC {
+			left: 0%;
+		}
+		.alignR {
+			left: 100%;
+		}
+	}
+
+	.add {
+		cursor: pointer;
+		text-decoration: none;
+		color: #fff;
+		padding: 0.5rem;
+		display: inline-block;
+		margin: 1rem 0 0;
+		float: right;
+		&[hidden] {
+			visibility: hidden;
+		}
+		&.disabled {
+			background-color: #aaa;
+		}
+		&:focus,
+		&:hover,
+		&:active {
+			opacity: .7;
+		}
+	}
+}

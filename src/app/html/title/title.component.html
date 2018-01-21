@@ -1,17 +1,15 @@
-<div class="html-title">
-	<a href="javascript:;" [routerLink]="'/'">
-		<h1>
-			<img [attr.src]="logo.url" [attr.alt]="logo.alt">
-		</h1>
-	</a>
-	<p class="fgc c1" [innerHTML]="slogan"></p>
-	<div class="menu" *ngIf="vars.loadSearch">
-		<ul *ngIf="menu.length">
-			<li *ngFor="let item of menu">
-				<a [routerLink]="item.link || []" href="item.href || 'javascript:;'">
+<a [attr.href]="url">
+	<h1>
+		<img [attr.src]="logo.url" [attr.alt]="logo.alt">
+	</h1>
+</a>
+<p class="fgc c1" [innerHTML]="slogan"></p>
+<div class="menu" *ngIf="vars.loadSearch">
+	<ul *ngIf="menu.length">
+		<li *ngFor="let item of menu">
+			<a [routerLink]="item.link || []" href="item.href || 'javascript:;'">
 					<span [textContent]="item.txt"></span>
 				</a>
-			</li>
-		</ul>
-	</div>
+		</li>
+	</ul>
 </div>

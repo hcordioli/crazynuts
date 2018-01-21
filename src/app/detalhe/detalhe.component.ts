@@ -14,9 +14,6 @@ export class DetalheComponent implements OnInit {
 
     public sub;
     public params;
-    public json2str(arg) {
-        return JSON.stringify(arg);
-    }
     public vars: any;
     constructor(private route: ActivatedRoute, private router: Router, private gd: GlobalService, private httpC: HttpClient) {
         var self = this;

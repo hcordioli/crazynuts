@@ -279,9 +279,7 @@ export class BuscaComponent implements OnInit {
                 //     p.go = false;
                 // self.router.navigate(['/', 'u', p || {}])
             }
-            setTimeout(function() {
-                self.vars.loadSearch = false;
-            }, 0);
+            self.vars.loadSearch = false;
         });
     }
     ngOnInit() {}
@@ -316,7 +314,6 @@ export class BuscaComponent implements OnInit {
                 keys: k.replace(/[~]+/gi, '&').replace(/[:]+/gi, '=')
             },
             isScroll = self.scrolling;
-        self.vars.loadSearch = false;
         self.vars.last.busca = self.vars.last.city;
         self.vars.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
             'regionId=' + o.id;
@@ -336,9 +333,8 @@ export class BuscaComponent implements OnInit {
             alert('Favor inserir token!');
             return;
         }
-        setTimeout(function() {
-            h.HotelListResponse = null;
-        }, 0)
+        self.vars.loadSearch = false;
+        h.HotelListResponse = null;
         self.httpC.get((self.vars.hotelsUrl.base +
             self.vars.hotelsUrl.avail +
             '&' + [
@@ -349,9 +345,7 @@ export class BuscaComponent implements OnInit {
                     self.vars.hotelsUrl.filter : ''
                 )
             ].join('&')).replace(/\&+/gi, '&').replace(/\&*$/gi, '')).subscribe(hotelList => {
-            setTimeout(function() {
-                self.vars.loadSearch = true;
-            }, 0);
+            self.vars.loadSearch = true;
             var msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;

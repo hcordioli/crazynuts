@@ -77,9 +77,6 @@ export class BarComponent implements AfterViewInit {
         }
         p.go = true;
         self.router.navigate(['/', 'u', p]);
-        self.vars.loadSearch = undefined;
-        setTimeout(function() {
-            self.vars.loadSearch = false;
-        }, 0);
+        self.vars.loadSearch = false;
     }
 }

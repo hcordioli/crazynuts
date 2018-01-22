@@ -1,5 +1,6 @@
 <div class="app-busca" [hidden]="vars.loadSearch === undefined">
-	<div *ngIf="vars.loadSearch;then content else other_content"></div>
+	<div *ngIf="vars.loadSearch === true;then content"></div>
+	<div *ngIf="vars.loadSearch === false;then other_content"></div>
 </div>
 <ng-template #content>
 	<style>

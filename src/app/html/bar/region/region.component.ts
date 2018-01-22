@@ -38,6 +38,7 @@ export class RegionComponent implements OnInit {
         id = self.vars.params.id || ck || id;
         self.regions = new Regions(self.http);
         if (id) {
+            self.vars.last.city = Utils.cookie('busca-val');
             self.busca.init = {
                 title: self.vars.params.id === ck ? Utils.cookie('busca-val') : '',
                 image: self.vars.params.id === ck ? Utils.cookie('busca-img') : '',

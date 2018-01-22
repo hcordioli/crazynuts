@@ -43,6 +43,14 @@
 		float: right;
 		width: 68%;
 		position: relative;
+		.msg {
+			&>div {
+				&>span {
+					padding-top: 7rem;
+					display: inline-block;
+				}
+			}
+		}
 		.stickie {
 			position: fixed;
 			top: 11rem;

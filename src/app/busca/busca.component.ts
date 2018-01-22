@@ -341,13 +341,9 @@ export class BuscaComponent implements OnInit {
             alert('Favor inserir token!');
             return;
         }
-        self.vars.loadSearch = undefined;
-        self.loadSearch = self.vars.loadSearch;
         h.HotelListResponse = null;
-        setTimeout(function() {
-            self.vars.loadSearch = false;
-            self.loadSearch = self.vars.loadSearch;
-        }, 0);
+        self.vars.loadSearch = false;
+        self.loadSearch = self.vars.loadSearch;
         self.httpC.get((self.vars.hotelsUrl.base +
             self.vars.hotelsUrl.avail +
             '&' + [
@@ -358,11 +354,8 @@ export class BuscaComponent implements OnInit {
                     self.vars.hotelsUrl.filter : ''
                 )
             ].join('&')).replace(/\&+/gi, '&').replace(/\&*$/gi, '')).subscribe(hotelList => {
-            setTimeout(function() {
-                self.vars.loadSearch = true;
-                self.loadSearch = self.vars.loadSearch;
-
-            }, 0);
+            self.vars.loadSearch = true;
+            self.loadSearch = self.vars.loadSearch;
             var msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;
@@ -451,10 +444,11 @@ export class BuscaComponent implements OnInit {
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
                     if (!h.HotelListResponse.length) {
                         setTimeout(function() {
-                            h.HotelListResponseStr = 'Não há hoteis com o nome: "' + self.vars.params.fn + '".';
                             h.HotelListResponse = null;
+                            h.HotelListResponseStr = 'Não há hoteis com o nome: "' + self.vars.filter.hotelname.val + '".';
+                            delete self.vars.params.fn;
+                            self.router.navigate(['/', 'u', self.vars.params]);
                         }, 0);
-
                     } else {
                         if (!Array.isArray(h.HotelListResponse))
                             h.HotelListResponse = [h.HotelListResponse];
@@ -638,7 +632,9 @@ export class BuscaComponent implements OnInit {
                     self.vars.filter.hotelname.val = '';
                 self.router.navigate(['/', 'u', self.vars.params]);
             } else if (str) {
+                console.log(str);
                 self.vars.hotelsUrl.filter = append;
+                self.vars.last.filterName = str;
                 self.vars.filter.hotelname.active = true;
                 self.vars.params.fn = str;
                 if (self.vars.filter.hotelname.val !== str)

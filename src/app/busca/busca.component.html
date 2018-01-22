@@ -1,6 +1,5 @@
 <div class="app-busca" [hidden]="loadSearch === undefined">
-	<div *ngIf="loadSearch === true;then content"></div>
-	<div *ngIf="loadSearch === false;then other_content"></div>
+	<div *ngIf="loadSearch !== undefined;then content"></div>
 </div>
 <ng-template #content>
 	<style>
@@ -81,7 +80,7 @@
 			</div>
 		</div>
 		<div class="cards">
-			<div class="stickie" data-stuck>
+			<div class="stickie">
 				<div class="wrap">
 					<ul class="sort">
 						<li class="item">
@@ -135,7 +134,17 @@
 					</ul>
 				</div>
 			</div>
-			<ul *ngIf="hotelList.HotelListResponse">
+			<div class="msg" *ngIf="hotelList">
+				<div *ngIf="hotelList.HotelListResponse">
+					<span *ngIf="!hotelList.HotelListResponse.length" class="loading icon">
+						<img [attr.src]="vars.loading" alt="Carregando...">
+					</span>
+				</div>
+				<div *ngIf="hotelList.HotelListResponseStr && hotelList.HotelListResponseStr.length">
+					<span [textContent]="hotelList.HotelListResponseStr"></span>
+				</div>
+			</div>
+			<ul *ngIf="hotelList.HotelListResponse && hotelList.HotelListResponse.length">
 				<li [attr.style]="cardShadow(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color)" [attr.class]="'wrap ' + 'cardN' + i + ' '" *ngFor="let item of hotelList.HotelListResponse; let i = index;">
 					<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1" [attr.data-test]="(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color ? ('box-shadow: 0px 0px 16px 4px ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color + ';') : '')">
 						<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
@@ -244,10 +253,4 @@
 		</div>
 	</div>
 	<span [hidden]="!infinityScrolling">Loading</span>
-</ng-template>
-<ng-template #other_content>
-	<span *ngIf="hotelList.HotelListResponseStr" [textContent]="hotelList.HotelListResponseStr"></span>
-	<span class="loading icon" *ngIf="hotelList.HotelListResponseStr === null">
-		<img [attr.src]="vars.loading" alt="Carregando...">
-	</span>
 </ng-template>

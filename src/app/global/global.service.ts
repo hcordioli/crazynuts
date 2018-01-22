@@ -16,7 +16,8 @@ export class GlobalService {
         last: {
             city: '',
             busca: '',
-            props: 0
+            props: 0,
+            filterName: ''
         },
         hotelsUrl: {
             base: '',

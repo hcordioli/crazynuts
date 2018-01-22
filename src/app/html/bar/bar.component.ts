@@ -80,7 +80,6 @@ export class BarComponent implements AfterViewInit {
         }
         p.go = true;
         Utils.cookie('room', self.vars.params.apt);
-        delete self.vars.loadSearch;
         self.router.navigate(['/', 'u', p]);
     }
 }

@@ -135,8 +135,8 @@
 				</div>
 			</div>
 			<div class="msg" *ngIf="hotelList">
-				<div *ngIf="hotelList.HotelListResponse">
-					<span *ngIf="!hotelList.HotelListResponse.length" class="loading icon">
+				<div *ngIf="!hotelList.searchId">
+					<span class="loading icon">
 						<img [attr.src]="vars.loading" alt="Carregando...">
 					</span>
 				</div>
@@ -144,7 +144,7 @@
 					<span [textContent]="hotelList.HotelListResponseStr"></span>
 				</div>
 			</div>
-			<ul *ngIf="hotelList.HotelListResponse && hotelList.HotelListResponse.length">
+			<ul *ngIf="hotelList.searchId">
 				<li [attr.style]="cardShadow(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color)" [attr.class]="'wrap ' + 'cardN' + i + ' '" *ngFor="let item of hotelList.HotelListResponse; let i = index;">
 					<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1" [attr.data-test]="(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color ? ('box-shadow: 0px 0px 16px 4px ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color + ';') : '')">
 						<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">

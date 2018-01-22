@@ -12,7 +12,6 @@ import { Utils } from './../utils/utils';
 })
 export class DetalheComponent implements OnInit {
 
-    public sub;
     public vars: any;
     constructor(private route: ActivatedRoute, private router: Router, private gd: GlobalService, private httpC: HttpClient) {
         var self = this;
@@ -22,16 +21,22 @@ export class DetalheComponent implements OnInit {
     }
     ngOnInit() {
         var self = this;
-        if(self.vars.params.id)
+        if (/;hi=(.*?)(;|$|\/)/.test(self.router.url)) {
+            self.hi = /;hi=(.*?)(;|$|\/)/.exec(self.router.url);
+            self.hi = self.hi.length > 1 ? self.hi[1] : "";
+            console.log(self.hi);
             self.loadInfo();
-        else
+        } else
             console.log('!id');
     }
     public res: any;
+    public hi: any;
     public loadInfo() {
         var self = this,
             h = self.vars.hotelList,
-            k = self.vars.keys;
+            k = self.vars.keys,
+            id = self.hi;
+        self.vars.path = 'detalhe';
         self.vars.keys = self.vars.keys || Utils.cookie('keys');
         if (!self.vars.keys) {
             alert('Favor inserir token');
@@ -42,7 +47,7 @@ export class DetalheComponent implements OnInit {
                 return str.replace(/^(\d{2})(\d{2})(\d{2})$/gi, '$1\/$2\/20$3');
             },
             o = {
-                id: p.id,
+                id: self.hi || p.id,
                 in: date2p(p.in),
                 out: date2p(p.out),
                 apt: p.apt.replace(/[~]+/gi, '&').replace(/[:]+/gi, '='),
@@ -50,12 +55,14 @@ export class DetalheComponent implements OnInit {
             };
         self.httpC.get(
             ('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelinfo?' +
-            'hotelId=' + o.id +
-            (o.in ? '&checkin=' + o.in + '&checkout=' + (o.out || o.in) : '') +
-            (o.apt || '') +
-            '&' + o.keys)).subscribe(data => {
+                'hotelId=' + o.id +
+                (o.in ? '&checkin=' + o.in + '&checkout=' + (o.out || o.in) : '') +
+                (o.apt || '') +
+                '&' + o.keys)).subscribe(data => {
             self.res = data;
+            console.log(data);
         }, err => {
+            console.log(err);
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
             alert(erro);
             setTimeout(function() {
@@ -66,9 +73,5 @@ export class DetalheComponent implements OnInit {
                 }, 0);
             }, 1000)
         });
-    }
-    ngOnDestroy() {
-        var self = this;
-        self.sub.unsubscribe();
     }
 }

@@ -18,15 +18,14 @@ import { UGuard } from './u/u.guard';
                     component: UComponent,
                     canActivate: [UGuard],
                     children: [{
-                            path: '',
-                            component: BuscaComponent,
-                            canActivate: [BuscaGuard]
-                        },
-                        {
-                            path: 'detalhe',
-                            component: DetalheComponent
-                        }
-                    ]
+                        path: 'detalhe',
+                        component: DetalheComponent
+                    }, {
+                        path: '',
+                        pathMatch: 'full',
+                        component: BuscaComponent,
+                        canActivate: [BuscaGuard]
+                    }]
                 },
                 {
                     path: 'booking',

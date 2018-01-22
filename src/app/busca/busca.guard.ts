@@ -14,12 +14,14 @@ export class BuscaGuard implements CanActivate {
         next: ActivatedRouteSnapshot,
         state: RouterStateSnapshot): Observable < boolean > | Promise < boolean > | boolean {
         var self = this,
-            arr = state.url.split(';'),
+            arr = state.url.split('/'),
             params = {
                 required: ['go'],
                 optional: ['id', 'in', 'out', 'apt', 'fl', 'fm', 'fn', 'fo']
             },
             i, b, tmp;
+        arr.shift();
+        arr = arr[0].split(';');
         arr.shift();
         for (i = 0; i < arr.length; i++) {
             arr[i] = decodeURI(arr[i]);
@@ -41,11 +43,14 @@ export class BuscaGuard implements CanActivate {
             }
         }
         b = !params.required.length
-        b = b && self.vars.params.go == 'true';
-        self.vars.path = b ? 'busca' : '/';
-        if (!b) {
-            self.router.navigate(['/']);
-        }
+        b = b && (self.vars.params.go == 'true') || 'go' in self.vars.params;
+        if (self.vars.path !== 'detalhe') {
+            self.vars.path = b ? 'busca' : '/';
+            if (!b) {
+                self.router.navigate(['/']);
+            }
+        } else
+            return false;
         return b;
     }
 }

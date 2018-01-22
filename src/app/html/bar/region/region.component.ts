@@ -31,27 +31,24 @@ export class RegionComponent implements OnInit {
     public dataService: RemoteData;
     public vars: any;
     constructor(private gd: GlobalService, private http: Http, private completerService: CompleterService, private router: Router) {
-        var self = this;
+        var self = this,
+            id = '0',
+            ck = Utils.cookie('busca-id');
         self.vars = gd.vars;
+        id = self.vars.params.id || ck || id;
         self.regions = new Regions(self.http);
-        if (self.vars.params.id) {
+        if (id) {
             self.busca.init = {
-                title: self.vars.params.id,
-                image: 'default',
-                description: ''
+                title: self.vars.params.id === ck ? Utils.cookie('busca-val') : '',
+                image: self.vars.params.id === ck ? Utils.cookie('busca-img') : '',
+                description: id
             }
-        } else if (Utils.cookie('busca-val')) {
-            self.busca.init = {
-                title: Utils.cookie('busca-val'),
-                image: Utils.cookie('busca-img'),
-                description: Utils.cookie('busca-id')
-            };
+            self.vars.params.id = self.busca.init.description;
+            self.router.navigate(['/', 'u', self.vars.params]);
         }
-
     }
 
     ngOnInit() {}
-
     public onCompleterInput(e) {
         var self = this;
         self.busca.cls = (self.busca.val || '').length < 3 ? 'lessthanthree' : '';
@@ -60,12 +57,21 @@ export class RegionComponent implements OnInit {
         var self = this;
         self.busca.cls = (self.busca.val || '').length < 3 ? 'lessthanthree' : '';
     }
+    public onCompleterBlurO = {
+        t: < any > 0
+    }
     public onCompleterBlur(e) {
         var self = this;
-        setTimeout(function() {
-            self.busca.val = (self.busca.val !== self.busca.lastVal ? (self.busca.val ? self.busca.lastVal : self.busca.val) : self.busca.val);
+        clearTimeout(self.onCompleterBlurO.t);
+        self.onCompleterBlurO.t = setTimeout(function() {
+            self.busca.val = (
+                self.busca.val !== self.busca.lastVal ?
+                (self.busca.init.title ?
+                    self.busca.lastVal :
+                    '') :
+                self.busca.val);
             self.busca.cls = (self.busca.val || '').length < 3 ? 'lessthanthree' : '';
-        }, 100);
+        }, 200);
     }
     public onCompleterSelected(e) {
         var title = e && e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : (e ? e.title : ''),
@@ -85,9 +91,14 @@ export class RegionComponent implements OnInit {
             } else {
                 self.busca.lastVal = title;
             }
-            tmp.id = self.busca.regionId;
-            self.vars.last.busca = self.busca.lastVal;
-            self.router.navigate(['/', 'u', tmp])
+            if (!tmp.id || tmp.id !== self.busca.regionId) {
+                tmp.id = self.busca.regionId;
+                Utils.cookie('busca-val', self.busca.val);
+                Utils.cookie('busca-img', self.busca.icon);
+                Utils.cookie('busca-id', self.busca.regionId);
+                self.vars.last.city = self.busca.lastVal;
+                // self.router.navigate(['/', 'u', tmp])
+            }
         }
     }
 }

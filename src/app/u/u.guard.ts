@@ -13,20 +13,27 @@ export class UGuard implements CanActivate {
     canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot):
         Observable < boolean > | Promise < boolean > | boolean {
             var self = this,
-                arr = state.url.split(';'),
+                arr = state.url.split('/'),
                 params = {
                     required: ['id', 'in', 'out', 'apt'],
                     optional: ['fl', 'fm', 'fn', 'fo', 'go', 'sort'],
-                    // id: '141417',
                     in: '022018',
                     out: '022218'
+                    // id: '141417',
                 },
                 i, b, tmp;
+            arr.shift();
+            arr = arr[0].split(';');
             arr.shift();
             for (i = 0; i < arr.length; i++) {
                 arr[i] = decodeURI(arr[i]);
                 tmp = /(.*?)=(.*?)($|[\/])+/gi.exec(arr[i]);
                 params[tmp[1]] = tmp[2];
+            }
+            for (i in self.vars.params) {
+                if (!self.vars.params.hasOwnProperty(i))
+                    continue;
+                params[i] = self.vars.params[i];
             }
             for (i in params) {
                 if (!params.hasOwnProperty(i) || /required|optional/gi.test(i))
@@ -37,7 +44,8 @@ export class UGuard implements CanActivate {
                 }
                 self.vars.params[i] = params[i];
             }
-            self.vars.path = '/';
+            if(self.vars.path !== 'detalhe')
+                self.vars.path = '/';
             b = !params.required.length;
             return b;
         }

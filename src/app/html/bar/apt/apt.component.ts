@@ -56,6 +56,10 @@ export class AptComponent implements AfterViewInit {
                     self.model2param();
                 }, 0);
             }
+        } else {
+            setTimeout(function() {
+                self.model2param();
+            }, 0);
         }
     }
     public model2paramt: any;

@@ -270,18 +270,21 @@ export class BuscaComponent implements OnInit {
         self.show.masks = new Array(self.vars.filter.bit.masks.length);
         for (i = 0; i < self.show.masks.length; i++)
             self.show.masks[i] = true;
+        self.route.params.subscribe(params => {
+            var p = self.vars.params;
+            if (self.vars.keys && p && p.go)
+                self.loadHotel();
+            else {
+                // if (p)
+                //     p.go = false;
+                // self.router.navigate(['/', 'u', p || {}])
+            }
+            setTimeout(function() {
+                self.vars.loadSearch = false;
+            }, 0);
+        });
     }
-    ngOnInit() {
-        var self = this,
-            p = self.vars.params;
-        if (self.vars.keys && p && p.go)
-            self.loadHotel();
-        else {
-            if (p)
-                p.go = false;
-            self.router.navigate(['/', 'u', p || {}])
-        }
-    }
+    ngOnInit() {}
     public rParam(obj) {
         var self = this,
             i,
@@ -314,6 +317,7 @@ export class BuscaComponent implements OnInit {
             },
             isScroll = self.scrolling;
         self.vars.loadSearch = false;
+        self.vars.last.busca = self.vars.last.city;
         self.vars.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
             'regionId=' + o.id;
         self.vars.hotelsUrl.avail = '&checkin=' + o.in + '&checkout=' + o.out + '&' + o.apt;
@@ -419,6 +423,7 @@ export class BuscaComponent implements OnInit {
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse;
                     h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
                     self.vars.last.props = h.properties;
+                    self.vars.last.busca = self.vars.last.city;
                     h.searchId = h.HotelListResponse.customerSessionId;
                     h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];

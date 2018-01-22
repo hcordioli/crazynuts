@@ -14,6 +14,7 @@ export class GlobalService {
         params: {},
         keys: '',
         last: {
+            city: '',
             busca: '',
             props: 0
         },

@@ -15,7 +15,6 @@ import { Router } from '@angular/router';
         '(window:mouseup)': 'onClick($event)',
         '(window:touchend)': 'onClick($event)'
     }
-
 })
 export class AptComponent implements AfterViewInit {
     @ViewChild('rooms') rooms: ElementRef;

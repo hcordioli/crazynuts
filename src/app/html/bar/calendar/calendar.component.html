@@ -1,14 +1,12 @@
-<div class="html-bar-calendar">
-	<label class="wrap" (keydown.Tab)="nextInput($event)">
-		<input type="text" name="daterangeInput" daterangepicker [options]="options" (blur)="blurDate($event)" (selected)="selectedDate($event)" />
-		<div [attr.class]="'checkin' + ((vars.mdl.entrada.val || '').length ? ' touched' : '')">
-			<span class="txt" [textContent]="vars.mdl.entrada.txt || '&nbsp;'"></span>
-			<span class="label"><span>Check-in</span></span>
-		</div>
-		<div [attr.class]="'checkout' + ((vars.mdl.saida.val || '').length ? ' touched' : '')">
-			<span class="txt" [textContent]="vars.mdl.saida.txt || '&nbsp;'"></span>
-			<span class="label"><span>Check-out</span></span>
-		</div>
-		<div id="pickMe" [attr.class]="'topArrow' + (vars.show.calendarRight ? ' rightAlign': '')"></div>
-	</label>
-</div>
+<label class="wrap" (keydown.Tab)="nextInput($event)">
+	<input type="text" name="daterangeInput" daterangepicker [options]="options" (blur)="blurDate($event)" (selected)="selectedDate($event)" />
+	<div [attr.class]="'checkin' + ((entrada.val || '').length ? ' touched' : '')">
+		<span class="txt" [textContent]="entrada.txt || '&nbsp;'"></span>
+		<span class="label"><span>Check-in</span></span>
+	</div>
+	<div [attr.class]="'checkout' + ((saida.val || '').length ? ' touched' : '')">
+		<span class="txt" [textContent]="saida.txt || '&nbsp;'"></span>
+		<span class="label"><span>Check-out</span></span>
+	</div>
+	<div id="pickMe" [attr.class]="'topArrow' + (vars.show.calendarRight ? ' rightAlign': '')"></div>
+</label>

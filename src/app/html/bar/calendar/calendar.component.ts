@@ -7,7 +7,15 @@ import { Utils } from "./../../../utils/utils";
     selector: '.html-bar-calendar',
     templateUrl: './calendar.component.html',
     styleUrls: ['./calendar.component.scss'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    host: {
+        '(document:click)': 'onClick($event)',
+        '(document:keyup)': 'onFocus($event)',
+        '(document:keydown)': 'onKey($event)',
+        '(window:mouseup)': 'onClick($event)',
+        '(window:touchend)': 'onClick($event)'
+    }
+
 })
 export class CalendarComponent implements AfterViewInit {
     @ViewChild(DaterangePickerComponent) rangepicker: DaterangePickerComponent;
@@ -45,7 +53,6 @@ export class CalendarComponent implements AfterViewInit {
         self.entrada.txt = self.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
         self.saida.val = Utils.cookie('saida');
         self.saida.txt = self.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-
     }
 
     ngAfterViewInit() {
@@ -119,36 +126,38 @@ export class CalendarComponent implements AfterViewInit {
             start = !!(/start/gi.exec(tgt.className));
             self.vars.show.calendarRight = !start;
             val = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');
-            val = val ? val.value : '';
-            val = (val || '/').split('/');
+            val = (val && val.value) || val;
+            val = (val || '/').split(/[\/.,]+/);
             if (val && val.length && val.length > 2 && (parseInt(val[1], 10) === parseInt(tgt.innerHTML, 10))) {
                 date = val.join('/');
                 val[2] = val[2].slice(-2);
-                clearTimeout(self.onClickO.t);
-                self.onClickO.t = setTimeout(function() {
-                    if (self.rangepicker.datePicker.startDate)
-                        self.blurDates[0] = self.rangepicker.datePicker.startDate.clone();
-                    if (!start && self.rangepicker.datePicker.endDate)
-                        self.blurDates[1] = self.rangepicker.datePicker.endDate.clone();
-                    else
-                        self.blurDates[1] = null;
-                    self.rangepicker.datePicker['set' + (start ? 'Start' : 'End') + 'Date'](date);
-                    self[start ? 'entrada' : 'saida'] = {
-                        val: val.join('/'),
-                        txt: [val[1], val[0], val[2]].join('/')
-                    };
-                    if (!start) {
-                        self.onClickO.old = [];
-                        self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
-                        self.vars.show.calendarRight = null;
-                    } else {
-                        self.saida = {
-                            val: '',
-                            txt: ''
+                if (date) {
+                    clearTimeout(self.onClickO.t);
+                    self.onClickO.t = setTimeout(function() {
+                        if (self.rangepicker.datePicker.startDate)
+                            self.blurDates[0] = self.rangepicker.datePicker.startDate.clone();
+                        if (!start && self.rangepicker.datePicker.endDate)
+                            self.blurDates[1] = self.rangepicker.datePicker.endDate.clone();
+                        else
+                            self.blurDates[1] = null;
+                        self.rangepicker.datePicker['set' + (start ? 'Start' : 'End') + 'Date'](date);
+                        self[start ? 'entrada' : 'saida'] = {
+                            val: val.join('/'),
+                            txt: [val[1], val[0], val[2]].join('/')
                         };
-                        self.vars.show.calendarRight = true;
-                    }
-                }, 0);
+                        if (!start) {
+                            self.onClickO.old = [];
+                            self.rangepicker.datePicker.hide.call(self.rangepicker.datePicker, {})
+                            self.vars.show.calendarRight = null;
+                        } else {
+                            self.saida = {
+                                val: '',
+                                txt: ''
+                            };
+                            self.vars.show.calendarRight = true;
+                        }
+                    }, 0);
+                }
             }
         } else if (!self.saida.txt && self.onClickO.old.length) {
             self.entrada.txt = self.onClickO.old[0].txt;
@@ -175,13 +184,13 @@ export class CalendarComponent implements AfterViewInit {
         if (value.start) {
             self.entrada.val = value.start.format('MM/DD/YYYY');
             self.entrada.txt = value.start.format('DD/MM/YY');
-            self.urlSubmit.in = Utils.date2str('', value.start._d);
+            self.vars.params.in = self.urlSubmit.in = Utils.date2str('', value.start._d);
             self.daterange.start = value.start;
         }
         if (value.end) {
             self.saida.val = value.end.format('MM/DD/YYYY');
             self.saida.txt = value.end.format('DD/MM/YY');
-            self.urlSubmit.out = Utils.date2str('', value.end._d);
+            self.vars.params.out = self.urlSubmit.out = Utils.date2str('', value.end._d);
             self.daterange.end = value.end;
         } else {
             self.saida.val = '';
@@ -189,9 +198,6 @@ export class CalendarComponent implements AfterViewInit {
             self.daterange.end = value.start || '';
         }
         if ('label' in value) {
-            self.onClick({
-                target: self.rangepicker.datePicker.element[0]
-            })
             self.daterange.label = '';
         }
     }

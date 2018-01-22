@@ -505,7 +505,6 @@ export class BuscaComponent implements OnInit {
             }, 0)
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
-            alert(erro);
             setTimeout(function() {
                 erro = isScroll ? '' : 'Erro: ' + erro;
                 h.HotelListResponseStr = erro;

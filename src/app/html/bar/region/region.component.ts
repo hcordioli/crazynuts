@@ -33,15 +33,18 @@ export class RegionComponent implements OnInit {
     constructor(private gd: GlobalService, private http: Http, private completerService: CompleterService, private router: Router) {
         var self = this,
             id = '0',
-            ck = Utils.cookie('busca-id');
+            ck = Utils.cookie('busca-id'),
+            b = false;
         self.vars = gd.vars;
-        id = self.vars.params.id || ck || id;
+        b = !self.vars.params.id;
+        id = (!b && self.vars.params.id) || ck || id;
+        b = b || self.vars.params.id === ck;
         self.regions = new Regions(self.http);
         if (id) {
             self.vars.last.city = Utils.cookie('busca-val');
             self.busca.init = {
-                title: self.vars.params.id === ck ? Utils.cookie('busca-val') : '',
-                image: self.vars.params.id === ck ? Utils.cookie('busca-img') : '',
+                title: b ? Utils.cookie('busca-val') : '',
+                image: b ? Utils.cookie('busca-img') : '',
                 description: id
             }
             self.vars.params.id = self.busca.init.description;

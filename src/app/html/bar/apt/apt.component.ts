@@ -47,11 +47,9 @@ export class AptComponent implements AfterViewInit {
         if (self.vars.params.apt) {
             self.param2model();
         } else if (cookie) {
-            if (cookie !== JSON.stringify(self.room)) {
-                self.room = JSON.parse(cookie);
-                self.cookied = true;
-                self.model2param();
-            }
+            self.vars.params.apt = cookie;
+            self.cookied = true;
+            self.param2model();
         } else {
             self.model2param();
         }

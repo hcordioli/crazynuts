@@ -249,7 +249,6 @@ export class BuscaComponent implements OnInit {
                 ]
             }
         ];
-        self.vars.loadSearch = false;
         self.hotelList.HotelListResponseStr = null;
         for (i = 0; i < arr.length; i++) {
             self.vars.filter.bit.masks.push({
@@ -272,20 +271,16 @@ export class BuscaComponent implements OnInit {
             self.show.masks[i] = true;
         self.route.params.subscribe(params => {
             var p = self.vars.params;
-            if (p.sort) {
-                self.sortBy(null, 'price', p.sort > 1);
-            }
-            if (p.fn) {
-                self.filterBy('hotelname', decodeURI(p.fn));
-            }
-            if (self.vars.keys && p && p.go)
-                self.loadHotel();
-            else {
-                // if (p)
-                //     p.go = false;
-                // self.router.navigate(['/', 'u', p || {}])
-            }
-            self.vars.loadSearch = false;
+            setTimeout(function() {
+                if (p.sort) {
+                    self.sortBy(null, 'price', p.sort > 1);
+                }
+                if (p.fn) {
+                    self.filterBy('hotelname', decodeURI(p.fn));
+                }
+                if (self.vars.keys && p && p.go)
+                    self.loadHotel();
+            }, 0);
         });
     }
     ngOnInit() {}
@@ -303,13 +298,14 @@ export class BuscaComponent implements OnInit {
         }
         return ret;
     }
+    public loadSearch = undefined;
     public scrolling = false;
     loadHotel() {
         var self = this,
             h = self.hotelList,
             k = self.vars.keys,
             p = self.vars.params,
-            b = self.vars.filter.hotelname.active,
+            b = false,
             date2p = function(str) {
                 return str.replace(/^(\d{2})(\d{2})(\d{2})$/gi, '$1\/$2\/20$3');
             },
@@ -338,14 +334,20 @@ export class BuscaComponent implements OnInit {
             h.regionId = o.id;
             self.vars.hotelsUrl.page = 'page=0';
             self.hotelList.page = 0;
+            self.vars.filter.hotelname.active = false;
         }
         self.vars.keys = self.vars.keys || Utils.cookie('keys');
         if (!self.vars.keys) {
             alert('Favor inserir token!');
             return;
         }
-        self.vars.loadSearch = false;
+        self.vars.loadSearch = undefined;
+        self.loadSearch = self.vars.loadSearch;
         h.HotelListResponse = null;
+        setTimeout(function() {
+            self.vars.loadSearch = false;
+            self.loadSearch = self.vars.loadSearch;
+        }, 0);
         self.httpC.get((self.vars.hotelsUrl.base +
             self.vars.hotelsUrl.avail +
             '&' + [
@@ -356,7 +358,11 @@ export class BuscaComponent implements OnInit {
                     self.vars.hotelsUrl.filter : ''
                 )
             ].join('&')).replace(/\&+/gi, '&').replace(/\&*$/gi, '')).subscribe(hotelList => {
-            self.vars.loadSearch = true;
+            setTimeout(function() {
+                self.vars.loadSearch = true;
+                self.loadSearch = self.vars.loadSearch;
+
+            }, 0);
             var msg = 'Erro!',
                 valueAdds,
                 i, j, k, tmp;
@@ -371,8 +377,10 @@ export class BuscaComponent implements OnInit {
                 i = (h.HotelListResponse && h.HotelListResponse.length) || 0;
                 h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
                 h.regionId = o.id;
-                self.infinityScrolling = false;
-                self.scrolling = false;
+                setTimeout(function() {
+                    self.infinityScrolling = false;
+                    self.scrolling = false;
+                }, 0);
                 h.HotelListResponse = h.HotelListResponse || [];
                 h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
                 for (; i < h.HotelListResponse.length; i++) {
@@ -413,9 +421,10 @@ export class BuscaComponent implements OnInit {
                 }
             } else {
                 if (b && !h.searchId) {
-                    self.vars.filter.hotelname.active = true;
                     setTimeout(function() {
                         self.vars.filter.hotelname.active = true;
+                        self.infinityScrolling = false;
+                        self.scrolling = false;
                         self.loadHotel();
                     }, 0);
                 }
@@ -441,8 +450,11 @@ export class BuscaComponent implements OnInit {
                     h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
                     if (!h.HotelListResponse.length) {
-                        h.HotelListResponseStr = 'Não há hoteis com o nome: "' + self.vars.params.fn + '".';
-                        h.HotelListResponse = null;
+                        setTimeout(function() {
+                            h.HotelListResponseStr = 'Não há hoteis com o nome: "' + self.vars.params.fn + '".';
+                            h.HotelListResponse = null;
+                        }, 0);
+
                     } else {
                         if (!Array.isArray(h.HotelListResponse))
                             h.HotelListResponse = [h.HotelListResponse];
@@ -492,6 +504,10 @@ export class BuscaComponent implements OnInit {
             }
             setTimeout(function() {
                 self.hotelList.HotelListResponse = h.HotelListResponse;
+                setTimeout(function() {
+                    self.infinityScrolling = false;
+                    self.scrolling = false;
+                }, 0);
             }, 0)
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';

@@ -12,20 +12,7 @@ export class GlobalService {
             calendarRight: false
         },
         params: {},
-        u: {
-            region: {
-                val: 0,
-                txt: '',
-            },
-            date: {
-                in: '',
-                out: ''
-            },
-            room: {
-                adults: 2,
-                kids: []
-            }
-        },
+        keys: '',
         hotelsUrl: {
             base: '',
             keys: '',

@@ -32,12 +32,13 @@ export class UGuard implements CanActivate {
                 if (!params.hasOwnProperty(i) || /required|optional/gi.test(i))
                     continue;
                 tmp = params.required.indexOf(i);
-                if(tmp >= 0) {
-                	params.required.splice(tmp, 1);
+                if (tmp >= 0) {
+                    params.required.splice(tmp, 1);
                 }
                 self.vars.params[i] = params[i];
             }
             self.vars.path = '/';
-            return !params.required.length;
+            b = !params.required.length;
+            return b;
         }
 }

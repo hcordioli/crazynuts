@@ -29,11 +29,11 @@
 					<div class="people">
 						<label>
 							<span>Adultos (18 anos)</span>
-							<input (focus)="selectRoom(n); quartosWrap.scrollLeft = 0;" type="number" placeholder="" min="1" max="{{room.people.limit}}" id="adults[{{p.name}}]" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event, 'adults[' + p.name + ']')">
+							<input (focus)="selectRoom(n); quartosWrap.scrollLeft = 0;" type="number" placeholder="" min="1" max="{{room.people.limit}}" id="adults[{{p.name}}]" name="adults[{{p.name}}]" [ngModel]="p.more18" (ngModelChange)="changeAdult(n, $event, 'adults[' + p.name + ']', null)">
 						</label>
 						<label>
 							<span>Crianças (0-17 anos)</span>
-							<input (focus)="selectRoom(n)" min="0" max="{{room.people.limit}}" step="1" type="number" id="children[{{p.name}}]" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event, 'children[' + p.name + ']')">
+							<input (focus)="selectRoom(n)" min="0" max="{{room.people.limit}}" step="1" type="number" id="children[{{p.name}}]" name="children[{{p.name}}]" [ngModel]="p.less18.total" (ngModelChange)="changeChild(n, $event, 'children[' + p.name + ']', null)">
 						</label>
 					</div>
 					<div class="children wrap">
@@ -45,6 +45,6 @@
 				</div>
 			</div>
 		</div>
-		<a [hidden]="room.total >= room.limit" [attr.class]="'add bgc c1' + (room.disabled ? ' disabled' : '')" href="javascript:;" (click)="addRoom(room.total)">Adicionar Quarto</a>
+		<a [hidden]="room.total >= room.limit" [attr.class]="'add bgc c1' + (room.disabled ? ' disabled' : '')" href="javascript:;" (click)="addRoom(room.total, null)">Adicionar Quarto</a>
 	</div>
 </div>

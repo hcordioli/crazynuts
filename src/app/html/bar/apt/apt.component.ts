@@ -44,29 +44,55 @@ export class AptComponent implements AfterViewInit {
             cookie;
         self.vars = gd.vars;
         cookie = Utils.cookie('room');
-        if (cookie) {
+        if (self.vars.params.apt) {
+            setTimeout(function() {
+                self.param2model();
+            }, 0);
+        } else if (cookie) {
             if (cookie !== JSON.stringify(self.room)) {
                 self.room = JSON.parse(cookie);
                 self.cookied = true;
-                self.model2param();
+                setTimeout(function() {
+                    self.model2param();
+                }, 0);
             }
         }
     }
+    public model2paramt: any;
     public model2param() {
         var self = this;
-        setTimeout(function() {
+        clearTimeout(self.model2paramt);
+        self.model2paramt = setTimeout(function() {
             var str = '',
                 i;
-            for(i = 0; i < self.room.total; i++) {
-                str += 'room' + (i+1) + '=';
+            for (i = 0; i < self.room.total; i++) {
+                str += (i ? '~' : '') + 'room' + (i + 1) + ':';
                 str += self.room.people.list[i].more18;
-                if(self.room.people.list[i].less18.list.length)
+                if (self.room.people.list[i].less18.list.length)
                     str += ',' + self.room.people.list[i].less18.list.map(function(a) {
                         return a.age;
                     }).join(',');
             }
-            self.router.navigate(['/u', { apt:  str}]);
+            self.rooms.nativeElement.className += ' touched';
+            self.router.navigate(['/u', { apt: str }]);
         }, 0);
+    }
+    public param2model() {
+        var self = this,
+            rooms = self.vars.params.apt.split('~room'),
+            i, tmp;
+        for (i = 0; i < rooms.length; i++) {
+            tmp = rooms[i].split(':');
+            if (tmp.length > 1) {
+                tmp = tmp[1].split(',');
+                if (i)
+                    self.addRoom(i, true);
+                self.changeAdult(i, tmp[0], 'adults[' + i + ']', true)
+                tmp.shift();
+                self.changeChild(i, tmp.length, 'children[' + i + ']', tmp);
+            }
+        }
+        self.rooms.nativeElement.className += ' touched';
     }
     ngAfterViewInit() {
         var self = this;
@@ -77,12 +103,13 @@ export class AptComponent implements AfterViewInit {
         var self = this;
         self.show = index;
     }
-    public addRoom(index) {
+    public counter = 0;
+    public addRoom(index, emulated) {
         var self = this,
             r = self.room,
             i = r.people.list.length,
             ii = index,
-            name = ++self.vars.name,
+            name = ++self.counter,
             el;
         setTimeout(function() {
             el = document.activeElement;
@@ -110,9 +137,10 @@ export class AptComponent implements AfterViewInit {
         r.people.total++;
         r.people.list[i].more18 = 1;
         r.disabled = r.people.total >= r.people.limit;
-        self.model2param();
+        if (!emulated)
+            self.model2param();
     }
-    public changeAdult(index, val, nome) {
+    public changeAdult(index, val, nome, emulated) {
         var self = this,
             p = self.room.people,
             i = index,
@@ -129,16 +157,31 @@ export class AptComponent implements AfterViewInit {
             p.total += val - old;
         }
         self.room.disabled = p.total >= p.limit;
-        self.model2param();
+        if (!emulated)
+            self.model2param();
     }
-    public changeChild(index, val, nome) {
+    public changeChild(index, val, nome, emulated) {
         function resize(arr, size, defval) {
-            var delta = arr.length - size;
+            var delta = arr.length - size,
+                i;
+            if (emulated)
+                for (i = 0; i < arr.length; i++)
+                    if (arr[i].age && i < emulated.length)
+                        arr[i].age = emulated[i];
             if (delta > 0)
                 arr.length = size;
             else
-                while (delta++ < 0)
-                    arr.push(defval);
+                for (i = 0; delta++ < 0; i++) {
+                    if (emulated) {
+                        if (!i) {
+                            setTimeout(function() {
+                                self.show = -1;
+                            }, 0);
+                        }
+                        arr.push({ age: emulated[i] | 0 });
+                    } else
+                        arr.push(defval);
+                }
             return arr;
         }
         var self = this,
@@ -154,11 +197,13 @@ export class AptComponent implements AfterViewInit {
                 el.value = old;
         } else {
             a.list = resize(a.list, val, { age: 0 });
+            console.log(a.list);
             p.total += val - old;
             a.total = val;
         }
         self.room.disabled = p.total >= p.limit;
-        self.model2param();
+        if (!emulated)
+            self.model2param();
     }
     public rmRoom(index) {
         var self = this,

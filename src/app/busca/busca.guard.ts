@@ -5,7 +5,7 @@ import { GlobalService } from './../global/global.service';
 
 @Injectable()
 export class BuscaGuard implements CanActivate {
-    private vars: any;
+    public vars: any;
     constructor(private router: Router, gd: GlobalService) {
         var self = this;
         self.vars = gd.vars;
@@ -29,13 +29,21 @@ export class BuscaGuard implements CanActivate {
         for (i in params) {
             if (!params.hasOwnProperty(i) || /required|optional/gi.test(i))
                 continue;
-            tmp = params.required.indexOf(i);
-            if (tmp >= 0) {
-                params.required.splice(tmp, 1);
-            }
+            if (params[i]) {
+                tmp = params.required.indexOf(i);
+                if (tmp >= 0) {
+                    params.required.splice(tmp, 1);
+                }
             self.vars.params[i] = params[i];
+            } else
+                delete self.vars.params[i];
         }
-        self.vars.path = !params.required.length ? 'busca' : '/';
-        return !params.required.length;
+        b = !params.required.length
+        b = b && self.vars.params.go == 'true';
+        self.vars.path = b ? 'busca' : '/';
+        if (!b) {
+            self.router.navigate(['/']);
+        }
+        return b;
     }
 }

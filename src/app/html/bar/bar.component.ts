@@ -31,9 +31,7 @@ export class BarComponent implements AfterViewInit {
         var self = this,
             roomCok;
         self.vars = gd.vars;
-        if (!Utils.cookie('cid'))
-            self.show.keys = true;
-        else {
+        if (Utils.cookie('cid')) {
             self.keys = {
                 cid: Utils.cookie('cid'),
                 api: Utils.cookie('api'),
@@ -43,7 +41,12 @@ export class BarComponent implements AfterViewInit {
         }
     }
 
-    ngAfterViewInit() {}
+    ngAfterViewInit() {
+        var self = this;
+        if (!Utils.cookie('cid'))
+            self.show.keys = true;
+
+    }
 
     public model2param() {
         var self = this,

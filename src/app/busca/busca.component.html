@@ -98,10 +98,10 @@
 						<li class="item">
 							<span (click)="sortBy($event, 'price', (vars.sort.price.asc ? false : true))">
 								Preço
-								<a title="Maior no Topo" href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" [routerLink]="['', params.id, params.in, params.out, params.apt, params.page, '1' + params.sort[1], params.fMask, params.fName].join('/')">
+								<a title="Maior no Topo" href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" [routerLink]="['/', 'u', rParam({sort: 1})].join('/')">
 									<i class="fa fa-sort-desc"></i>
 								</a>
-								<a title="Menor no Topo" href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" [routerLink]="['', params.id, params.in, params.out, params.apt, params.page, '2' + params.sort[1], params.fMask, params.fName].join('/')">
+								<a title="Menor no Topo" href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" [routerLink]="['/', 'u', rParam({sort: 2})].join('/')">
 									<i class="fa fa-sort-asc"></i>
 								</a>
 							</span>

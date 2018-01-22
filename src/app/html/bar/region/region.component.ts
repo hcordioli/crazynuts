@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { GlobalService } from './../../../global/global.service';
+import { CompleterService, RemoteData } from 'ng2-completer';
 import { Utils } from "./../../../utils/utils";
+import { Router } from '@angular/router';
 import { Http } from "@angular/http";
 import { Regions } from './regions';
 
@@ -26,12 +28,19 @@ export class RegionComponent implements OnInit {
         cls: ''
     };
     public regions: Regions;
+    public dataService: RemoteData;
     public vars: any;
-    constructor(private gd: GlobalService, private http: Http) {
+    constructor(private gd: GlobalService, private http: Http, private completerService: CompleterService, private router: Router) {
         var self = this;
         self.vars = gd.vars;
         self.regions = new Regions(self.http);
-        if (Utils.cookie('busca-val')) {
+        if (self.vars.params.id) {
+            self.busca.init = {
+                title: self.vars.params.id,
+                image: 'default',
+                description: ''
+            }
+        } else if (Utils.cookie('busca-val')) {
             self.busca.init = {
                 title: Utils.cookie('busca-val'),
                 image: Utils.cookie('busca-img'),
@@ -60,7 +69,8 @@ export class RegionComponent implements OnInit {
     }
     public onCompleterSelected(e) {
         var title = e && e.originalObject ? (e.originalObject.title || e.originalObject.regionNameLong) : (e ? e.title : ''),
-            self = this;
+            self = this,
+            tmp = self.vars.params;
         if (e && e.description) {
             self.busca.lastRegion = self.busca.regionId;
             self.busca.regionId = e.description || '0';
@@ -70,11 +80,14 @@ export class RegionComponent implements OnInit {
             self.vars.filter.hotelname.active = false;
             if (self.busca.lastVal !== title) {
                 self.busca.lastVal = title;
-                if (self.vars.hotelList.hasMorePages)
+                if (self.vars.hotelList && self.vars.hotelList.hasMorePages)
                     self.vars.hotelList.hasMorePages = false;
             } else {
                 self.busca.lastVal = title;
             }
+            tmp.id = self.busca.regionId;
+            self.vars.last.busca = self.busca.lastVal;
+            self.router.navigate(['/', 'u', tmp])
         }
     }
 }

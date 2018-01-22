@@ -34,9 +34,11 @@ export class BuscaGuard implements CanActivate {
                 if (tmp >= 0) {
                     params.required.splice(tmp, 1);
                 }
-            self.vars.params[i] = params[i];
-            } else
+                self.vars.params[i] = params[i];
+            } else {
+                console.log(i, self.vars.params[i]);
                 delete self.vars.params[i];
+            }
         }
         b = !params.required.length
         b = b && self.vars.params.go == 'true';

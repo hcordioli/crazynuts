@@ -16,10 +16,10 @@ export class UGuard implements CanActivate {
                 arr = state.url.split(';'),
                 params = {
                     required: ['id', 'in', 'out', 'apt'],
-                    optional: ['fl', 'fm', 'fn', 'fo', 'go'],
-                    id: '141417',
-                    in: '200218',
-                    out: '220218'
+                    optional: ['fl', 'fm', 'fn', 'fo', 'go', 'sort'],
+                    // id: '141417',
+                    in: '022018',
+                    out: '022218'
                 },
                 i, b, tmp;
             arr.shift();

@@ -46,7 +46,7 @@ export class DetalheComponent implements OnInit {
                     arr.push(params.apt || '_1=2');
                     if (!params.apt) {
                         console.log('/');
-                        self.router.navigate([arr.join('/')]);
+                        // self.router.navigate([arr.join('/')]);
                     } else {
                         self.loadInfo();
                     }
@@ -82,7 +82,7 @@ export class DetalheComponent implements OnInit {
                     arr.push((self.params.out | 0) || self.params.in);
                     arr.push(self.params.apt || '_1=2');
                     console.log(arr);
-                    self.router.navigate([arr.join('/')]);
+                    // self.router.navigate([arr.join('/')]);
                 }, 0);
             }, 1000)
         });

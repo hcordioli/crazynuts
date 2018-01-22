@@ -13,7 +13,7 @@ import { Utils } from './../utils/utils';
 })
 export class BuscaComponent implements OnInit {
     public hotelList = {
-        HotelListResponse: <any>null,
+        HotelListResponse: < any > null,
         HotelListResponseStr: '',
         properties: 0,
         state: 0,
@@ -23,7 +23,6 @@ export class BuscaComponent implements OnInit {
         page: 0
     };
     public sub;
-    public params;
     public vars: any;
     public infinityScrolling = false;
     public show = {
@@ -155,8 +154,7 @@ export class BuscaComponent implements OnInit {
             i, j;
         self.vars = gd.vars;
         self.httpC = httpC;
-        arr = [
-            {
+        arr = [{
                 str: 'Filtros Mais Usados',
                 arr: [
                     { str: 'Café da manhã incluído' },
@@ -274,47 +272,71 @@ export class BuscaComponent implements OnInit {
             self.show.masks[i] = true;
     }
     ngOnInit() {
-        var self = this;
+        var self = this,
+            p = self.vars.params;
+        if (self.vars.keys && p && p.go)
+            self.loadHotel();
+        else {
+            if (p)
+                p.go = false;
+            self.router.navigate(['/', 'u', p || {}])
+        }
     }
-
+    public rParam(obj) {
+        var self = this,
+            i;
+            console.log(obj);
+        for (i in obj) {
+            if (!obj.hasOwnProperty(i))
+                continue;
+            self.vars.params[i] = obj[i];
+        }
+            console.log(self.vars.params);
+        return self.vars.params;
+    }
     public scrolling = false;
-    public loading = true;
     loadHotel() {
         var self = this,
-            m = self.vars,
             h = self.hotelList,
-            k = m.keys,
+            k = self.vars.keys,
+            p = self.vars.params,
+            date2p = function(str) {
+                return str.replace(/^(\d{2})(\d{2})(\d{2})$/gi, '$1\/$2\/20$3');
+            },
+            o = {
+                id: p.id,
+                in: date2p(p.in),
+                out: date2p(p.out),
+                apt: p.apt.replace(/[~]+/gi, '&').replace(/[:]+/gi, '='),
+                keys: k.replace(/[~]+/gi, '&').replace(/[:]+/gi, '=')
+            },
             isScroll = self.scrolling;
-        if (self.loading)
-            return;
         self.vars.loadSearch = false;
         self.vars.hotelsUrl.base = 'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelsavailable?' +
-            'regionId=' + (self.params.id || m.busca.regionId);
-        self.vars.hotelsUrl.avail = '&checkin=' + m.entrada.val +
-            '&checkout=' + m.saida.val +
-            self.params.apt.replace(/[_]+/gi, '&room').replace(/[-]+/gi, '=');
-        if (h.regionId === m.busca.regionId) {
+            'regionId=' + o.id;
+        self.vars.hotelsUrl.avail = '&checkin=' + o.in + '&checkout=' + o.out + '&' + o.apt;
+        if (h.regionId === o.id) {
             if (h.searchId && self.vars.hotelsUrl.base.indexOf('searchId=') < 0)
                 self.vars.hotelsUrl.base += '&searchId=' + h.searchId;
             if (h.hasMorePages && h.searchId && isScroll)
                 self.vars.hotelsUrl.page = 'page=' + h.page;
         } else {
-            h.regionId = m.busca.regionId;
+            h.regionId = o.id;
             self.vars.hotelsUrl.page = 'page=0';
             self.hotelList.page = 0;
         }
-        self.vars.hotelsUrl.keys = self.vars.hotelsUrl.keys || Utils.cookie('keys');
-        if (!self.vars.hotelsUrl.keys) {
-            alert('Favor inserir token');
+        self.vars.keys = self.vars.keys || Utils.cookie('keys');
+        if (!self.vars.keys) {
+            alert('Favor inserir token!');
             return;
         }
         setTimeout(function() {
             h.HotelListResponse = null;
         }, 0)
         self.httpC.get((self.vars.hotelsUrl.base +
-            self.vars.hotelsUrl.keys +
             self.vars.hotelsUrl.avail +
             '&' + [
+                o.keys,
                 self.vars.hotelsUrl.page,
                 self.vars.hotelsUrl.sort,
                 (self.vars.filter.hotelname.active ?
@@ -337,7 +359,7 @@ export class BuscaComponent implements OnInit {
                     return;
                 i = (h.HotelListResponse && h.HotelListResponse.length) || 0;
                 h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
-                h.regionId = m.busca.regionId;
+                h.regionId = o.id;
                 self.infinityScrolling = false;
                 h.HotelListResponse = h.HotelListResponse || [];
                 h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
@@ -394,6 +416,7 @@ export class BuscaComponent implements OnInit {
                     }
                     h.HotelListResponse = h.HotelListResponse.HotelListResponse;
                     h.properties = h.HotelListResponse.HotelList['@activePropertyCount'];
+                    self.vars.last.props = h.properties;
                     h.searchId = h.HotelListResponse.customerSessionId;
                     h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
@@ -452,12 +475,7 @@ export class BuscaComponent implements OnInit {
                 erro = isScroll ? '' : 'Erro: ' + erro;
                 h.HotelListResponseStr = erro;
                 setTimeout(function() {
-                    var arr = [];
-                    arr.push(self.params.id);
-                    arr.push((self.params.in | 0));
-                    arr.push((self.params.out | 0) || self.params.in);
-                    arr.push(self.params.apt || '_1=2');
-                    self.router.navigate([arr.join('/')]);
+                    self.router.navigate(['/', 'u', self.vars.params]);
                 }, 0);
             }, 1000)
         });

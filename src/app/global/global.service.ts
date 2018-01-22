@@ -13,6 +13,10 @@ export class GlobalService {
         },
         params: {},
         keys: '',
+        last: {
+            busca: '',
+            props: 0
+        },
         hotelsUrl: {
             base: '',
             keys: '',

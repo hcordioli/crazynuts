@@ -77,6 +77,7 @@ export class AptComponent implements AfterViewInit {
             self.router.navigate(['/u', { apt: str }]);
         }, 0);
     }
+    public param2modelt: any;
     public param2model() {
         var self = this,
             rooms = self.vars.params.apt.split('~room'),
@@ -89,10 +90,14 @@ export class AptComponent implements AfterViewInit {
                     self.addRoom(i, true);
                 self.changeAdult(i, tmp[0], 'adults[' + i + ']', true)
                 tmp.shift();
-                self.changeChild(i, tmp.length, 'children[' + i + ']', tmp);
+                self.changeChild(i, tmp.length, ('children[' + i + ']'), tmp);
             }
         }
-        self.rooms.nativeElement.className += ' touched';
+
+        clearTimeout(self.param2modelt);
+        self.param2modelt = setTimeout(function() {
+            self.rooms.nativeElement.className += ' touched';
+        }, 0);
     }
     ngAfterViewInit() {
         var self = this;
@@ -197,7 +202,6 @@ export class AptComponent implements AfterViewInit {
                 el.value = old;
         } else {
             a.list = resize(a.list, val, { age: 0 });
-            console.log(a.list);
             p.total += val - old;
             a.total = val;
         }

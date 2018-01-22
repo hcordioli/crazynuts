@@ -272,6 +272,12 @@ export class BuscaComponent implements OnInit {
             self.show.masks[i] = true;
         self.route.params.subscribe(params => {
             var p = self.vars.params;
+            if (p.sort) {
+                self.sortBy(null, 'price', p.sort > 1);
+            }
+            if (p.fn) {
+                self.filterBy('hotelname', decodeURI(p.fn));
+            }
             if (self.vars.keys && p && p.go)
                 self.loadHotel();
             else {
@@ -303,6 +309,7 @@ export class BuscaComponent implements OnInit {
             h = self.hotelList,
             k = self.vars.keys,
             p = self.vars.params,
+            b = self.vars.filter.hotelname.active,
             date2p = function(str) {
                 return str.replace(/^(\d{2})(\d{2})(\d{2})$/gi, '$1\/$2\/20$3');
             },
@@ -321,9 +328,13 @@ export class BuscaComponent implements OnInit {
         if (h.regionId === o.id) {
             if (h.searchId && self.vars.hotelsUrl.base.indexOf('searchId=') < 0)
                 self.vars.hotelsUrl.base += '&searchId=' + h.searchId;
-            if (h.hasMorePages && h.searchId && isScroll)
-                self.vars.hotelsUrl.page = 'page=' + h.page;
+            if (h.hasMorePages) {
+                self.infinityScrolling = true;
+                if (h.searchId && isScroll)
+                    self.vars.hotelsUrl.page = 'page=' + h.page;
+            }
         } else {
+            b = self.vars.filter.hotelname.active = !h.regionId;
             h.regionId = o.id;
             self.vars.hotelsUrl.page = 'page=0';
             self.hotelList.page = 0;
@@ -361,6 +372,7 @@ export class BuscaComponent implements OnInit {
                 h.hasMorePages = tmp.HotelListResponse.moreResultsAvailable;
                 h.regionId = o.id;
                 self.infinityScrolling = false;
+                self.scrolling = false;
                 h.HotelListResponse = h.HotelListResponse || [];
                 h.HotelListResponse = h.HotelListResponse.concat(tmp.HotelListResponse.HotelList.HotelSummary);
                 for (; i < h.HotelListResponse.length; i++) {
@@ -400,6 +412,13 @@ export class BuscaComponent implements OnInit {
                     }
                 }
             } else {
+                if (b && !h.searchId) {
+                    self.vars.filter.hotelname.active = true;
+                    setTimeout(function() {
+                        self.vars.filter.hotelname.active = true;
+                        self.loadHotel();
+                    }, 0);
+                }
                 try {
                     h.HotelListResponseStr = '';
                     h.HotelListResponse = hotelList;
@@ -421,42 +440,47 @@ export class BuscaComponent implements OnInit {
                     h.searchId = h.HotelListResponse.customerSessionId;
                     h.hasMorePages = h.HotelListResponse.moreResultsAvailable;
                     h.HotelListResponse = h.HotelListResponse.HotelList['HotelSummary'];
-                    if (!Array.isArray(h.HotelListResponse))
-                        h.HotelListResponse = [h.HotelListResponse];
-                    self.show.cardImg = new Array(h.HotelListResponse.length);
-                    self.show.valueAdds = new Array(h.HotelListResponse.length);
-                    for (i = 0; i < h.HotelListResponse.length; i++) {
-                        h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
-                        self.show.cardImg[i] = 0;
-                        self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
-                        self.show.remainAdds[i] = [];
-                        valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
-                        tmp = h.HotelListResponse[i].tripAdvisorRating;
-                        if (tmp && tmp >= 3.5) {
-                            if (tmp <= 3.9)
-                                tmp = 'Bom!';
-                            else if (tmp <= 4.2)
-                                tmp = 'Muito Bom!';
-                            else if (tmp <= 4.4)
-                                tmp = 'Incrível!';
-                            else if (tmp <= 4.6)
-                                tmp = 'Fantástico!';
-                            else if (tmp <= 5)
-                                tmp = 'Excepcional!';
-                            h.HotelListResponse[i].tripAdvisorLabel = tmp;
-                        }
-                        if (valueAdds) {
-                            if (!Array.isArray(valueAdds.ValueAdd))
-                                valueAdds.ValueAdd = [valueAdds.ValueAdd];
-                            for (j = 0; j < valueAdds.ValueAdd.length; j++) {
-                                k = valueAdds.ValueAdd[j];
-                                if (k['@id'] in self.valueAdds.ids) {
-                                    if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
-                                        self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
-                                    else
+                    if (!h.HotelListResponse.length) {
+                        h.HotelListResponseStr = 'Não há hoteis com o nome: "' + self.vars.params.fn + '".';
+                        h.HotelListResponse = null;
+                    } else {
+                        if (!Array.isArray(h.HotelListResponse))
+                            h.HotelListResponse = [h.HotelListResponse];
+                        self.show.cardImg = new Array(h.HotelListResponse.length);
+                        self.show.valueAdds = new Array(h.HotelListResponse.length);
+                        for (i = 0; i < h.HotelListResponse.length; i++) {
+                            h.HotelListResponse[i].shortDescription = self.decodeHTML(h.HotelListResponse[i].shortDescription);
+                            self.show.cardImg[i] = 0;
+                            self.show.valueAdds[i] = new Array(self.valueAdds.icons.length);
+                            self.show.remainAdds[i] = [];
+                            valueAdds = h.HotelListResponse[i].RoomRateDetailsList.RoomRateDetails.ValueAdds;
+                            tmp = h.HotelListResponse[i].tripAdvisorRating;
+                            if (tmp && tmp >= 3.5) {
+                                if (tmp <= 3.9)
+                                    tmp = 'Bom!';
+                                else if (tmp <= 4.2)
+                                    tmp = 'Muito Bom!';
+                                else if (tmp <= 4.4)
+                                    tmp = 'Incrível!';
+                                else if (tmp <= 4.6)
+                                    tmp = 'Fantástico!';
+                                else if (tmp <= 5)
+                                    tmp = 'Excepcional!';
+                                h.HotelListResponse[i].tripAdvisorLabel = tmp;
+                            }
+                            if (valueAdds) {
+                                if (!Array.isArray(valueAdds.ValueAdd))
+                                    valueAdds.ValueAdd = [valueAdds.ValueAdd];
+                                for (j = 0; j < valueAdds.ValueAdd.length; j++) {
+                                    k = valueAdds.ValueAdd[j];
+                                    if (k['@id'] in self.valueAdds.ids) {
+                                        if (!self.show.valueAdds[i][self.valueAdds.ids[k['@id']]])
+                                            self.show.valueAdds[i][self.valueAdds.ids[k['@id']]] = k.description;
+                                        else
+                                            self.show.remainAdds[i].push(k.description);
+                                    } else {
                                         self.show.remainAdds[i].push(k.description);
-                                } else {
-                                    self.show.remainAdds[i].push(k.description);
+                                    }
                                 }
                             }
                         }
@@ -498,8 +522,10 @@ export class BuscaComponent implements OnInit {
                 s = d.body.scrollTop || d.documentElement.scrollTop;
             h *= 0.75;
             if (s >= h && !self.infinityScrolling) {
-                if (self.hotelList.hasMorePages)
+                if (self.hotelList.hasMorePages) {
+                    self.scrolling = true;
                     self.loadHotel();
+                }
             }
         }, 400);
     }
@@ -565,7 +591,7 @@ export class BuscaComponent implements OnInit {
             ord = bool ? 'asc' : 'desc';
         if (e && e.stopPropagation)
             e.stopPropagation()
-        if (self.vars.sort[str][ord] && self.vars.hotelsUrl.sort) {
+        if (self.vars.params.sort === '0' || (self.vars.sort[str][ord] && self.vars.hotelsUrl.sort)) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.hotelsUrl.sort = '';
@@ -591,11 +617,17 @@ export class BuscaComponent implements OnInit {
                 self.vars.hotelsUrl.page = 'page=' + self.hotelList.page;
                 self.vars.hotelsUrl.filter = '';
                 self.vars.filter.hotelname.active = false;
-                self.loadHotel();
+                delete self.vars.params.fn;
+                if (self.vars.filter.hotelname.val)
+                    self.vars.filter.hotelname.val = '';
+                self.router.navigate(['/', 'u', self.vars.params]);
             } else if (str) {
                 self.vars.hotelsUrl.filter = append;
                 self.vars.filter.hotelname.active = true;
-                self.loadHotel();
+                self.vars.params.fn = str;
+                if (self.vars.filter.hotelname.val !== str)
+                    self.vars.filter.hotelname.val = str;
+                self.router.navigate(['/', 'u', self.vars.params]);
             }
         }
     }

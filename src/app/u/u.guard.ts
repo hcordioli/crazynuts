@@ -16,7 +16,7 @@ export class UGuard implements CanActivate {
                 arr = state.url.split('/'),
                 params = {
                     required: ['id', 'in', 'out', 'apt'],
-                    optional: ['fl', 'fm', 'fn', 'fo', 'go', 'sort'],
+                    optional: ['fn', 'go', 'sort'],
                     in: '022018',
                     out: '022218'
                     // id: '141417',

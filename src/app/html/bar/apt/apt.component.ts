@@ -45,21 +45,15 @@ export class AptComponent implements AfterViewInit {
         self.vars = gd.vars;
         cookie = Utils.cookie('room');
         if (self.vars.params.apt) {
-            setTimeout(function() {
-                self.param2model();
-            }, 0);
+            self.param2model();
         } else if (cookie) {
             if (cookie !== JSON.stringify(self.room)) {
                 self.room = JSON.parse(cookie);
                 self.cookied = true;
-                setTimeout(function() {
-                    self.model2param();
-                }, 0);
+                self.model2param();
             }
         } else {
-            setTimeout(function() {
-                self.model2param();
-            }, 0);
+            self.model2param();
         }
     }
     public model2paramt: any;
@@ -78,28 +72,29 @@ export class AptComponent implements AfterViewInit {
                     }).join(',');
             }
             self.rooms.nativeElement.className += ' touched';
-            self.router.navigate(['/u', { apt: str }]);
+            self.vars.params = self.vars.params || {};
+            self.vars.params.apt = str;
+            // self.router.navigate(['/u', self.vars.params.apt]);
         }, 0);
     }
     public param2modelt: any;
     public param2model() {
         var self = this,
-            rooms = self.vars.params.apt.split('~room'),
-            i, tmp;
-        for (i = 0; i < rooms.length; i++) {
-            tmp = rooms[i].split(':');
-            if (tmp.length > 1) {
-                tmp = tmp[1].split(',');
-                if (i)
-                    self.addRoom(i, true);
-                self.changeAdult(i, tmp[0], 'adults[' + i + ']', true)
-                tmp.shift();
-                self.changeChild(i, tmp.length, ('children[' + i + ']'), tmp);
-            }
-        }
-
+            rooms = self.vars.params.apt.split('~room');
         clearTimeout(self.param2modelt);
         self.param2modelt = setTimeout(function() {
+            var i, tmp;
+            for (i = 0; i < rooms.length; i++) {
+                tmp = rooms[i].split(':');
+                if (tmp.length > 1) {
+                    tmp = tmp[1].split(',');
+                    if (i)
+                        self.addRoom(i, true);
+                    self.changeAdult(i, tmp[0], 'adults[' + i + ']', true)
+                    tmp.shift();
+                    self.changeChild(i, tmp.length, ('children[' + i + ']'), tmp);
+                }
+            }
             self.rooms.nativeElement.className += ' touched';
         }, 0);
     }
@@ -212,6 +207,18 @@ export class AptComponent implements AfterViewInit {
         self.room.disabled = p.total >= p.limit;
         if (!emulated)
             self.model2param();
+    }
+    public changeChildAgeT: any;
+    public changeChildAge(e, n) {
+        var self = this,
+            p = n;
+        clearTimeout(self.changeChildAgeT);
+        self.changeChildAgeT = setTimeout(function() {
+            var str = ((self.room.people.list[p] && self.room.people.list[p].less18.list).map(function(a) {
+                return a.age;
+            }).join(','));
+            self.vars.params.apt = self.vars.params.apt.replace(new RegExp('(^|~)(room' + (p + 1) + ':.*?[0-9],)([,0-9]+)(~|$)', 'i'), '$1$2' + str);
+        }, 0);
     }
     public rmRoom(index) {
         var self = this,

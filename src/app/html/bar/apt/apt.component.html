@@ -39,7 +39,7 @@
 					<div class="children wrap">
 						<label *ngFor="let pp of p.less18.list; let nn = index">
 							<span>Criança {{ nn + 1 }}</span>
-							<input (focus)="selectRoom(n)" type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
+							<input (ngModelChange)="changeChildAge($event, n)" (focus)="selectRoom(n)" type="number" max="17" min="0" placeholder="" name="childage[{{p.name}}][{{nn}}]" [(ngModel)]="pp.age">
 						</label>
 					</div>
 				</div>

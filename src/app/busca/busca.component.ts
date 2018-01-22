@@ -284,15 +284,17 @@ export class BuscaComponent implements OnInit {
     }
     public rParam(obj) {
         var self = this,
-            i;
-            console.log(obj);
+            i,
+            ret = {};
+        for (i in self.vars.params)
+            if (self.vars.params.hasOwnProperty(i))
+                ret[i] = self.vars.params[i];
         for (i in obj) {
             if (!obj.hasOwnProperty(i))
                 continue;
-            self.vars.params[i] = obj[i];
+            ret[i] = obj[i];
         }
-            console.log(self.vars.params);
-        return self.vars.params;
+        return ret;
     }
     public scrolling = false;
     loadHotel() {
@@ -558,12 +560,6 @@ export class BuscaComponent implements OnInit {
         var self = this;
         if (self.show.compare.length)
             alert(self.show.compare.join(','));
-    }
-    public hotelUrl(id) {
-        var self = this,
-            url = self.router.url.split('/').slice(0, 5);
-        url[1] = id;
-        return document.baseURI + 'detalhe' + url.join('/');
     }
     public sortBy(e, str, bool) {
         var self = this,

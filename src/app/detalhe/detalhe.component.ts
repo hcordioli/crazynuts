@@ -13,7 +13,6 @@ import { Utils } from './../utils/utils';
 export class DetalheComponent implements OnInit {
 
     public sub;
-    public params;
     public vars: any;
     constructor(private route: ActivatedRoute, private router: Router, private gd: GlobalService, private httpC: HttpClient) {
         var self = this;
@@ -23,51 +22,38 @@ export class DetalheComponent implements OnInit {
     }
     ngOnInit() {
         var self = this;
-        self.sub = self.route
-            .params
-            .subscribe(params => {
-                var arr = [],
-                    tmp;
-                self.params = {
-                    id: params.id,
-                    in: params.in || '',
-                    out: params.out || '',
-                    apt: params.apt || ''
-                }
-                if (!params.id) {
-                    console.log('/');
-                    self.router.navigate(['/']);
-                } else {
-                    if (!(params.in | 0))
-                        self.params.in = Utils.date2str('');
-                    arr.push(params.id);
-                    arr.push((self.params.in | 0));
-                    arr.push((params.out | 0) || self.params.in);
-                    arr.push(params.apt || '_1=2');
-                    if (!params.apt) {
-                        console.log('/');
-                        // self.router.navigate([arr.join('/')]);
-                    } else {
-                        self.loadInfo();
-                    }
-                }
-            });
+        if(self.vars.params.id)
+            self.loadInfo();
+        else
+            console.log('!id');
     }
     public res: any;
     public loadInfo() {
         var self = this,
-            m = self.vars.mdl,
             h = self.vars.hotelList,
-            k = m.keys;
-        self.vars.hotelsUrl.keys = self.vars.hotelsUrl.keys || Utils.cookie('keys');
-        if (!self.vars.hotelsUrl.keys) {
+            k = self.vars.keys;
+        self.vars.keys = self.vars.keys || Utils.cookie('keys');
+        if (!self.vars.keys) {
             alert('Favor inserir token');
             return;
         }
+        var p = self.vars.params,
+            date2p = function(str) {
+                return str.replace(/^(\d{2})(\d{2})(\d{2})$/gi, '$1\/$2\/20$3');
+            },
+            o = {
+                id: p.id,
+                in: date2p(p.in),
+                out: date2p(p.out),
+                apt: p.apt.replace(/[~]+/gi, '&').replace(/[:]+/gi, '='),
+                keys: k.replace(/[~]+/gi, '&').replace(/[:]+/gi, '=')
+            };
         self.httpC.get(
-            'https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelinfo?' +
-            'hotelId=' + self.params.id +
-            self.vars.hotelsUrl.keys).subscribe(data => {
+            ('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelinfo?' +
+            'hotelId=' + o.id +
+            (o.in ? '&checkin=' + o.in + '&checkout=' + (o.out || o.in) : '') +
+            (o.apt || '') +
+            '&' + o.keys)).subscribe(data => {
             self.res = data;
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
@@ -76,13 +62,7 @@ export class DetalheComponent implements OnInit {
                 erro = 'Erro: ' + erro;
                 h.HotelListResponseStr = erro;
                 setTimeout(function() {
-                    var arr = [];
-                    arr.push(self.params.id);
-                    arr.push((self.params.in | 0));
-                    arr.push((self.params.out | 0) || self.params.in);
-                    arr.push(self.params.apt || '_1=2');
-                    console.log(arr);
-                    // self.router.navigate([arr.join('/')]);
+                    self.router.navigate(['/', 'u', self.vars.params]);
                 }, 0);
             }, 1000)
         });

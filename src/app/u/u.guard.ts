@@ -25,7 +25,7 @@ export class UGuard implements CanActivate {
             arr.shift();
             for (i = 0; i < arr.length; i++) {
                 arr[i] = decodeURI(arr[i]);
-                tmp = /(.*?)=(.*)/gi.exec(arr[i]);
+                tmp = /(.*?)=(.*?)($|[\/])+/gi.exec(arr[i]);
                 params[tmp[1]] = tmp[2];
             }
             for (i in params) {

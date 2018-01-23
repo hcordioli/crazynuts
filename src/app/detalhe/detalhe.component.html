@@ -7,4 +7,8 @@
 			</span>
 		</div>
 	</div>
+	<div class="rateTrip fgc c1" [hidden]="!res.hotelTripAdvisorRating">
+		<span class="label" [textContent]="res.hotelTripAdvisorLabel"></span>
+		<span class="rate" [textContent]="res.hotelTripAdvisorRating.toFixed(1)"></span>
+	</div>
 </div>

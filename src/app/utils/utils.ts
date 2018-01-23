@@ -12,5 +12,21 @@ export const Utils = {
         if (val !== undefined)
             document.cookie = prop + '=' + val + (eternal ? '; expires=' + new Date('01/01/2038').toUTCString() : '') + '; path=/;';
         return val ? val : (ret && ret.length > 1 ? ret[1] : '');
+    },
+    tripRating(arg) {
+        var ret = '';
+        if (arg && arg >= 3.5) {
+            if (arg <= 3.9)
+                ret = 'Bom!';
+            else if (arg <= 4.2)
+                ret = 'Muito Bom!';
+            else if (arg <= 4.4)
+                ret = 'Incrível!';
+            else if (arg <= 4.6)
+                ret = 'Fantástico!';
+            else if (arg <= 5)
+                ret = 'Excepcional!';
+        }
+        return ret;
     }
 }

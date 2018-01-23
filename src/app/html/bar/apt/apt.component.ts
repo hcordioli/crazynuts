@@ -92,6 +92,10 @@ export class AptComponent implements AfterViewInit {
                 }
             }
             self.rooms.nativeElement.className += ' touched';
+            setTimeout(function() {
+                if (self.show > 0)
+                    self.show = -1;
+            }, 0);
         }, 0);
     }
     ngAfterViewInit() {

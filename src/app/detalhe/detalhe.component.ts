@@ -24,7 +24,6 @@ export class DetalheComponent implements OnInit {
         if (/;hi=(.*?)(;|$|\/)/.test(self.router.url)) {
             self.hi = /;hi=(.*?)(;|$|\/)/.exec(self.router.url);
             self.hi = self.hi.length > 1 ? self.hi[1] : "";
-            console.log(self.hi);
             self.loadInfo();
         } else
             console.log('!id');
@@ -53,25 +52,23 @@ export class DetalheComponent implements OnInit {
                 apt: p.apt.replace(/[~]+/gi, '&').replace(/[:]+/gi, '='),
                 keys: k.replace(/[~]+/gi, '&').replace(/[:]+/gi, '=')
             };
-        self.httpC.get(
-            ('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelinfo?' +
-                'hotelId=' + o.id +
-                (o.in ? '&checkin=' + o.in + '&checkout=' + (o.out || o.in) : '') +
-                (o.apt || '') +
-                '&' + o.keys)).subscribe(data => {
-            self.res = data;
-            console.log(data);
-        }, err => {
-            console.log(err);
-            var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
-            alert(erro);
-            setTimeout(function() {
-                erro = 'Erro: ' + erro;
-                h.HotelListResponseStr = erro;
+        self.httpC.get(('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelinfo?hotelId=' + o.id +
+                (o.in ? '&checkin=' + o.in + '&checkout=' + (o.out || o.in) : '') + (o.apt || '') + '&' + o.keys))
+            .subscribe(data => {
+                var tmp;
+                self.res = data;
+                tmp = Utils.tripRating(self.res.hotelTripAdvisorRating);
+                if (tmp)
+                    self.res.hotelTripAdvisorLabel = tmp;
+            }, err => {
+                var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
                 setTimeout(function() {
-                    self.router.navigate(['/', 'u', self.vars.params]);
-                }, 0);
-            }, 1000)
-        });
+                    erro = 'Erro: ' + erro;
+                    h.HotelListResponseStr = erro;
+                    setTimeout(function() {
+                        self.router.navigate(['/', 'u', self.vars.params]);
+                    }, 0);
+                }, 1000)
+            });
     }
 }

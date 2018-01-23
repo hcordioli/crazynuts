@@ -19,6 +19,8 @@ export class GlobalService {
             props: 0,
             filterName: ''
         },
+        hotelList: {
+        },
         hotelsUrl: {
             base: '',
             keys: '',

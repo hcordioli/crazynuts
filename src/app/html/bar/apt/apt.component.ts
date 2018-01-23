@@ -71,7 +71,6 @@ export class AptComponent implements AfterViewInit {
             self.rooms.nativeElement.className += ' touched';
             self.vars.params = self.vars.params || {};
             self.vars.params.apt = str;
-            // self.router.navigate(['/u', self.vars.params.apt]);
         }, 0);
     }
     public param2modelt: any;
@@ -214,7 +213,7 @@ export class AptComponent implements AfterViewInit {
             var str = ((self.room.people.list[p] && self.room.people.list[p].less18.list).map(function(a) {
                 return a.age;
             }).join(','));
-            self.vars.params.apt = self.vars.params.apt.replace(new RegExp('(^|~)(room' + (p + 1) + ':.*?[0-9],)([,0-9]+)(~|$)', 'i'), '$1$2' + str);
+            self.vars.params.apt = self.vars.params.apt.replace(new RegExp('(^|~)(room' + (p + 1) + ':.*?[0-9],)([,0-9]+)(~|$)', 'i'), '$1$2' + str + '$4');
         }, 0);
     }
     public rmRoom(index) {

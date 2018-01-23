@@ -322,8 +322,10 @@ export class BuscaComponent implements OnInit {
             'regionId=' + o.id;
         self.vars.hotelsUrl.avail = '&checkin=' + o.in + '&checkout=' + o.out + '&' + o.apt;
         if (h.regionId === o.id) {
-            if (h.searchId && self.vars.hotelsUrl.base.indexOf('searchId=') < 0)
+            if (h.searchId && self.vars.hotelsUrl.base.indexOf('searchId=') < 0) {
                 self.vars.hotelsUrl.base += '&searchId=' + h.searchId;
+            } else
+                self.hotelList.searchId = '';
             if (h.hasMorePages) {
                 self.infinityScrolling = true;
                 if (h.searchId && isScroll)
@@ -343,7 +345,6 @@ export class BuscaComponent implements OnInit {
         }
         h.HotelListResponse = null;
         self.vars.loadSearch = false;
-        self.hotelList.searchId = '';
         self.loadSearch = self.vars.loadSearch;
         self.httpC.get((self.vars.hotelsUrl.base +
             self.vars.hotelsUrl.avail +

@@ -476,10 +476,9 @@ export class BuscaComponent implements OnInit {
                     h.HotelListResponseStr = msg;
                     h.HotelListResponse = null;
                 }
-                self.hotelList = h;
             }
             setTimeout(function() {
-                h.HotelListResponse = h.HotelListResponse;
+                self.hotelList = h;
                 setTimeout(function() {
                     self.infinityScrolling = false;
                     self.scrolling = false;
@@ -490,7 +489,9 @@ export class BuscaComponent implements OnInit {
             setTimeout(function() {
                 erro = isScroll ? '' : 'Erro: ' + erro;
                 h.HotelListResponseStr = erro;
+                h.searchId = '';
                 setTimeout(function() {
+                    self.hotelList = h;
                     self.router.navigate(['/', 'u', self.vars.params]);
                 }, 0);
             }, 1000)

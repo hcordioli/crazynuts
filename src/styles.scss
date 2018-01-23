@@ -181,6 +181,33 @@ table {
     }
 }
 
+.fsz {
+    &.f34 {
+        font-size: 2rem;
+    }
+    &.f20 {
+        font-size: 1.18rem;
+    }
+    &.f19 {
+        font-size: 1.12rem;
+    }
+    &.f17 {
+        font-size: 1rem;
+    }
+    &.f15 {
+        font-size: 0.89rem;
+    }
+    &.f14 {
+        font-size: 0.83rem;
+    }
+    &.f13 {
+        font-size: 0.75rem;
+    }
+    &.f12 {
+        font-size: 0.71rem;
+    }
+}
+
 html,
 body {
     font-size: 16px !important;

@@ -120,7 +120,7 @@
 						<li class="maps">
 							<a href="map" target="_blank">
 								<i class="fa fa-map-marker fgc c2" aria-hidden="true"></i>
-								<span class="text">
+								<span class="text fsz f14">
 									Ver no mapa
 								</span>
 								<img [attr.src]="vars.icons.base + vars.icons.map" alt="Ver no mapa">
@@ -150,7 +150,7 @@
 						<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
 							<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt=""> -->
 							<i [attr.class]="'fa ' + valueAdds.icons[0]"></i>
-							<span class="fgc c1">
+							<span class="fgc c1 fsz f13">
 								Café da manhã
 								<span class="fgc c2">incluído</span>
 						</span>
@@ -162,17 +162,17 @@
 					<div class="info wrap">
 						<div class="top wrap">
 							<div class="left">
-								<span class="nome" [textContent]="item.name"></span>
+								<span class="nome fsz f20" [textContent]="item.name"></span>
 								<div class="ndwrap wrap">
 									<div class="rateStar">
 										<div class="stars">
-											<span [attr.class]="(item.hotelRating % 1 !== 0 && j + 1 > item.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:item.hotelRating; let j = index;">
+											<span [attr.class]="'fsz f19' + (item.hotelRating % 1 !== 0 && j + 1 > item.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:item.hotelRating; let j = index;">
 												☆
 											</span>
 										</div>
 									</div>
 									<div class="location" (mouseenter)="$event.target.className = 'location' + ($event.target.children[0].offsetWidth < $event.target.children[0].scrollWidth ? ' hover' : '');" (mouseleave)="$event.target.className = 'location';" [attr.data-tooltip-dyn]="item.locationDescription">
-										<span class="label" [textContent]="item.locationDescription"></span>
+										<span class="label fsz f12" [textContent]="item.locationDescription"></span>
 									</div>
 								</div>
 								<div class="amenidades">
@@ -195,7 +195,7 @@
 								</div>
 							</div>
 							<div class="right">
-								<div class="rateTrip fgc c1" [hidden]="!item.tripAdvisorRating">
+								<div class="rateTrip fgc c1 fsz f15" [hidden]="!item.tripAdvisorRating">
 									<span class="label" [textContent]="item.tripAdvisorLabel"></span>
 									<span class="rate" [textContent]="item.tripAdvisorRating.toFixed(1)"></span>
 								</div>
@@ -203,7 +203,7 @@
 									<span class="icon">
 										<img [attr.src]="vars.icons.base + vars.icons.hot" alt="">
 									</span>
-									<span class="text">
+									<span class="text fsz f14">
 										{{ item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment <= 1 ? 'último quarto' : 'últimos ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.currentAllotment + ' quartos'}}
 									</span>
 								</div>
@@ -212,7 +212,7 @@
 						<div class="bot wrap">
 							<div class="left">
 								<div class="room-desc" (mouseenter)="$event.target.className = 'room-desc' + ($event.target.children[0].offsetWidth < $event.target.children[0].scrollWidth ? ' hover' : '');" (mouseleave)="$event.target.className = 'room-desc';" [attr.data-tooltip-dyn]="item.RoomRateDetailsList.RoomRateDetails.roomDescription">
-									<span class="label" [textContent]="item.RoomRateDetailsList.RoomRateDetails.roomDescription"></span>
+									<span class="label fsz f12" [textContent]="item.RoomRateDetailsList.RoomRateDetails.roomDescription"></span>
 								</div>
 								<div class="compBtn">
 									<a [attr.class]="(show.compare.indexOf(item.hotelId) >= 0 ? 'active' : '')" href="javascript:;" (click)="compareAdd($event, item.hotelId)">

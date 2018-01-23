@@ -138,7 +138,6 @@
 									bottom: 0;
 									left: 50%;
 									transform: translate(-50%, 0);
-									font-size: 0.83rem;
 									white-space: nowrap;
 									font-weight: 600;
 								}
@@ -211,7 +210,6 @@
 							width: 1.6rem;
 						}
 						&>span {
-							font-size: 0.75rem;
 							font-weight: 600;
 							vertical-align: middle;
 							&>span {
@@ -304,17 +302,11 @@
 				width: 53%;
 			}
 		}
-		.rateTrip[hidden],
-		.lastRooms[hidden] {
-			display: none;
-		}
-		.rateTrip {
-			font-weight: 600;
-			line-height: 1.5;
-			font-size: 0.89rem;
-		}
 		.lastRooms {
 			padding-top: 0.1rem;
+			&[hidden] {
+				display: none;
+			}
 			.icon {
 				display: inline-block;
 				width: 1rem;
@@ -323,9 +315,6 @@
 					width: 100%;
 					height: auto;
 				}
-			}
-			.text {
-				font-size: 0.83rem;
 			}
 		}
 		.location,
@@ -343,14 +332,12 @@
 				overflow: hidden;
 				width: 100%;
 				display: inline-block;
-				font-size: 0.71rem;
 			}
 		}
 		.room-desc {
 			width: 100%;
 		}
 		.nome {
-			font-size: 1.18rem;
 			color: #222;
 			display: block;
 		}

@@ -14,5 +14,24 @@
 		}
 	}
 	.app-detalhe {
+		text-align: left;
+		&>.headline {
+			position: relative;
+			text-align: left;
+			&>.wrap {
+				display: inline-block;
+				&.right {
+					text-align: right;
+					position: absolute;
+					top: 50%;
+					transform: translate(0, -50%);
+					right: 0;
+				}
+				&>div {
+					display: inline-block;
+					vertical-align: middle;
+				}
+			}
+		}
 	}
 }

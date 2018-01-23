@@ -1,5 +1,5 @@
 <div #rooms>
-	<div class="quartos" (click)="onClick($event.target)">
+	<div class="quartos fsz f17" (click)="onClick($event.target)">
 		<span class="label">
 			<span class="icon-room">
 				<img [attr.src]="vars.icons.base + vars.icons.room" alt="Q">
@@ -19,7 +19,7 @@
 			<a (click)="selectRoom(n)" [attr.class]="'btn' + (show === n ? ' bgc c1 active':'')" *ngFor="let p of room.people.list; let n = index;">
 				<span>{{n + 1}}</span>
 			</a>
-			<span [hidden]="room.total <= 1" class="icon-remove remove" (click)="rmRoom(show)">
+			<span [hidden]="room.total <= 1" class="icon-remove remove fsz f34" (click)="rmRoom(show)">
 				<img [attr.src]="vars.icons.base + vars.icons.remove" alt="&times;">
 			</span>
 		</div>

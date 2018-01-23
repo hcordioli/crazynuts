@@ -1,14 +1,22 @@
 <div class="app-detalhe" *ngIf="res">
-	<h2 [textContent]="res.hotelName"></h2>
-	<div class="rateStar">
-		<div class="stars">
-			<span [attr.class]="(res.hotelRating % 1 !== 0 && j + 1 > res.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:res.hotelRating; let j = index;">
-				☆
-			</span>
+	<div class="headline">
+		<div class="left wrap">
+			<div>
+				<h2 [textContent]="res.hotelName" class="fsz f20"></h2>
+			</div>
+			<div class="rateStar">
+				<div class="stars">
+					<span [attr.class]="'fsz f19' + (res.hotelRating % 1 !== 0 && j + 1 > res.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:res.hotelRating; let j = index;">
+						☆
+					</span>
+				</div>
+			</div>
 		</div>
-	</div>
-	<div class="rateTrip fgc c1" [hidden]="!res.hotelTripAdvisorRating">
-		<span class="label" [textContent]="res.hotelTripAdvisorLabel"></span>
-		<span class="rate" [textContent]="res.hotelTripAdvisorRating.toFixed(1)"></span>
+		<div class="right wrap">
+			<div class="rateTrip fgc c1 fsz f15" [hidden]="!res.hotelTripAdvisorRating">
+				<span class="label" [textContent]="res.hotelTripAdvisorLabel"></span>
+				<span class="rate" [textContent]="res.hotelTripAdvisorRating.toFixed(1)"></span>
+			</div>
+		</div>
 	</div>
 </div>

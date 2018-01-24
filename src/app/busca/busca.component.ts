@@ -276,12 +276,10 @@ export class BuscaComponent implements OnInit {
             var s = self,
                 p = s.vars.params;
             setTimeout(function() {
-                if (p.sort) {
+                if (p.sort)
                     s.sortBy({ on: 'always' }, 'price', p.sort === '2');
-                }
-                if (p.fn) {
+                if (p.fn)
                     s.filterBy('hotelname', p.fn);
-                }
                 if (s.vars.keys && p && (p.go.toString() === 'true')) {
                     setTimeout(function() {
                         s.loadHotel();

@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, ViewEncapsulation, ViewChild } from '@angular/core';
-import { DaterangePickerComponent } from 'ng2-daterangepicker';
 import { GlobalService } from './../../../global/global.service';
+import { DaterangePickerComponent } from 'ng2-daterangepicker';
+import { ActivatedRoute } from '@angular/router';
 import { Utils } from "./../../../utils/utils";
 
 @Component({
@@ -46,21 +47,26 @@ export class CalendarComponent implements AfterViewInit {
         },
         parentEl: '#pickMe'
     };
-    constructor(private gd: GlobalService) {
+    constructor(private gd: GlobalService, private route: ActivatedRoute) {
         var self = this;
         self.vars = gd.vars;
         self.entrada.val = Utils.cookie('entrada');
         self.entrada.txt = self.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
         self.saida.val = Utils.cookie('saida');
         self.saida.txt = self.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
+        self.options.startDate = self.entrada.val;
+        self.options.endDate = self.saida.val;
     }
 
     ngAfterViewInit() {
         var self = this;
         if (self.rangepicker.datePicker.startDate)
-            self.urlSubmit.in = Utils.date2str('', self.rangepicker.datePicker.startDate._d);
-        if (self.rangepicker.datePicker.endDate)
-            self.urlSubmit.out = Utils.date2str('', self.rangepicker.datePicker.endDate._d);
+            self.vars.params.in = self.urlSubmit.in = Utils.date2str('', self.rangepicker.datePicker.startDate._d);
+        if (self.rangepicker.datePicker.endDate) {
+            self.vars.params.out = self.urlSubmit.out = Utils.date2str('', self.rangepicker.datePicker.endDate._d);
+            if(self.rangepicker.datePicker.startDate)
+                self.vars.params.rng = Math.ceil((self.rangepicker.datePicker.endDate._d - self.rangepicker.datePicker.startDate._d) / 864e5);
+        }
     }
     public nextInput(ev) {
         var self = this,
@@ -166,6 +172,7 @@ export class CalendarComponent implements AfterViewInit {
             self.saida.val = self.onClickO.old[1].val;
             self.onClickO.old = [];
         }
+        if (!self.onClickO.old.length) {}
         return true;
     }
 
@@ -192,6 +199,10 @@ export class CalendarComponent implements AfterViewInit {
             self.saida.txt = value.end.format('DD/MM/YY');
             self.vars.params.out = self.urlSubmit.out = Utils.date2str('', value.end._d);
             self.daterange.end = value.end;
+            if (value.start) {
+                Utils.cookie('entrada', value.start.format('MM/DD/YYYY'));
+                Utils.cookie('saida', value.end.format('MM/DD/YYYY'));
+            }
         } else {
             self.saida.val = '';
             self.saida.txt = '';

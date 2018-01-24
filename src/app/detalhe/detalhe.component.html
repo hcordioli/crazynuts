@@ -1,22 +1,38 @@
 <div class="app-detalhe" *ngIf="res">
-	<div class="headline">
-		<div class="left wrap">
-			<div>
-				<h2 [textContent]="res.hotelName" class="fsz f20"></h2>
-			</div>
-			<div class="rateStar" [hidden]="!res.hotelRating">
-				<div class="stars">
-					<span [attr.class]="'fsz f19' + (res.hotelRating % 1 !== 0 && j + 1 > res.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:(res.hotelRating ? res.hotelRating : 1); let j = index;">
+	<div class="wrap">
+		<div class="headline">
+			<div class="top">
+				<div class="left wrap">
+					<div>
+						<h2 [textContent]="res.hotelName" class="fsz f20"></h2>
+					</div>
+					<div class="rateStar" [hidden]="!res.hotelRating">
+						<div class="stars">
+							<span [attr.class]="'fsz f19' + (res.hotelRating % 1 !== 0 && j + 1 > res.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:(res.hotelRating ? res.hotelRating : 1); let j = index;">
 						☆
 					</span>
+						</div>
+					</div>
+				</div>
+				<div class="right wrap">
+					<div class="rateTrip fgc c1 fsz f15" [hidden]="!res.hotelTripAdvisorRating">
+						<span class="label" [textContent]="res.hotelTripAdvisorLabel"></span>
+						<span class="rate" [textContent]="res.hotelTripAdvisorRating.toFixed(1)"></span>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="right wrap">
-			<div class="rateTrip fgc c1 fsz f15" [hidden]="!res.hotelTripAdvisorRating">
-				<span class="label" [textContent]="res.hotelTripAdvisorLabel"></span>
-				<span class="rate" [textContent]="res.hotelTripAdvisorRating.toFixed(1)"></span>
+			<div class="bot" [hidden]="!vars.params.in || !vars.params.out">
+				<p class="fsz f17">
+					<span>{{ vars.params.rng }} Noites</span>
+					<strong>Entrada</strong>
+					<span [textContent]="vars.param.in"></span>
+					<span [textContent]="vars.param.out"></span>
+				</p>
 			</div>
 		</div>
 	</div>
+	<div id="quartos"></div>
+	<div id="bom-saber"></div>
+	<div id="facilidades"></div>
+	<div id="pontos-de-interesse"></div>
 </div>

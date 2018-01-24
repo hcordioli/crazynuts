@@ -28,6 +28,13 @@ export class DetalheComponent implements OnInit {
         } else
             console.log('!id');
     }
+    public apt = {
+        in: 0,
+        out: 0,
+        noites: 0,
+        adult: 0,
+        kid: 0
+    };
     public res: any;
     public hi: any;
     public loadInfo() {
@@ -43,7 +50,7 @@ export class DetalheComponent implements OnInit {
         }
         var p = self.vars.params,
             date2p = function(str) {
-                return str.replace(/^(\d{2})(\d{2})(\d{2})$/gi, '$1\/$2\/20$3');
+                return str.replace(/^(\d{2})(\d{2})(\d{2})$/gi, '$2\/$1\/20$3');
             },
             o = {
                 id: self.hi || p.id,

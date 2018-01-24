@@ -23,7 +23,6 @@ export class RootComponent implements OnInit {
             if (data && data.redirecting)
                 self.router.navigate(['/'], { queryParams: { '404': self.router.url } });
         });
-
     }
     ngOnInit() {
         this.sub = this.route.queryParams.subscribe(params => {

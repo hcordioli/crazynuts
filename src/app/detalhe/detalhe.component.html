@@ -6,7 +6,7 @@
 			</div>
 			<div class="rateStar" [hidden]="!res.hotelRating">
 				<div class="stars">
-					<span [attr.class]="'fsz f19' + (res.hotelRating % 1 !== 0 && j + 1 > res.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:res.hotelRating; let j = index;">
+					<span [attr.class]="'fsz f19' + (res.hotelRating % 1 !== 0 && j + 1 > res.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:(res.hotelRating ? res.hotelRating : 1); let j = index;">
 						☆
 					</span>
 				</div>

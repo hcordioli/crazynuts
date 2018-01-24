@@ -100,7 +100,7 @@ form {
 				display: block;
 			}
 			&[hidden] {
-				visibility: hidden;
+				visibility: hidden !important;
 			}
 		}
 		.icon-room,

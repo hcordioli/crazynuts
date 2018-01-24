@@ -16,7 +16,7 @@
 		top: 12rem;
 		left: 0;
 		&[hidden] {
-			display: none;
+			display: none !important;
 		}
 		.filtro {
 			position: absolute;
@@ -305,7 +305,7 @@
 		.lastRooms {
 			padding-top: 0.1rem;
 			&[hidden] {
-				display: none;
+				display: none !important;
 			}
 			.icon {
 				display: inline-block;
@@ -409,7 +409,7 @@
 			li {
 				display: inline-block;
 				&[hidden] {
-					display: none;
+					display: none !important;
 				}
 				&>span {
 					padding: 0 0.2rem;

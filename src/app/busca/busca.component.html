@@ -164,7 +164,7 @@
 							<div class="left">
 								<span class="nome fsz f20" [textContent]="item.name"></span>
 								<div class="ndwrap wrap">
-									<div class="rateStar">
+									<div class="rateStar" [hidden]="!item.hotelRating">
 										<div class="stars">
 											<span [attr.class]="'fsz f19' + (item.hotelRating % 1 !== 0 && j + 1 > item.hotelRating ? ' half' : '')" *ngFor="let star of [] | range:item.hotelRating; let j = index;">
 												☆

@@ -23,7 +23,7 @@
 			display: block;
 		}
 		&[hidden] {
-			visibility: hidden;
+			visibility: hidden !important;
 		}
 	}
 
@@ -182,7 +182,7 @@
 		margin: 1rem 0 0;
 		float: right;
 		&[hidden] {
-			visibility: hidden;
+			visibility: hidden !important;
 		}
 		&.disabled {
 			background-color: #aaa;

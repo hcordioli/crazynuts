@@ -6,7 +6,7 @@
     "ng": "ng",
     "start": "ng serve -p 80",
     "build": "ng build -prod && cp docs/index.html docs/404.html",
-    "commit": "npm build && git add . && git commit -m ",
+    "commit": "npm run build && git add . && git commit -m ",
     "push": "git add . && git pull && git push -u",
     "test": "ng test",
     "lint": "ng lint",

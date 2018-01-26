@@ -50,12 +50,16 @@ export class CalendarComponent implements AfterViewInit {
     constructor(private gd: GlobalService, private route: ActivatedRoute) {
         var self = this;
         self.vars = gd.vars;
-        self.entrada.val = Utils.cookie('entrada');
-        self.entrada.txt = self.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-        self.saida.val = Utils.cookie('saida');
-        self.saida.txt = self.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
-        self.options.startDate = self.entrada.val;
-        self.options.endDate = self.saida.val;
+        if (Utils.cookie('entrada')) {
+            self.entrada.val = Utils.cookie('entrada');
+            self.entrada.txt = self.entrada.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
+        }
+        if(Utils.cookie('saida')) {
+            self.saida.val = Utils.cookie('saida');
+            self.saida.txt = self.saida.val.replace(/^(\d*?)(.)(\d*?)(.)(\d{2})(\d{2})$/gi, '$3$4$1$2$6');
+            self.options.startDate = self.entrada.val;
+            self.options.endDate = self.saida.val;
+        }
     }
 
     ngAfterViewInit() {
@@ -64,8 +68,8 @@ export class CalendarComponent implements AfterViewInit {
             self.vars.params.in = self.urlSubmit.in = Utils.date2str('', self.rangepicker.datePicker.startDate._d);
         if (self.rangepicker.datePicker.endDate) {
             self.vars.params.out = self.urlSubmit.out = Utils.date2str('', self.rangepicker.datePicker.endDate._d);
-            if(self.rangepicker.datePicker.startDate)
-                self.vars.params.rng = Math.ceil((self.rangepicker.datePicker.endDate._d - self.rangepicker.datePicker.startDate._d) / 864e5);
+            // if(self.rangepicker.datePicker.startDate)
+            // self.vars.params.rng = Math.ceil((self.rangepicker.datePicker.endDate._d - self.rangepicker.datePicker.startDate._d) / 864e5);
         }
     }
     public nextInput(ev) {

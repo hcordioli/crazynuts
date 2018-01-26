@@ -277,7 +277,7 @@ export class BuscaComponent implements OnInit {
                 p = s.vars.params;
             setTimeout(function() {
                 if (p.sort)
-                    s.sortBy(p.sort === '0' ? { on: 'always' } : {}, 'price', p.sort === '2');
+                    s.sortBy({ on: p.sort === '0' ? 'off' : 'always' }, 'price', p.sort === '2');
                 if (p.fn)
                     s.filterBy('hotelname', p.fn);
                 if (s.vars.keys && p && (p.go.toString() === 'true')) {
@@ -586,7 +586,7 @@ export class BuscaComponent implements OnInit {
             self.vars.sort[str].desc = false;
             self.vars.sort[str][ord] = true;
             self.vars.hotelsUrl.sort = 'sort=price&sortorder=' + ord;
-        } else if ((self.vars.params.sort === '0' || (self.vars.sort[str][ord] && self.vars.hotelsUrl.sort))) {
+        } else if ((e && e.on && e.on === 'off') || (self.vars.params.sort === '0' || (self.vars.sort[str][ord] && self.vars.hotelsUrl.sort))) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.hotelsUrl.sort = '';

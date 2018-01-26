@@ -581,16 +581,21 @@ export class BuscaComponent implements OnInit {
             ord = bool ? 'asc' : 'desc';
         if (e && e.stopPropagation)
             e.stopPropagation()
-        if ((e && e.on && e.on === 'always') || self.vars.sort[str] && ord in self.vars.sort[str]) {
+        if ((e && e.on && e.on === 'off')) {
+            self.vars.sort[str].asc = false;
+            self.vars.sort[str].desc = false;
+            self.vars.hotelsUrl.sort = '';
+        } else if ((e && e.on && e.on === 'always') || self.vars.sort[str] && ord in self.vars.sort[str]) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.sort[str][ord] = true;
             self.vars.hotelsUrl.sort = 'sort=price&sortorder=' + ord;
-        } else if ((e && e.on && e.on === 'off') || (self.vars.params.sort === '0' || (self.vars.sort[str][ord] && self.vars.hotelsUrl.sort))) {
+        } else if ((self.vars.params.sort === '0' || (self.vars.sort[str][ord] && self.vars.hotelsUrl.sort))) {
             self.vars.sort[str].asc = false;
             self.vars.sort[str].desc = false;
             self.vars.hotelsUrl.sort = '';
         }
+
     }
     public hotelnameChange() {
         var self = this;

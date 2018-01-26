@@ -13,7 +13,7 @@
 		display: block;
 		width: 100%;
 		position: absolute;
-		top: 12rem;
+		top: 11rem;
 		left: 0;
 		&[hidden] {
 			display: none !important;
@@ -53,7 +53,7 @@
 		}
 		.stickie {
 			position: fixed;
-			top: 11rem;
+			top: 10rem;
 			z-index: 2;
 			padding: 0.6rem 0rem;
 			background-color: #fff;
@@ -98,7 +98,6 @@
 							&>*,
 							& a {
 								text-decoration: none;
-								color: #777;
 								font-weight: 600;
 								cursor: pointer;
 								display: inline-block !important;
@@ -502,7 +501,6 @@
 		}
 		h4 {
 			text-transform: uppercase;
-			font-size: 0.83rem;
 			color: #243E6F;
 			font-weight: 600;
 			padding-bottom: 0.4rem;
@@ -627,7 +625,6 @@
 					li {
 						label {
 							position: relative;
-							font-size: 0.71rem;
 							.checkIcon {
 								content: '';
 								position: absolute;

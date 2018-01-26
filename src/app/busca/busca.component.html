@@ -20,9 +20,9 @@
 		<div class="filtro">
 			<div class="filtros" data-stuck>
 				<div class="wrap">
-					<h3>Filtrar resultados</h3>
+					<!-- <h3>Filtrar resultados</h3> -->
 					<div class="filtro-ativo" *ngIf="vars.filter.bit.val > 0">
-						<h4>Filtros Ativos</h4>
+						<h4 class="fsz f17	">Filtros Ativos</h4>
 						<ul>
 							<ng-template let-filtro ngFor [ngForOf]="vars.filter.bit.masks" let-i="index">
 								<ng-template let-item ngFor [ngForOf]="filtro.arr" let-j="index">
@@ -42,7 +42,7 @@
 					</div>
 					<div class="hotelname">
 						<div class="wrap">
-							<h4>Nome do hotel</h4>
+							<h4 class="fsz f17">Nome do hotel</h4>
 							<label (keyup.Enter)="filterBy('hotelname', vars.filter.hotelname.val)">
 								<input type="text" placeholder="Nome do hotel" name="hotelname" [(ngModel)]="vars.filter.hotelname.val" (ngModelChange)="hotelnameChange()">
 							</label>
@@ -53,7 +53,7 @@
 					</div>
 					<div class="hotelprice">
 						<div class="wrap">
-							<h4>Preço por noite</h4>
+							<h4 class="fsz f17">Preço por noite</h4>
 							<em>Min <span [textContent]="vars.filter.hotelprice.val[0] | currency:'BRL':'code':'1.0-0'"></span> a <span [textContent]="vars.filter.hotelprice.val[1] | currency:'BRL':'code':'1.0-0'"></span> Max</em>
 							<nouislider [step]="1" [connect]="true" [min]="vars.filter.hotelprice.min" [max]="vars.filter.hotelprice.max" [(ngModel)]="vars.filter.hotelprice.val"></nouislider>
 						</div>
@@ -61,14 +61,14 @@
 					<div class="hotelfilters">
 						<div class="wrap" *ngFor="let filtro of vars.filter.bit.masks; let i = index;">
 							<div class="title wrap">
-								<h4 [textContent]="filtro.str"></h4>
+								<h4 class="fsz f17" [textContent]="filtro.str"></h4>
 								<a class="sanfona fgc c1" [attr.title]="filterOpened(i) ? 'Fechar' : 'Abrir'" href="javascript:;" (click)="filterOpen(i);">
 									<i [attr.class]="'fa fa-angle-' + (filterOpened(i) ? 'up' : 'down')"></i>
 								</a>
 							</div>
 							<ul [hidden]="!show.masks[i]">
 								<li *ngFor="let item of filtro.arr; let j = index;">
-									<label>
+									<label class="fsz f13">
 										<input type="checkbox" (ngModelChange)="filterAdd(i, j)" [(ngModel)]="item.val">
 										<span [textContent]="item.str"></span>
 									</label>
@@ -82,7 +82,7 @@
 		<div class="cards">
 			<div class="stickie">
 				<div class="wrap">
-					<ul class="sort">
+					<ul class="sort fsz f17">
 						<li class="item">
 							<a href="javascript:;">
 								<span class="hotdeals icon">
@@ -91,28 +91,28 @@
 							</a>
 						</li>
 						<li class="item">
-							<a href="javascript:;">
+							<a href="javascript:;" class="fgc c1">
 								<span>Mais Populares</span>
 							</a>
 						</li>
 						<li class="item">
 							<span>
-								<a href="javascript:;" [routerLink]="['/', 'u', rParam({sort: 0})]">Preço</a>
-								<a title="Maior no Topo" href="javascript:;" [attr.class]="vars.sort.price.desc ? 'active' : ''" [routerLink]="['/', 'u', rParam({sort: 1})]">
+								<a href="javascript:;" class="fgc c1" [routerLink]="['/', 'u', rParam({sort: 0})]">Preço</a>
+								<a title="Maior no Topo" href="javascript:;" [attr.class]="'fgc c1 ' + (vars.sort.price.desc ? 'active' : '')" [routerLink]="['/', 'u', rParam({sort: 1})]">
 									<i class="fa fa-sort-desc"></i>
 								</a>
-								<a title="Menor no Topo" href="javascript:;" [attr.class]="vars.sort.price.asc ? 'active' : ''" [routerLink]="['/', 'u', rParam({sort: 2})]">
+								<a title="Menor no Topo" href="javascript:;" [attr.class]="'fgc c1 ' + (vars.sort.price.asc ? 'active' : '')" [routerLink]="['/', 'u', rParam({sort: 2})]">
 									<i class="fa fa-sort-asc"></i>
 								</a>
 							</span>
 						</li>
 						<li class="item">
 							<span (click)="sortBy($event, 'rating', (vars.sort.rating.asc ? false : true))">
-								Avaliação
-								<a href="javascript:;" [attr.class]="vars.sort.rating.desc ? 'active' : ''" (click)="sortBy($event, 'preco', false)">
+								<a href="javascript:;" class="fgc c1" [routerLink]="['/', 'u', rParam({rat: 0})]">Avaliação</a>
+								<a href="javascript:;" [attr.class]="'fgc c1 ' + (vars.sort.rating.desc ? 'active' : '')" (click)="sortBy($event, 'preco', false)">
 									<i class="fa fa-sort-desc"></i>
 								</a>
-								<a href="javascript:;" [attr.class]="vars.sort.rating.asc ? 'active' : ''" (click)="sortBy($event, 'preco', true)">
+								<a href="javascript:;" [attr.class]="'fgc c1 ' + (vars.sort.rating.asc ? 'active' : '')" (click)="sortBy($event, 'preco', true)">
 									<i class="fa fa-sort-asc"></i>
 								</a>
 							</span>

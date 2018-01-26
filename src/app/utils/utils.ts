@@ -28,5 +28,36 @@ export const Utils = {
                 ret = 'Excepcional!';
         }
         return ret;
+    },
+    animate: function(win, el, style, unit, from, to, time, prop) {
+        if (!el)
+            return;
+        if(!win)
+            win = {};
+        var start = (new Date()).getTime(),
+            timer = function() {
+                var step = Math.min(1, (new Date().getTime() - start) / time);
+                if (prop) {
+                    el[style] = (from + step * (to - from)) + unit;
+                } else {
+                    el.style[style] = (from + step * (to - from)) + unit;
+                }
+                if (step !== 1) {
+                    if (!win['requestAnimationFrame']) {
+                        win['requestAnimationFrame'] = (function() {
+                            return win['webkitRequestAnimationFrame'] ||
+                                win['mozRequestAnimationFrame'] ||
+                                win['oRequestAnimationFrame'] ||
+                                win['msRequestAnimationFrame'] ||
+                                function(cb) {
+                                    win['setTimeout'](cb, 1000 / 60);
+                                };
+                        }());
+                    }
+                    win['requestAnimationFrame'](timer);
+                }
+            };
+        timer();
+        el.style[style] = from + unit;
     }
 }

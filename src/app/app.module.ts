@@ -25,6 +25,7 @@ import { BarComponent } from './html/bar/bar.component';
 import { RegionComponent } from './html/bar/region/region.component';
 import { CalendarComponent } from './html/bar/calendar/calendar.component';
 import { AptComponent } from './html/bar/apt/apt.component';
+import { SliderComponent } from './html/slider/slider.component';
 
 registerLocaleData(localePt, 'pt-BR');
 
@@ -43,7 +44,8 @@ registerLocaleData(localePt, 'pt-BR');
         BarComponent,
         RegionComponent,
         CalendarComponent,
-        AptComponent
+        AptComponent,
+        SliderComponent
     ],
     imports: [
         FormsModule,

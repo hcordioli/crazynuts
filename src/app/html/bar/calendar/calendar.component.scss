@@ -70,7 +70,9 @@
 			width: 50%;
 			padding-left: .7rem;
 			overflow: hidden;
+			cursor: pointer;
 			&:before {
+				background-color: transparent;
 				width: .7rem;
 				height: 100%;
 				display: block;
@@ -94,6 +96,7 @@
 			z-index: -1;
 			&.topArrow {
 				margin-top: 22px;
+				background-color: transparent;
 				& .daterangepicker {
 					&:before,
 					&:after {

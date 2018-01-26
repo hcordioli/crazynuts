@@ -277,7 +277,7 @@ export class BuscaComponent implements OnInit {
                 p = s.vars.params;
             setTimeout(function() {
                 if (p.sort)
-                    s.sortBy({ on: 'always' }, 'price', p.sort === '2');
+                    s.sortBy(p.sort === '0' ? { on: 'always' } : {}, 'price', p.sort === '2');
                 if (p.fn)
                     s.filterBy('hotelname', p.fn);
                 if (s.vars.keys && p && (p.go.toString() === 'true')) {

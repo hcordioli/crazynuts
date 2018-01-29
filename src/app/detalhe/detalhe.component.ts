@@ -40,6 +40,10 @@ export class DetalheComponent implements OnInit {
     public img: any;
     public imgHeight = { height: 'auto' };
     public thumbHeight = { height: 'auto' };
+    public btnStyle = {
+        width: 'auto',
+        height: 'auto'
+    };
     public hi: any;
     public show = {
         thumbs: false,
@@ -106,6 +110,10 @@ export class DetalheComponent implements OnInit {
         var self = this;
         if (self.thumbHeight.height === 'auto') {
             self.thumbHeight.height = ((tgt.height + 5) * 2) + 'px';
+            self.btnStyle = {
+                width: (tgt.height * 2) + 'px',
+                height: tgt.height + 'px'
+            };
         }
     }
 }

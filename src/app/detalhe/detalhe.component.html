@@ -79,7 +79,7 @@
 					<div (click)="show.img = n" [attr.class]="'thumb' + (show.img === n ? ' active' : '')" *ngFor="let item of [] | range:img.hotelImages.HotelImage.length; let n = index;">
 						<img (load)="thumbRatio($event.target, n)" [attr.src]="img.hotelImages.HotelImage[n].thumbnailUrl" alt="">
 					</div>
-					<a href="javascript:;" (click)="show.thumbs = !show.thumbs">
+					<a [ngStyle]="btnStyle" href="javascript:;" (click)="show.thumbs = !show.thumbs">
 						<span *ngIf="!show.thumbs">
 							Veja {{img.hotelImages.HotelImage.length}} Fotos
 						</span>

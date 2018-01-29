@@ -107,9 +107,9 @@ export class CalendarComponent implements AfterViewInit {
             return true;
         if (tgt && tgt.parentNode && tgt.parentNode.parentNode && /check(in|out)/gi.exec(tgt.parentNode.parentNode.className))
             tgt = tgt.parentNode;
-        if (e.target.id === 'pickMe' || /check(in|out)/gi.exec(e.target.className))
-            tgt = e.target.parentNode.querySelector('.check' + (tgt.id || /in/gi.exec(tgt.className) ? 'in' : 'out') + ' > span');
-        if (/check(in|out)/gi.exec(tgt.parentNode.className)) {
+        if (e.target.id === 'pickMe' || (e.target && /check(in|out)/gi.exec(e.target.className)))
+            tgt = e.target.parentNode.querySelector('.check' + (tgt.id || tgt && /in/gi.exec(tgt.className) ? 'in' : 'out') + ' > span');
+        if (tgt.parentNode && /check(in|out)/gi.exec(tgt.parentNode.className)) {
             start = !!(/in/gi.exec(tgt.parentNode.className));
             self.vars.show.calendarRight = !start;
             date = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');
@@ -132,7 +132,7 @@ export class CalendarComponent implements AfterViewInit {
                     }
                 }, 0);
             }
-        } else if (/(start|end)[-]date/.exec(tgt.className)) {
+        } else if (tgt && /(start|end)[-]date/.exec(tgt.className)) {
             start = !!(/start/gi.exec(tgt.className));
             self.vars.show.calendarRight = !start;
             val = el.querySelector('[name="daterangepicker_' + (start ? 'start' : 'end') + '"]');

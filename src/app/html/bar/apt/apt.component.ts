@@ -68,7 +68,8 @@ export class AptComponent implements AfterViewInit {
                         return a.age;
                     }).join(',');
             }
-            self.rooms.nativeElement.className += ' touched';
+            if (self.rooms && self.rooms.nativeElement)
+                self.rooms.nativeElement.className += ' touched';
             self.vars.params = self.vars.params || {};
             self.vars.params.apt = str;
         }, 0);
@@ -91,7 +92,8 @@ export class AptComponent implements AfterViewInit {
                     self.changeChild(i, tmp.length, ('children[' + i + ']'), tmp);
                 }
             }
-            self.rooms.nativeElement.className += ' touched';
+            if (self.rooms && self.rooms.nativeElement)
+                self.rooms.nativeElement.className += ' touched';
             setTimeout(function() {
                 if (self.show > 0)
                     self.show = -1;
@@ -100,7 +102,7 @@ export class AptComponent implements AfterViewInit {
     }
     ngAfterViewInit() {
         var self = this;
-        if (self.cookied)
+        if (self.cookied && self.rooms && self.rooms.nativeElement)
             self.rooms.nativeElement.className += ' touched';
     }
     public selectRoom(index) {
@@ -258,7 +260,7 @@ export class AptComponent implements AfterViewInit {
             val, date;
         if (!e || !tgt)
             return true;
-        if (self.rooms.nativeElement) {
+        if (self.rooms && self.rooms.nativeElement) {
             if (self.rooms.nativeElement.contains(tgt)) {
                 self.show = Math.max(self.show, 0);
                 if (!/touched/.test(self.rooms.nativeElement.className))

@@ -30,8 +30,7 @@ export class DetalheComponent implements OnInit {
         } else
             console.log('!id');
     }
-    public apt = {
-        in: 0,
+    public apt = { in: 0,
         out: 0,
         noites: 0,
         adult: 0,
@@ -39,6 +38,7 @@ export class DetalheComponent implements OnInit {
     };
     public res: any;
     public img: any;
+    public imgHeight = { height: 'auto' };
     public hi: any;
     public show = {
         moreImg: false,
@@ -85,8 +85,19 @@ export class DetalheComponent implements OnInit {
                 }, 1000)
             });
         self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelimages?hotelId=' + o.id + '&' + o.keys).subscribe(data => {
+            var i;
             self.img = data;
-            console.log(self.img.HotelImages);
+            for (i = 0; i < self.img.hotelImages.HotelImage.length; i++)
+                if (self.img.hotelImages.HotelImage[i].main && i) {
+                    self.img.hotelImages.HotelImage[i].unshift(self.img.hotelImages.HotelImage[i]);
+                    self.img.hotelImages.HotelImage[i].splice(i, 1);
+                }
         });
+    }
+    public imgRatio(tgt, i) {
+        var self = this;
+        self.img.hotelImages.HotelImage[i].cls = tgt.height * 1.333 > tgt.width ? 'tall' : 'wide';
+        if (self.imgHeight.height === 'auto')
+            self.imgHeight.height = (tgt.parentNode.parentNode.offsetWidth * 0.75) + 'px';
     }
 }

@@ -54,9 +54,25 @@
 		</ul>
 		<div class="summary">
 			<div class="imgs" *ngIf="img">
-				<div class="img" (click)="show.img = show.img === img.hotelImages.HotelImage.length - 1 ? 0 : show.img + 1">
-					<div [attr.class]="'abs ' + (show.img > n ? 'alignL' : (show.img === n ? 'alignC' : 'alignR'))"  *ngFor="let item of [] | range:(img.hotelImages.HotelImage.length); let n = index;">
-						<img [attr.src]="img.hotelImages.HotelImage[n].url" alt="">
+				<div class="img" [ngStyle]="imgHeight">
+					<div class="prevNext">
+						<div (click)="show.img = show.img === 0 ? img.hotelImages.HotelImage.length - 1 : show.img - 1">
+							<span class="left fgc c1"><i class="fa fa-chevron-left fa-2x"></i></span>
+						</div>
+						<div (click)="show.img = show.img === img.hotelImages.HotelImage.length - 1 ? 0 : show.img + 1">
+							<span class="right fgc c1"><i class="fa fa-chevron-right fa-2x"></i></span>
+						</div>
+					</div>
+					<span class="overlay">
+						<strong class="fsz f13">
+							Imagem em destaque
+							<span>
+								[{{show.img + 1}}/{{img.hotelImages.HotelImage.length}}]
+							</span>
+					</strong>
+					</span>
+					<div [attr.class]="'abs ' + (show.img > n ? 'alignL' : (show.img === n ? 'alignC' : 'alignR'))" *ngFor="let item of [] | range:(img.hotelImages.HotelImage.length); let n = index;">
+						<img (load)="imgRatio($event.target, n)" [attr.class]="img.hotelImages.HotelImage[n].cls" [attr.src]="img.hotelImages.HotelImage[n].url" alt="">
 					</div>
 				</div>
 			</div>

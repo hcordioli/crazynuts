@@ -39,9 +39,10 @@ export class DetalheComponent implements OnInit {
     public res: any;
     public img: any;
     public imgHeight = { height: 'auto' };
+    public thumbHeight = { height: 'auto' };
     public hi: any;
     public show = {
-        moreImg: false,
+        thumbs: false,
         img: 0
     };
     public loadInfo() {
@@ -97,7 +98,14 @@ export class DetalheComponent implements OnInit {
     public imgRatio(tgt, i) {
         var self = this;
         self.img.hotelImages.HotelImage[i].cls = tgt.height * 1.333 > tgt.width ? 'tall' : 'wide';
-        if (self.imgHeight.height === 'auto')
+        if (self.imgHeight.height === 'auto') {
             self.imgHeight.height = (tgt.parentNode.parentNode.offsetWidth * 0.75) + 'px';
+        }
+    }
+    public thumbRatio(tgt, i) {
+        var self = this;
+        if (self.thumbHeight.height === 'auto') {
+            self.thumbHeight.height = ((tgt.height + 5) * 2) + 'px';
+        }
     }
 }

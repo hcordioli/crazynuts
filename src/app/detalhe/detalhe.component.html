@@ -17,11 +17,11 @@
 				<div class="right wrap">
 					<div class="rateTrip fgc c1 fsz f15" [hidden]="!res.hotelTripAdvisorRating">
 						<span class="label" [textContent]="res.hotelTripAdvisorLabel"></span>
-						<span class="rate" [textContent]="res.hotelTripAdvisorRating.toFixed(1)"></span>
+						<span class="rate" [textContent]="(res.hotelTripAdvisorRating||0).toFixed(1)"></span>
 					</div>
 				</div>
 			</div>
-			<div class="bot" [hidden]="!vars.params.in || !vars.params.out || !vars.params.rng">
+			<div class="bot" style="display:none;" [hidden]="!vars.params.in || !vars.params.out || !vars.params.rng">
 				<p class="fsz f17">
 					<span>{{ vars.params.rng }} Noites</span>
 					<strong>Entrada</strong>
@@ -72,8 +72,21 @@
 					</strong>
 					</span>
 					<div [attr.class]="'abs ' + (show.img > n ? 'alignL' : (show.img === n ? 'alignC' : 'alignR'))" *ngFor="let item of [] | range:(img.hotelImages.HotelImage.length); let n = index;">
-						<img (load)="imgRatio($event.target, n)" [attr.class]="img.hotelImages.HotelImage[n].cls" [attr.src]="img.hotelImages.HotelImage[n].url" alt="">
+						<img (load)="imgRatio($event.target, n)" [attr.class]="img.hotelImages.HotelImage[n].cls" [attr.src]="img.hotelImages.HotelImage[n].highResolutionUrl" alt="">
 					</div>
+				</div>
+				<div class="thumbs" [ngStyle]="!show.thumbs ? thumbHeight : {}" [hidden]="!show.thumbs">
+					<div (click)="show.img = n" [attr.class]="'thumb' + (show.img === n ? ' active' : '')" *ngFor="let item of [] | range:img.hotelImages.HotelImage.length; let n = index;">
+						<img (load)="thumbRatio($event.target, n)" [attr.src]="img.hotelImages.HotelImage[n].thumbnailUrl" alt="">
+					</div>
+					<a href="javascript:;" (click)="show.thumbs = !show.thumbs">
+						<span *ngIf="!show.thumbs">
+							Veja {{img.hotelImages.HotelImage.length}} Fotos
+						</span>
+						<span *ngIf="show.thumbs">
+							Exibir Menos
+						</span>
+					</a>
 				</div>
 			</div>
 		</div>

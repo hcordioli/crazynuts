@@ -153,7 +153,7 @@
 							<span class="fgc c1 fsz f13">
 								Café da manhã
 								<span class="fgc c2">incluído</span>
-						</span>
+							</span>
 						</span>
 						<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
 							<img [attr.class]="n ? 'flipped' : ''" [attr.src]="img ? 'https://i.travelapi.com' + img.replace('_t.', '_d.') : ''" alt="">

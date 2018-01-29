@@ -18,6 +18,8 @@ export class DetalheComponent implements OnInit {
         self.vars = gd.vars;
         self.vars.path = 'detalhe';
         self.vars.loadSearch = false;
+        self.res = null;
+        self.img = null;
     }
     ngOnInit() {
         var self = this;
@@ -36,7 +38,12 @@ export class DetalheComponent implements OnInit {
         kid: 0
     };
     public res: any;
+    public img: any;
     public hi: any;
+    public show = {
+        moreImg: false,
+        img: 0
+    };
     public loadInfo() {
         var self = this,
             h = self.vars.hotelList,
@@ -77,5 +84,9 @@ export class DetalheComponent implements OnInit {
                     }, 0);
                 }, 1000)
             });
+        self.httpC.get('https://s9fcnig6dc.execute-api.us-east-1.amazonaws.com/Test/hotelimages?hotelId=' + o.id + '&' + o.keys).subscribe(data => {
+            self.img = data;
+            console.log(self.img.HotelImages);
+        });
     }
 }

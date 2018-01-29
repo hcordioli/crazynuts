@@ -30,7 +30,7 @@
 				</p>
 			</div>
 		</div>
-		<ul class="menu">
+		<ul class="menu" style="display:none;">
 			<li>
 				<a href="javascript:;" fragment="quartos">
 					<span>Quartos</span>
@@ -52,6 +52,15 @@
 				</a>
 			</li>
 		</ul>
+		<div class="summary">
+			<div class="imgs" *ngIf="img">
+				<div class="img" (click)="show.img = show.img === img.hotelImages.HotelImage.length - 1 ? 0 : show.img + 1">
+					<div [attr.class]="'abs ' + (show.img > n ? 'alignL' : (show.img === n ? 'alignC' : 'alignR'))"  *ngFor="let item of [] | range:(img.hotelImages.HotelImage.length); let n = index;">
+						<img [attr.src]="img.hotelImages.HotelImage[n].url" alt="">
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div id="nav-quartos"></div>
 	<div id="nav-bom-saber"></div>

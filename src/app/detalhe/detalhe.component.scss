@@ -40,5 +40,43 @@
 				}
 			}
 		}
+		.summary {
+			.img {
+				float: left;
+				width: 30%;
+				padding-bottom: 30%;
+				overflow: hidden;
+				position: relative;
+				.abs {
+					position: absolute;
+					top: 0;
+					left: 0;
+					height: auto;
+					width: 100%;
+					display: block;
+					transition: left .4s ease;
+					background-color: #fff;
+					z-index: 0;
+					&.alignL {
+						left: -100%;
+					}
+					&.alignC {
+						left: 0%;
+					}
+					&.alignR {
+						left: 100%;
+					}
+
+					img {
+						display: block;
+						width: 100%;
+					}
+					img.flipped {
+						transform: scaleX(-1) rotate(180deg);
+						filter: FlipH;
+					}
+				}
+			}
+		}
 	}
 }

@@ -280,6 +280,12 @@ export class BuscaComponent implements OnInit {
                     s.sortBy({ on: p.sort === '0' ? 'off' : 'always' }, 'price', p.sort === '2');
                 if (p.fn)
                     s.filterBy('hotelname', p.fn);
+                else if (p.go.toString() === 'false') {
+                    if (!self.hotelList.HotelListResponseStr) {
+                        p.go = 'true';
+                        self.router.navigate(['/', 'u', p]);
+                    }
+                }
                 if (s.vars.keys && p && (p.go.toString() === 'true')) {
                     setTimeout(function() {
                         s.loadHotel();
@@ -331,26 +337,33 @@ export class BuscaComponent implements OnInit {
         if (h.regionId === o.id) {
             if (h.searchId && self.vars.hotelsUrl.base.indexOf('searchId=') < 0) {
                 self.vars.hotelsUrl.base += '&searchId=' + h.searchId;
-            } else
+            } else {
                 h.searchId = '';
+            }
+            if (self.vars.filter.hotelname.active) {
+                self.vars.loadSearch = false;
+                h.HotelListResponse = null;
+            }
             if (h.hasMorePages) {
-                self.infinityScrolling = true;
-                if (h.searchId && isScroll)
-                    self.vars.hotelsUrl.page = 'page=' + h.page;
+                if (h.searchId && isScroll) {
+                    self.vars.hotelsUrl.page = 'page=' + (++h.page);
+                    self.vars.loadSearch = true;
+                }
             }
         } else {
-            b = self.vars.filter.hotelname.active = !h.regionId;
+            if (self.vars.filter.hotelname.active)
+                b = self.vars.filter.hotelname.active = !h.regionId;
             h.regionId = o.id;
             self.vars.hotelsUrl.page = 'page=0';
             h.page = 0;
+            h.HotelListResponse = null;
+            self.vars.loadSearch = false;
         }
         self.vars.keys = self.vars.keys || Utils.cookie('keys');
         if (!self.vars.keys) {
             alert('Favor inserir token!');
             return;
         }
-        h.HotelListResponse = null;
-        self.vars.loadSearch = false;
         self.loadSearch = self.vars.loadSearch;
         url = (self.vars.hotelsUrl.base +
             self.vars.hotelsUrl.avail +
@@ -437,7 +450,6 @@ export class BuscaComponent implements OnInit {
                             h.HotelListResponse = null;
                             h.HotelListResponseStr = 'Não há hoteis com o nome: "' + self.vars.filter.hotelname.val + '".';
                             delete self.vars.params.fn;
-                            self.router.navigate(['/', 'u', self.vars.params]);
                         }, 0);
                     } else {
                         if (!Array.isArray(h.HotelListResponse))
@@ -485,13 +497,25 @@ export class BuscaComponent implements OnInit {
         }, err => {
             var erro = err ? err.error && err.error.text : '{messagem: Erro!}';
             setTimeout(function() {
-                erro = isScroll ? '' : 'Erro: ' + erro;
-                h.HotelListResponseStr = erro;
-                h.searchId = '';
-                setTimeout(function() {
-                    self.hotelList = h;
-                    self.router.navigate(['/', 'u', self.vars.params]);
-                }, 0);
+                if (isScroll) {
+                    h.HotelListResponseStr = null;
+                    setTimeout(function() {
+                        self.vars.loadSearch = true;
+                        self.loadSearch = self.vars.loadSearch;
+                        self.hotelList = h;
+                        self.hotelList.hasMorePages = false;
+                        self.scrolling = false;
+                        self.infinityScrolling = false;
+                    }, 0);
+                } else {
+                    erro = 'Erro: ' + erro;
+                    h.HotelListResponseStr = erro;
+                    h.searchId = '';
+                    setTimeout(function() {
+                        self.hotelList = h;
+                        self.router.navigate(['/', 'u', self.vars.params]);
+                    }, 0);
+                }
             }, 1000)
         });
     }
@@ -514,6 +538,7 @@ export class BuscaComponent implements OnInit {
             if (s >= h && !self.infinityScrolling) {
                 if (self.hotelList.hasMorePages) {
                     self.scrolling = true;
+                    self.infinityScrolling = true;
                     self.loadHotel();
                 }
             }
@@ -607,7 +632,7 @@ export class BuscaComponent implements OnInit {
         var self = this,
             append = 'filterfield=' + field + '&filtervalue=' + str;
         if (field === 'hotelname') {
-            if (!str && self.vars.filter.hotelname.active) {
+            if (!str && (self.vars.filter.hotelname.active || self.hotelList.HotelListResponseStr)) {
                 self.hotelList.page = 0;
                 self.vars.hotelsUrl.page = 'page=' + self.hotelList.page;
                 self.vars.hotelsUrl.filter = '';
@@ -615,6 +640,8 @@ export class BuscaComponent implements OnInit {
                 delete self.vars.params.fn;
                 if (self.vars.filter.hotelname.val)
                     self.vars.filter.hotelname.val = '';
+                self.hotelList.HotelListResponseStr = '';
+                self.vars.params.go = 'false';
                 self.router.navigate(['/', 'u', self.vars.params]);
             } else if (str) {
                 self.vars.hotelsUrl.filter = append;

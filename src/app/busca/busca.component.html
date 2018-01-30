@@ -1,6 +1,11 @@
 <div class="app-busca" [hidden]="loadSearch === undefined">
 	<div *ngIf="loadSearch !== undefined;then content"></div>
 </div>
+<ng-template #loading>
+	<span *ngIf="!hotelList.HotelListResponseStr || !hotelList.HotelListResponseStr.length" class="loading icon">
+		<img [attr.src]="vars.loading" alt="Carregando...">
+	</span>
+</ng-template>
 <ng-template #content>
 	<style>
 	@font-face {
@@ -20,7 +25,6 @@
 		<div class="filtro">
 			<div class="filtros" data-stuck>
 				<div class="wrap">
-					<!-- <h3>Filtrar resultados</h3> -->
 					<div class="filtro-ativo" *ngIf="vars.filter.bit.val > 0">
 						<h4 class="fsz f17	">Filtros Ativos</h4>
 						<ul>
@@ -135,25 +139,20 @@
 				</div>
 			</div>
 			<div class="msg" *ngIf="hotelList">
-				<div *ngIf="!hotelList.searchId">
-					<span *ngIf="!hotelList.HotelListResponseStr" class="loading icon">
-						<img [attr.src]="vars.loading" alt="Carregando...">
-					</span>
+				<div *ngIf="!hotelList.searchId || !hotelList.HotelListResponse;then loading">
 				</div>
-				<div *ngIf="hotelList.HotelListResponseStr && hotelList.HotelListResponseStr.length">
-					<span [textContent]="hotelList.HotelListResponseStr"></span>
-				</div>
+				<span *ngIf="hotelList.HotelListResponseStr && hotelList.HotelListResponseStr.length" [textContent]="hotelList.HotelListResponseStr">
+				</span>
 			</div>
 			<ul *ngIf="hotelList.searchId">
 				<li [attr.style]="cardShadow(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color)" [attr.class]="'wrap ' + 'cardN' + i + ' '" *ngFor="let item of hotelList.HotelListResponse; let i = index;">
 					<div class="img" (click)="show.cardImg[i] = show.cardImg[i] ? 0 : 1" [attr.data-test]="(item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color ? ('box-shadow: 0px 0px 16px 4px ' + item.RoomRateDetailsList.RoomRateDetails.RateInfos.RateInfo.color + ';') : '')">
 						<span *ngIf="show.valueAdds[i] && show.valueAdds[i][0]" class="cafe-incluso">
-							<!-- <img [attr.src]="vars.icons.base + 'adds-' + valueAdds.icons[0] + '.png'" alt=""> -->
 							<i [attr.class]="'fa ' + valueAdds.icons[0]"></i>
 							<span class="fgc c1 fsz f13">
 								Café da manhã
 								<span class="fgc c2">incluído</span>
-							</span>
+						</span>
 						</span>
 						<div [attr.class]="'abs ' + (show.cardImg[i] > n ? 'alignL' : (show.cardImg[i] === n ? 'alignC' : 'alignR'))" *ngFor="let img of [item.thumbNailUrl, item.thumbNailUrl]; let n = index">
 							<img [attr.class]="n ? 'flipped' : ''" [attr.src]="img ? 'https://i.travelapi.com' + img.replace('_t.', '_d.') : ''" alt="">
@@ -250,7 +249,7 @@
 					</div>
 				</li>
 			</ul>
+			<div *ngIf="hotelList.HotelListResponse && infinityScrolling;then loading"></div>
 		</div>
 	</div>
-	<span [hidden]="!infinityScrolling">Loading</span>
 </ng-template>

@@ -1,7 +1,7 @@
 .app-root {
 	.icon.loading {
 		display: block;
-		margin: 0 auto;
+		margin: 0 auto 10rem;
 		width: 2rem;
 		img {
 			display: block;
@@ -44,11 +44,9 @@
 		width: 68%;
 		position: relative;
 		.msg {
-			&>div {
-				&>span {
-					padding-top: 7rem;
-					display: inline-block;
-				}
+			span {
+				padding-top: 7rem;
+				display: inline-block;
 			}
 		}
 		.stickie {

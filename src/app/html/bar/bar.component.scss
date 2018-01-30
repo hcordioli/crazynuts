@@ -115,3 +115,12 @@ form {
 		}
 	}
 }
+
+.sub {
+	background-color: #fff;
+	&[hidden] {
+		.txt {
+			display: none;
+		}
+	}
+}

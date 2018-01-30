@@ -30,9 +30,9 @@
 				</p>
 			</div>
 		</div>
-		<ul class="menu" style="display:none;">
+		<ul class="menu">
 			<li>
-				<a href="javascript:;" fragment="quartos">
+				<a href="javascript:;" (click)="scrollBy('quartos')">
 					<span>Quartos</span>
 				</a>
 			</li>
@@ -52,14 +52,18 @@
 				</a>
 			</li>
 		</ul>
+		<br>
+		<br>
+		<br>
+		<br>
 		<div class="summary">
 			<div class="imgs" *ngIf="img">
-				<div class="img" [ngStyle]="imgHeight">
+				<div class="img">
 					<div class="prevNext">
 						<div (click)="show.img = show.img === 0 ? img.hotelImages.HotelImage.length - 1 : show.img - 1">
 							<span class="left fgc c1"><i class="fa fa-chevron-left fa-2x"></i></span>
 						</div>
-						<div (click)="show.img = show.img === img.hotelImages.HotelImage.length - 1 ? 0 : show.img + 1">
+						<div (click)="show.img = show.img >= img.hotelImages.HotelImage.length - 1 ? 0 : show.img + 1">
 							<span class="right fgc c1"><i class="fa fa-chevron-right fa-2x"></i></span>
 						</div>
 					</div>
@@ -75,11 +79,11 @@
 						<img (load)="imgRatio($event.target, n)" [attr.class]="img.hotelImages.HotelImage[n].cls" [attr.src]="img.hotelImages.HotelImage[n].highResolutionUrl" alt="">
 					</div>
 				</div>
-				<div class="thumbs" [ngStyle]="!show.thumbs ? thumbHeight : {}" [hidden]="!show.thumbs">
+				<div *ngIf="thumbHeight" class="thumbs" [ngStyle]="!show.thumbs ? {'height': 'calc(8px + ' + (thumbHeight * 2) + 'rem)'} : {}" [hidden]="!show.thumbs">
 					<div (click)="show.img = n" [attr.class]="'thumb' + (show.img === n ? ' active' : '')" *ngFor="let item of [] | range:img.hotelImages.HotelImage.length; let n = index;">
-						<img (load)="thumbRatio($event.target, n)" [attr.src]="img.hotelImages.HotelImage[n].thumbnailUrl" alt="">
+						<img [ngStyle]="{'height': thumbHeight + 'rem', 'width': thumbHeight + 'rem'}" [attr.src]="img.hotelImages.HotelImage[n].thumbnailUrl" alt="">
 					</div>
-					<a [ngStyle]="btnStyle" href="javascript:;" (click)="show.thumbs = !show.thumbs">
+					<a [ngStyle]="{'width': (thumbHeight * 2) + 'rem', 'height': thumbHeight + 'rem'}" href="javascript:;" (click)="show.thumbs = !show.thumbs">
 						<span *ngIf="!show.thumbs">
 							Veja {{img.hotelImages.HotelImage.length}} Fotos
 						</span>
@@ -91,8 +95,34 @@
 			</div>
 		</div>
 	</div>
-	<div id="nav-quartos"></div>
-	<div id="nav-bom-saber"></div>
-	<div id="nav-facilidades"></div>
-	<div id="nav-pontos-de-interesse"></div>
+	<div class="nav">
+		<div id="nav-quartos">
+			<br>
+			<br>
+			<br>
+			<br>
+			<img src="http://placehold.it/1000x500" alt="">
+		</div>
+		<div id="nav-bom-saber">
+			<br>
+			<br>
+			<br>
+			<br>
+			<img src="http://placehold.it/1000x500" alt="">
+		</div>
+		<div id="nav-facilidades">
+			<br>
+			<br>
+			<br>
+			<br>
+			<img src="http://placehold.it/1000x500" alt="">
+		</div>
+		<div id="nav-pontos-de-interesse">
+			<br>
+			<br>
+			<br>
+			<br>
+			<img src="http://placehold.it/1000x500" alt="">
+		</div>
+	</div>
 </div>

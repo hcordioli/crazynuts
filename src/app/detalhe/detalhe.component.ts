@@ -38,12 +38,7 @@ export class DetalheComponent implements OnInit {
     };
     public res: any;
     public img: any;
-    public imgHeight = { height: 'auto' };
-    public thumbHeight = { height: 'auto' };
-    public btnStyle = {
-        width: 'auto',
-        height: 'auto'
-    };
+    public thumbHeight = 0;
     public hi: any;
     public show = {
         thumbs: false,
@@ -100,20 +95,16 @@ export class DetalheComponent implements OnInit {
         });
     }
     public imgRatio(tgt, i) {
-        var self = this;
+        var self = this,
+            fsz;
         self.img.hotelImages.HotelImage[i].cls = tgt.height * 1.333 > tgt.width ? 'tall' : 'wide';
-        if (self.imgHeight.height === 'auto') {
-            self.imgHeight.height = (tgt.parentNode.parentNode.offsetWidth * 0.75) + 'px';
-        }
-    }
-    public thumbRatio(tgt, i) {
-        var self = this;
-        if (self.thumbHeight.height === 'auto') {
-            self.thumbHeight.height = ((tgt.height + 5) * 2) + 'px';
-            self.btnStyle = {
-                width: (tgt.height * 2) + 'px',
-                height: tgt.height + 'px'
-            };
+        if (!self.thumbHeight) {
+            fsz = getComputedStyle(document.documentElement, null);
+            fsz = fsz && fsz['font-size'];
+            fsz = fsz && fsz.replace(/px/, '');
+            fsz = fsz && parseFloat(fsz);
+            if (fsz)
+                self.thumbHeight = ((tgt.parentNode.parentNode.offsetWidth - 37) / 10.1) / fsz;
         }
     }
 }
